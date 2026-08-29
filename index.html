@@ -3,119 +3,136 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VirtualHome Streaming-VLM Benchmark</title>
+<meta name="color-scheme" content="light dark">
+<title>VirtualHome Streaming-Assistant Benchmark</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-  :root{--bg:#0f1117;--card:#161a23;--line:#252b38;--fg:#e6edf3;--dim:#9aa4b2;
-        --accent:#c792ea;--gold:#ffd24d;--good:#7fe0a0;--bad:#ff9f9f}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);
-       font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-  .wrap{max-width:960px;margin:0 auto;padding:48px 20px 80px}
-  h1{font-size:30px;margin:0 0 6px;letter-spacing:-.4px}
-  .sub{color:var(--dim);margin:0 0 34px;font-size:15px}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
-  a.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;
-         padding:22px;text-decoration:none;color:inherit;transition:border-color .15s,transform .15s}
-  a.card:hover{border-color:var(--accent);transform:translateY(-2px)}
-  .card h2{margin:0 0 8px;font-size:19px;color:var(--accent)}
-  .card p{margin:0 0 12px;color:var(--dim);font-size:14px}
-  .meta{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line);padding-top:10px}
-  .meta b{color:var(--fg)}
-  section{margin-top:44px}
-  h3{font-size:16px;margin:0 0 10px}
-  p.body{color:var(--dim);margin:0 0 12px}
-  table{border-collapse:collapse;width:100%;font-size:13.5px;margin:10px 0 4px}
-  th,td{border:1px solid var(--line);padding:6px 10px;text-align:left}
-  th{background:#1b2130;color:var(--fg);font-weight:600}
-  td.n{text-align:right}
-  .good{color:var(--good)}.bad{color:var(--bad)}
-  code{background:#1b2130;padding:1px 5px;border-radius:4px;font-size:12.5px}
-  .note{border-left:3px solid var(--gold);padding:10px 14px;background:#1a1a12;
-        border-radius:0 8px 8px 0;color:var(--dim);font-size:14px;margin:16px 0}
-  footer{margin-top:52px;padding-top:18px;border-top:1px solid var(--line);
-         color:var(--dim);font-size:13px}
+:root{--bg:#eef1f3;--panel:#fbfcfc;--ink:#141a1d;--muted:#5a686e;--line:#d9e1e4;--line2:#e7edef;
+      --accent:#0f6e6e;--accent-soft:#dcecec;--code:#eff3f4}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1114;--panel:#141a1e;--ink:#e4ebee;--muted:#93a3aa;--line:#242e34;--line2:#1b2429;
+  --accent:#4fbdbd;--accent-soft:#122a2a;--code:#111820}}
+:root[data-theme="dark"]{--bg:#0d1114;--panel:#141a1e;--ink:#e4ebee;--muted:#93a3aa;--line:#242e34;
+  --line2:#1b2429;--accent:#4fbdbd;--accent-soft:#122a2a;--code:#111820}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,serif;font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:56px 22px 90px}
+h1,h2,h3{font-family:Archivo,system-ui,sans-serif;margin:0;letter-spacing:-.012em;text-wrap:balance}
+h1{font-size:clamp(30px,5vw,44px);font-weight:700;line-height:1.08}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.lede{color:var(--muted);max-width:72ch;font-size:18px;margin:.7em 0 0}
+.lede b{color:var(--ink);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(126px,1fr));gap:10px;margin:30px 0 8px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.stat b{display:block;font-family:"IBM Plex Mono",monospace;font-size:21px;font-weight:600;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:12.5px}
+h2.sh{font-size:13px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+  margin:44px 0 12px;padding-top:14px;border-top:1px solid var(--line)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(292px,1fr));gap:14px}
+a.card{display:block;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:10px;padding:18px 19px;text-decoration:none;color:inherit}
+a.card:hover{border-color:var(--accent);background:var(--accent-soft)}
+a.card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.card h3{font-size:17.5px;color:var(--accent);margin-bottom:5px}
+.card p{margin:0;color:var(--muted);font-size:14.5px}
+.card .tag{display:inline-block;margin-top:11px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);
+  border-radius:20px;padding:2px 9px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:9px;background:var(--panel);margin:12px 0}
+table{border-collapse:collapse;width:100%;font-family:Archivo,system-ui,sans-serif;font-size:14px;min-width:560px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line2)}
+thead th{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--muted);background:var(--code)}
+tbody tr:last-child td{border-bottom:none}
+td.n{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;text-align:right}
+td.win{color:var(--accent);font-weight:600}
+p.body{color:var(--muted);max-width:74ch}
+footer{margin-top:52px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 </style>
 </head>
 <body>
 <div class="wrap">
+<div class="eyebrow">VirtualHome · streaming interactive agents</div>
+<h1>The household assistant benchmark</h1>
+<p class="lede">A simulated person does a chore in a rendered house while an AI assistant watches
+through a camera and may speak. The engine <b>injects mistakes</b> into the person's plan. The
+assistant is scored on noticing each one, naming it correctly, guiding the repair — and staying
+quiet when nothing is wrong.</p>
 
-<h1>VirtualHome Streaming-VLM Benchmark</h1>
-<p class="sub">A household agent executes a multi-goal plan. Errors are injected into that plan in
-controlled ways. A vision-language model watches the stream in real time and must notice the error,
-name it, and do so before its consequences seal.</p>
+<div class="stats">
+  <div class="stat"><b>19</b><span>task episodes</span></div>
+  <div class="stat"><b>7</b><span>error classes</span></div>
+  <div class="stat"><b>12</b><span>multi-error episodes</span></div>
+  <div class="stat"><b>3</b><span>personas</span></div>
+  <div class="stat"><b>180</b><span>scored rollouts</span></div>
+  <div class="stat"><b>5</b><span>assistants tested</span></div>
+</div>
 
+<h2 class="sh">Start here</h2>
 <div class="cards">
+  <a class="card" href="programme/">
+    <h3>The programme &rarr;</h3>
+    <p>The complete record in one place: environment, tasks, error taxonomy, both benchmarks, the
+    multi-error rollout machinery, results and findings. Written to build a paper from.</p>
+    <span class="tag">full record</span></a>
+  <a class="card" href="results/">
+    <h3>Results &rarr;</h3>
+    <p>Five assistants on chores that go wrong more than once — detection, restraint and task
+    metrics, every rate with its denominator.</p>
+    <span class="tag">180 rollouts</span></a>
+</div>
+
+<h2 class="sh">Reference</h2>
+<div class="cards">
+  <a class="card" href="spec/">
+    <h3>Benchmark specification &rarr;</h3>
+    <p>World state and the symbolic twin, the egocentric action space and its two gates, injection
+    on the progress key, the takeover, grading and validity gates.</p>
+    <span class="tag">methods</span></a>
+  <a class="card" href="observation/">
+    <h3>The observation contract &rarr;</h3>
+    <p>Exactly what the person and the assistant each receive on every turn, with the real prompts
+    and a live sample observation.</p>
+    <span class="tag">prompts</span></a>
+  <a class="card" href="interaction-stepin/">
+    <h3>Episode videos &rarr;</h3>
+    <p>Filmed step-in episodes: first-person view beside the top-down map, spoken dialogue, and the
+    full interaction transcript.</p>
+    <span class="tag">video</span></a>
   <a class="card" href="benchmark/">
-    <h2>Task episodes &rarr;</h2>
-    <p>The 18 benchmark episodes, each rendered end to end: the correct plan executed without any
-    injected error. This is the substrate every experiment is built on.</p>
-    <div class="meta"><b>18</b> episodes &middot; egocentric view + top-down semantic map</div>
-  </a>
+    <h3>Task episodes &rarr;</h3>
+    <p>The task families the errors are injected into, replayed clean.</p>
+    <span class="tag">tasks</span></a>
   <a class="card" href="detection/">
-    <h2>Error detection results &rarr;</h2>
-    <p>27 injected-error cases across six error classes, each watched live at one decision per
-    second. Per-case cards carry the video, the model's full decision log, and the verdict.</p>
-    <div class="meta"><b>27</b> cases &middot; <b>16</b> correctly detected &middot; six error classes</div>
-  </a>
+    <h3>Earlier detection results &rarr;</h3>
+    <p>The single-error detection sweep that preceded the composite suite.</p>
+    <span class="tag">archive</span></a>
 </div>
 
-<section>
-<h3>How the detection task works</h3>
-<p class="body">Each case takes a clean episode and applies one typed transform to its plan &mdash;
-substitute an object, drop a subgoal, redirect a destination, redo a completed action, stall. The
-model is stepped through the resulting video in order and at each second sees only the past: an
-eight-second window at one frame per second. It answers either <code>SILENT</code> or
-<code>FLAG_ERROR</code> with a class name.</p>
-<p class="body">Scoring is exact-match on the class name. Flagging at the right moment with the wrong
-label counts as a false positive, not a hit &mdash; a strict choice, but it is what exposes the
-dominant failure mode: the model very often reacts at the right instant and then misnames what it
-saw.</p>
-<p class="body">The model is shown a <b>clean</b> cut with no banners, subtitles or timeline. The
-annotated cut on the results page exists only so a human can follow along.</p>
-</section>
+<h2 class="sh">Headline result</h2>
+<p class="body">Every composite episode contains a mistake that breaks the outcome, so in-time
+success only rises when the assistant actually guides a repair. The silent floor is the control:
+what the chores do with nobody helping.</p>
+<div class="tw"><table>
+<thead><tr><th>assistant</th><th>detection F1</th><th>precision</th><th>recall</th><th>in-time success</th><th>flag schema</th></tr></thead>
+<tbody>
+<tr><td>Gemini 3.1 Pro</td><td class="n win">0.715</td><td class="n">0.683</td><td class="n win">0.792</td><td class="n win">0.361</td><td class="n win">1.000</td></tr>
+<tr><td>Gemini 3 Flash</td><td class="n">0.694</td><td class="n">0.724</td><td class="n">0.704</td><td class="n">0.229</td><td class="n">0.714</td></tr>
+<tr><td>Qwen3-VL 8B <em>(open weights)</em></td><td class="n">0.602</td><td class="n win">0.817</td><td class="n">0.292</td><td class="n">0.028</td><td class="n">0.036</td></tr>
+<tr><td>Qwen2.5-VL 7B <em>(open weights)</em></td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="n">0.000</td><td class="n">0.056</td><td class="n">&mdash;</td></tr>
+<tr><td>Silent floor <em>(control)</em></td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="n">0.000</td><td class="n">0.083</td><td class="n">&mdash;</td></tr>
+</tbody></table></div>
+<p class="body">Qwen3-VL first scored a flat zero on detection. It was not blind: it emitted 115 of
+its 118 flags as a bare string where the harness accepted only a dict, so every genuine detection
+was discarded. Regraded from what the models actually said, it has the highest precision in the
+sweep. A harness that accepts only its declared schema scores formatting failures as perception
+failures.</p>
 
-<section>
-<h3>Results by error class</h3>
-<table>
-<tr><th>class</th><th class="n">n</th><th class="n">detected</th><th>what it asks of the observer</th></tr>
-<tr><td>skipped_step</td><td class="n">6</td><td class="n good">6</td><td>notice something that never happened</td></tr>
-<tr><td>repetition</td><td class="n">6</td><td class="n">3</td><td>remember a subgoal completed much earlier</td></tr>
-<tr><td>stall</td><td class="n">6</td><td class="n">3</td><td>tell a pause from a stop</td></tr>
-<tr><td>wrong_object</td><td class="n">3</td><td class="n">2</td><td>tell a look-alike from the target</td></tr>
-<tr><td>navigation_inefficiency</td><td class="n">4</td><td class="n bad">1</td><td>tell wandering from a legitimate route</td></tr>
-<tr><td>wrong_placement</td><td class="n">2</td><td class="n">1</td><td>notice the right object in the wrong place</td></tr>
-</table>
-<p class="body">Absent steps are the easiest thing to see and wandering is the hardest &mdash; on an
-eight-second window a detour is nearly indistinguishable from a route.</p>
-</section>
-
-<section>
-<h3>A note on what these videos show</h3>
-<div class="note">
-Two rendering defects were found and fixed before this round. VirtualHome sets an object's state
-absolutely but <i>toggles</i> its visual, so a setup command asserting a state an object already held
-inverted its appearance permanently &mdash; in six of nineteen episodes, opening the fridge rendered
-as closing it and switching a lamp off rendered as switching it on. Separately, the egocentric camera
-looked straight ahead during manipulations, leaving the acted-on object at the frame edge; it now
-aims at the target, and at the <i>destination</i> when something is being set down.
-</div>
-<p class="body">This matters for reading the results. Correcting the inversion moved detection of
-<b>repetition</b> from 0 of 6 to 3 of 6 with no regressions in that class, while every other class
-moved in both directions &mdash; and repetition is exactly the class whose cases turn on seeing a
-device get re-toggled. An earlier write-up concluded that repetition failure was a memory limit
-rather than a legibility one; that conclusion rested on a comparison this bug had confounded, and it
-has been retracted.</p>
-<p class="body">The overall total barely moved (15 &rarr; 16 of 27). With one run per case and a
-stochastic model, that difference is noise; the class-specific, one-directional shift is the part
-worth reporting.</p>
-</section>
-
-<footer>
-Rendered in VirtualHome (Unity, scene 2). Videos are 8 fps, egocentric view beside a top-down
-semantic map. Evaluation model: Gemini 3.1 Pro. Engine source and reproduction documentation are
-maintained separately.
-</footer>
-
+<footer>Engine revision 2026-08-26.f74+ &middot; every table generated from the run artifacts,
+none transcribed.</footer>
 </div>
 </body>
 </html>

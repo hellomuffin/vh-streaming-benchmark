@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Who Notices the Second Mistake</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#eef1f3; --panel:#fbfcfc; --ink:#141a1d; --muted:#5a686e; --line:#dbe2e5; --line2:#e8edef;
+  --accent:#0f6e6e; --accent-soft:#dcecec;
+  --task:#3d6ea8; --detect:#0f6e6e; --conduct:#8a6a2f;
+  --good:#2f7d4f; --warn:#a8742a; --bad:#a33a3a;
+  --code:#eff3f4; --win:#0f6e6e;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1114; --panel:#141a1e; --ink:#e4ebee; --muted:#93a3aa; --line:#242e34; --line2:#1b2429;
+  --accent:#4fbdbd; --accent-soft:#122a2a;
+  --task:#79a9dd; --detect:#4fbdbd; --conduct:#d0a55e;
+  --good:#5fc189; --warn:#d0a55e; --bad:#e0736f;
+  --code:#111820; --win:#4fbdbd;
+}}
+:root[data-theme="dark"]{
+  --bg:#0d1114; --panel:#141a1e; --ink:#e4ebee; --muted:#93a3aa; --line:#242e34; --line2:#1b2429;
+  --accent:#4fbdbd; --accent-soft:#122a2a;
+  --task:#79a9dd; --detect:#4fbdbd; --conduct:#d0a55e;
+  --good:#5fc189; --warn:#d0a55e; --bad:#e0736f;
+  --code:#111820; --win:#4fbdbd;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Source Sans 3",system-ui,sans-serif;font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1140px;margin:0 auto;padding:44px 22px 80px}
+h1,h2,h3{font-family:Archivo,system-ui,sans-serif;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(28px,4.4vw,42px);font-weight:700;line-height:1.1}
+h2{font-size:clamp(19px,2.5vw,24px);font-weight:600;margin:2.4em 0 .2em}
+h3{font-size:16px;font-weight:600}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.lede{color:var(--muted);max-width:70ch;margin:.7em 0 0;font-size:17px}
+.sub{color:var(--muted);max-width:78ch;margin:.35em 0 1.1em}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:12px;margin:26px 0 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 15px}
+.card.local{border-top:3px solid var(--task)}
+.card.api{border-top:3px solid var(--detect)}
+.card.floor{border-top:3px solid var(--muted)}
+.ct{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.tier{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cn{color:var(--muted);font-size:13px;margin:.3em 0 .7em}
+.card dl{margin:0;display:flex;flex-direction:column;gap:4px}
+.card dl div{display:flex;justify-content:space-between;gap:10px;font-size:13.5px}
+.card dt{color:var(--muted)}
+.card dd{margin:0;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-weight:500}
+.of{color:var(--muted);font-weight:400}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel);margin-top:14px}
+table{border-collapse:collapse;width:100%;min-width:820px}
+th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--line2);vertical-align:middle}
+thead th{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);background:var(--code);white-space:nowrap}
+tbody tr:last-child td,tbody tr:last-child th{border-bottom:none}
+th[scope=row]{font-weight:400;min-width:230px}
+.mn{display:block;font-weight:600;font-size:14.5px}
+.mb{display:block;color:var(--muted);font-size:12.5px;line-height:1.4;margin-top:1px}
+td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{display:inline-block;width:60px;height:6px;border-radius:3px;background:var(--line);
+  vertical-align:middle;margin-right:8px;overflow:hidden}
+.bar span{display:block;height:100%;border-radius:3px}
+.bar.task span{background:var(--task)} .bar.detection span{background:var(--detect)}
+.bar.conduct span{background:var(--conduct)}
+.bv{font-size:13.5px} .nb{color:var(--muted);margin-right:8px}
+.den{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+td.win .bv{color:var(--win);font-weight:600}
+.finding{background:var(--accent-soft);border:1px solid var(--accent);border-radius:10px;
+  padding:16px 18px;margin-top:16px}
+.finding h3{color:var(--accent)}
+.finding p{margin:.5em 0 0;max-width:76ch}
+code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--code);
+  border:1px solid var(--line2);border-radius:4px;padding:.08em .34em}
+ul{max-width:78ch;padding-left:1.15em} li{margin:.3em 0}
+.note{color:var(--muted);font-size:14px;max-width:78ch}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:780px){.grid2{grid-template-columns:1fr}}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<meta name="color-scheme" content="light dark">
+<style>.backlink{position:fixed;top:10px;left:10px;z-index:99;font:600 12px/1 system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:#0f6e6e;background:rgba(255,255,255,.88);border:1px solid #cfdadd;border-radius:6px;padding:6px 10px}@media (prefers-color-scheme:dark){.backlink{color:#4fbdbd;background:rgba(13,17,20,.88);border-color:#2a353b}}</style>
+</head>
+<body>
+<a class="backlink" href="../">&larr; index</a>
+<div class="wrap">
+<div class="eyebrow">VirtualHome streaming benchmark · composite suite</div>
+<h1>Who notices the second mistake</h1>
+<p class="lede">Five assistants watched a simulated person do household chores that go wrong
+<strong>more than once</strong>, and were scored on whether they noticed each mistake, named it
+correctly, and helped fix it without talking over the person. 180 episodes:
+12 multi-error chores × 3 personas × 5 assistants.</p>
+
+<div class="cards"><article class="card api">
+  <div class="ct"><h3>Gemini 3.1 Pro</h3><span class="tier">api</span></div>
+  <p class="cn">gemini-3.1-pro-preview</p>
+  <dl>
+    <div><dt>errors caught</dt><dd>49 <span class="of">/ 62</span></dd></div>
+    <div><dt>false alarms</dt><dd>29</dd></div>
+    <div><dt>things said</dt><dd>1121</dd></div>
+    <div><dt>episodes</dt><dd>36</dd></div>
+  </dl></article><article class="card api">
+  <div class="ct"><h3>Gemini 3 Flash</h3><span class="tier">api</span></div>
+  <p class="cn">gemini-3-flash-preview</p>
+  <dl>
+    <div><dt>errors caught</dt><dd>38 <span class="of">/ 57</span></dd></div>
+    <div><dt>false alarms</dt><dd>21</dd></div>
+    <div><dt>things said</dt><dd>1312</dd></div>
+    <div><dt>episodes</dt><dd>36</dd></div>
+  </dl></article><article class="card local">
+  <div class="ct"><h3>Qwen3-VL 8B</h3><span class="tier">local</span></div>
+  <p class="cn">vLLM, GPU 0, port 18300</p>
+  <dl>
+    <div><dt>errors caught</dt><dd>21 <span class="of">/ 69</span></dd></div>
+    <div><dt>false alarms</dt><dd>6</dd></div>
+    <div><dt>things said</dt><dd>565</dd></div>
+    <div><dt>episodes</dt><dd>36</dd></div>
+  </dl></article><article class="card local">
+  <div class="ct"><h3>Qwen2.5-VL 7B</h3><span class="tier">local</span></div>
+  <p class="cn">vLLM, GPU 1, port 18100</p>
+  <dl>
+    <div><dt>errors caught</dt><dd>0 <span class="of">/ 72</span></dd></div>
+    <div><dt>false alarms</dt><dd>0</dd></div>
+    <div><dt>things said</dt><dd>19</dd></div>
+    <div><dt>episodes</dt><dd>36</dd></div>
+  </dl></article><article class="card floor">
+  <div class="ct"><h3>Silent floor</h3><span class="tier">floor</span></div>
+  <p class="cn">never speaks — the control</p>
+  <dl>
+    <div><dt>errors caught</dt><dd>0 <span class="of">/ 72</span></dd></div>
+    <div><dt>false alarms</dt><dd>0</dd></div>
+    <div><dt>things said</dt><dd>0</dd></div>
+    <div><dt>episodes</dt><dd>36</dd></div>
+  </dl></article></div>
+
+<h2>Results</h2>
+<p class="sub">Every rate carries its denominator. Best in each row is highlighted; a dash means the
+metric had no opportunity to be measured for that assistant.</p>
+<div class="tblwrap"><table>
+<thead><tr><th scope="col">metric</th><th scope="col">Gemini 3.1 Pro</th><th scope="col">Gemini 3 Flash</th><th scope="col">Qwen3-VL 8B</th><th scope="col">Qwen2.5-VL 7B</th><th scope="col">Silent floor</th></tr></thead>
+<tbody><tr><th scope="row"><span class="mn">In-time success</span><span class="mb">1 if the chore is completed within twice the reference time</span></th><td class="num win"><span class="bar task"><span style="width:36%"></span></span><span class="bv">0.361</span><span class="den">n=36</span></td><td class="num"><span class="bar task"><span style="width:22%"></span></span><span class="bv">0.222</span><span class="den">n=36</span></td><td class="num"><span class="bar task"><span style="width:3%"></span></span><span class="bv">0.028</span><span class="den">n=36</span></td><td class="num"><span class="bar task"><span style="width:6%"></span></span><span class="bv">0.056</span><span class="den">n=36</span></td><td class="num"><span class="bar task"><span style="width:8%"></span></span><span class="bv">0.083</span><span class="den">n=36</span></td></tr><tr><th scope="row"><span class="mn">Efficiency</span><span class="mb">time and interruption cost, weighted by the person's own preferences; only over successful runs</span></th><td class="num"><span class="bar task"><span style="width:50%"></span></span><span class="bv">0.498</span><span class="den">n=13</span></td><td class="num"><span class="bar task"><span style="width:49%"></span></span><span class="bv">0.488</span><span class="den">n=8</span></td><td class="num win"><span class="bar task"><span style="width:73%"></span></span><span class="bv">0.733</span><span class="den">n=1</span></td><td class="num"><span class="bar task"><span style="width:67%"></span></span><span class="bv">0.675</span><span class="den">n=2</span></td><td class="num"><span class="bar task"><span style="width:73%"></span></span><span class="bv">0.731</span><span class="den">n=3</span></td></tr><tr><th scope="row"><span class="mn">Conversation efficiency</span><span class="mb">1 = never interrupts, 0 = talks continuously</span></th><td class="num"><span class="bar task"><span style="width:41%"></span></span><span class="bv">0.415</span><span class="den">n=36</span></td><td class="num"><span class="bar task"><span style="width:36%"></span></span><span class="bv">0.355</span><span class="den">n=36</span></td><td class="num"><span class="bar task"><span style="width:39%"></span></span><span class="bv">0.393</span><span class="den">n=36</span></td><td class="num"><span class="bar task"><span style="width:98%"></span></span><span class="bv">0.982</span><span class="den">n=36</span></td><td class="num win"><span class="bar task"><span style="width:100%"></span></span><span class="bv">1.000</span><span class="den">n=36</span></td></tr><tr><th scope="row"><span class="mn">Detection timing</span><span class="mb">1 prevented, 0.5 caught after it commits, 0 missed</span></th><td class="num win"><span class="bar detection"><span style="width:40%"></span></span><span class="bv">0.396</span><span class="den">n=36</span></td><td class="num"><span class="bar detection"><span style="width:35%"></span></span><span class="bv">0.352</span><span class="den">n=36</span></td><td class="num"><span class="bar detection"><span style="width:15%"></span></span><span class="bv">0.146</span><span class="den">n=36</span></td><td class="num"><span class="bar detection"><span style="width:2%"></span></span><span class="bv">0.000</span><span class="den">n=36</span></td><td class="num"><span class="bar detection"><span style="width:2%"></span></span><span class="bv">0.000</span><span class="den">n=36</span></td></tr><tr><th scope="row"><span class="mn">Precision</span><span class="mb">of the errors it named, how many were real</span></th><td class="num"><span class="bar detection"><span style="width:68%"></span></span><span class="bv">0.683</span><span class="den">n=35</span></td><td class="num"><span class="bar detection"><span style="width:72%"></span></span><span class="bv">0.724</span><span class="den">n=35</span></td><td class="num win"><span class="bar detection"><span style="width:82%"></span></span><span class="bv">0.817</span><span class="den">n=21</span></td><td class="num"><span class="nb">—</span><span class="den">n=0</span></td><td class="num"><span class="nb">—</span><span class="den">n=0</span></td></tr><tr><th scope="row"><span class="mn">Recall</span><span class="mb">of the errors that happened, how many it named</span></th><td class="num win"><span class="bar detection"><span style="width:79%"></span></span><span class="bv">0.792</span><span class="den">n=36</span></td><td class="num"><span class="bar detection"><span style="width:70%"></span></span><span class="bv">0.704</span><span class="den">n=36</span></td><td class="num"><span class="bar detection"><span style="width:29%"></span></span><span class="bv">0.292</span><span class="den">n=36</span></td><td class="num"><span class="bar detection"><span style="width:2%"></span></span><span class="bv">0.000</span><span class="den">n=36</span></td><td class="num"><span class="bar detection"><span style="width:2%"></span></span><span class="bv">0.000</span><span class="den">n=36</span></td></tr><tr><th scope="row"><span class="mn">Detection F1</span><span class="mb">the balance of the two</span></th><td class="num win"><span class="bar detection"><span style="width:72%"></span></span><span class="bv">0.715</span><span class="den">n=35</span></td><td class="num"><span class="bar detection"><span style="width:69%"></span></span><span class="bv">0.694</span><span class="den">n=35</span></td><td class="num"><span class="bar detection"><span style="width:60%"></span></span><span class="bv">0.602</span><span class="den">n=21</span></td><td class="num"><span class="nb">—</span><span class="den">n=0</span></td><td class="num"><span class="nb">—</span><span class="den">n=0</span></td></tr><tr><th scope="row"><span class="mn">Flag schema compliance</span><span class="mb">how often the flag arrived in the declared shape</span></th><td class="num win"><span class="bar conduct"><span style="width:100%"></span></span><span class="bv">1.000</span><span class="den">n=35</span></td><td class="num"><span class="bar conduct"><span style="width:71%"></span></span><span class="bv">0.714</span><span class="den">n=35</span></td><td class="num"><span class="bar conduct"><span style="width:4%"></span></span><span class="bv">0.036</span><span class="den">n=21</span></td><td class="num"><span class="nb">—</span><span class="den">n=0</span></td><td class="num"><span class="nb">—</span><span class="den">n=0</span></td></tr></tbody>
+</table></div>
+
+<div class="finding">
+<h3>The result that nearly came out backwards</h3>
+<p>Qwen3-VL first scored a flat <strong>zero</strong> on every detection metric. It was not blind.
+It emitted 115 of its 118 flags as a bare string — <code>"flag": "wrong_placement"</code> — where
+the harness accepted only <code>{"error": "wrong_placement"}</code>, so every genuine detection
+was discarded. Regraded from the models' own replies, it turns out to have the
+<strong>highest precision in the sweep</strong>. What it actually fails at is emitting the
+declared shape, which is now reported as its own metric instead of being silently folded into
+its detection score.</p>
+<p>The headline would otherwise have read "open-weight models cannot detect errors at all". They
+can; ours could not hear them.</p>
+</div>
+
+<h2>What this measures</h2>
+<div class="grid2">
+<div>
+<h3>The episodes</h3>
+<p class="note">Each chore carries two or more injected mistakes of different kinds — a forgotten
+lamp <em>and</em> a repetition, a wrong carton <em>and</em> a stall. The errors are separated in
+time and cannot be twins of one another, so a flag can be attributed to exactly one of them. The
+assistant sees the person's camera, a floor plan, and a room-level state map; it can only speak.</p>
+</div>
+<div>
+<h3>The floor</h3>
+<p class="note">The silent arm never speaks. It is not a strawman: it fixes the interruption cost
+at its best possible value and shows what the chores do on their own. In-time success is
+<strong>0.083</strong> without an assistant, so anything above that is help, and anything below it
+is interference.</p>
+</div>
+</div>
+
+<h2>Honest limits</h2>
+<ul>
+<li><strong>Three metrics are not measured</strong>, and are reported that way rather than as
+zeros: answer accuracy (these chores ask the assistant no scored questions), alert score (no
+standing "tell me when it's done" request), and the 15-item assistance-quality rubric (its judge
+was not run here).</li>
+<li><strong>Substitutions.</strong> No OpenAI key exists in this environment, so the GPT arms
+could not run at all. The reference spec's <code>gemini-3.7-flash</code> is not offered on this
+key; <code>gemini-3-flash-preview</code> stands in. The spec's local models
+(<code>qwen-27b</code>, <code>minicpmo</code>, <code>museglimmer</code>) are not on this
+filesystem; two open-weight VLMs that are were served instead.</li>
+<li><strong>One arm's task metrics are not comparable.</strong> Because the live harness did not
+recognise Qwen3-VL's flags, its takeover never released on detection — so its success and
+efficiency figures understate what it would achieve with a conforming flag. Its detection
+figures are fair, having been regraded from what it actually said.</li>
+<li><strong>Success is a hard bar here.</strong> Every episode contains a mistake that breaks the
+outcome, so in-time success can only rise when the assistant actually guides a repair.</li>
+</ul>
+
+<footer>Composite suite, engine rev 2026-08-26.f74+ · one rollout per engine, 16 engines ·
+assistant swapped per arm, the simulated person held on the reference model throughout ·
+grading recomputed offline from the recorded flag ticks.</footer>
+</div>
+</body>
+</html>

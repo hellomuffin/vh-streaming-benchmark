@@ -1,0 +1,1198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Benchmark Specification</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script>window.MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+:root{--bg:#eef1f3;--paper:#fbfcfc;--ink:#141a1d;--muted:#5a686e;--line:#d9e1e4;--line2:#e7edef;--accent:#0f6e6e;--accent-soft:#dcecec;--code:#eff3f4;--th:#e9eef0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1114;--paper:#141a1e;--ink:#e4ebee;--muted:#93a3aa;--line:#242e34;--line2:#1b2429;--accent:#4fbdbd;--accent-soft:#122a2a;--code:#111820;--th:#192126}}
+:root[data-theme="dark"]{--bg:#0d1114;--paper:#141a1e;--ink:#e4ebee;--muted:#93a3aa;--line:#242e34;--line2:#1b2429;--accent:#4fbdbd;--accent-soft:#122a2a;--code:#111820;--th:#192126}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Serif 4",Georgia,serif;font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding:54px 24px 90px;background:var(--paper);border-left:1px solid var(--line);border-right:1px solid var(--line)}
+h1,h2,h3,h4{font-family:Archivo,system-ui,sans-serif;text-wrap:balance;letter-spacing:-.012em}
+h1{font-size:clamp(28px,4.6vw,40px);line-height:1.12;margin:0 0 10px;font-weight:700}
+h2{font-size:clamp(21px,3vw,27px);margin:2.3em 0 .5em;padding-top:.55em;border-top:2px solid var(--line);font-weight:600}
+h3{font-size:18px;margin:1.8em 0 .4em;font-weight:600}
+h4{font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:1.5em 0 .3em}
+p{margin:0 0 1em;max-width:72ch} li{margin:.25em 0} ul,ol{padding-left:1.35em;max-width:74ch}
+a{color:var(--accent)}
+blockquote{margin:1.1em 0;padding:.65em 1.05em;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 6px 6px 0}
+blockquote p{margin:0 0 .5em} blockquote p:last-child{margin:0}
+code{font-family:"IBM Plex Mono",monospace;font-size:.82em;background:var(--code);padding:.1em .35em;border-radius:4px;border:1px solid var(--line2)}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow-x:auto;font-size:13px;line-height:1.5;margin:1em 0}
+pre code{background:none;border:none;padding:0;font-size:inherit}
+.tbl{overflow-x:auto;margin:1.1em 0;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-family:Archivo,system-ui,sans-serif;font-size:14px;line-height:1.45}
+th,td{text-align:left;vertical-align:top;padding:8px 11px;border-bottom:1px solid var(--line2)}
+thead th{background:var(--th);font-weight:700;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+tbody tr:last-child td{border-bottom:none}
+hr{border:none;border-top:1px solid var(--line);margin:2.2em 0}
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;margin:1em 0!important}
+</style>
+<meta name="color-scheme" content="light dark">
+<style>.backlink{position:fixed;top:10px;left:10px;z-index:99;font:600 12px/1 system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:#0f6e6e;background:rgba(255,255,255,.88);border:1px solid #cfdadd;border-radius:6px;padding:6px 10px}@media (prefers-color-scheme:dark){.backlink{color:#4fbdbd;background:rgba(13,17,20,.88);border-color:#2a353b}}</style>
+</head>
+<body>
+<a class="backlink" href="../">&larr; index</a>
+<div class="wrap">
+<h1 id="a-user-in-the-loop-household-benchmark-for-streaming-assistants">A User-in-the-Loop Household Benchmark for Streaming Assistants</h1>
+<p><strong>Engine and benchmark specification — VirtualHome edition</strong>
+Engine revision <code>2026-08-26.f74</code> · specification date 2026-08-28</p>
+<hr />
+<h3 id="how-to-read-this-document">How to read this document</h3>
+<p>This is the design reference for a paper about the simulation engine and the benchmark built on it. It is written for a reader who was not in the room: every term is defined before it is used, every number is given with its rationale, and the <em>why</em> behind each mechanism is stated alongside the <em>what</em>. It is not an implementation manual — there are no file names or function names except where a name has become the name of a concept.</p>
+<p>Sections 1–7 correspond to a paper's Methods; §8 is a worked demonstration; the appendix holds the tables a reviewer will ask for. Suggested mapping to a NeurIPS-style submission:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>paper section</th>
+<th>this document</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Introduction / setting</td>
+<td>§1</td>
+</tr>
+<tr>
+<td>Environment (world, state, actions)</td>
+<td>§2, §4</td>
+</tr>
+<tr>
+<td>Tasks</td>
+<td>§3 (+ Appendix table)</td>
+</tr>
+<tr>
+<td>User simulation and error injection</td>
+<td>§5, §6.1</td>
+</tr>
+<tr>
+<td>Assistant interface</td>
+<td>§6.2–6.5</td>
+</tr>
+<tr>
+<td>Evaluation protocol, validity, metrics</td>
+<td>§7</td>
+</tr>
+<tr>
+<td>Qualitative results / demonstration</td>
+<td>§8</td>
+</tr>
+<tr>
+<td>Glossary</td>
+<td>Appendix G</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="contents">Contents</h3>
+<ol>
+<li>Overview — what is measured, architecture, the episode loop, settings, the design principle, differences from the kitchen</li>
+<li>World state — scene graph, symbolic twin, plan-effect mirror and progress key, time, spatial layer (two maps), visibility geometry</li>
+<li>Task suite — design principle, families, the 19 episodes, instance grounding, scene preparation</li>
+<li>Action space — high-level vs mid-level, vocabulary and constants, the two gates, nearest-visible grounding, action lifecycle, zero-frame actions, subgoal grammar and dependency DAG</li>
+<li>Human error — the graded taxonomy, twins, the non-error family, injection on the progress key, soft/hard/combo and the takeover, the case set and admissibility</li>
+<li>The two agents — personas and enforcement, what each observes, reply schemas, tiers, questionnaire, prompt audit</li>
+<li>Scoring, validity and metrics — verdicts and the one Correct set, outcomes, gates, determinism, affordance matrix, report contents, metrics</li>
+<li>Reference episodes — the published demonstration set and what the audits found
+Appendix G — Glossary</li>
+</ol>
+<hr />
+<h2 id="1-overview">1 Overview</h2>
+<h3 id="11-what-is-being-measured">1.1 What is being measured</h3>
+<p>The benchmark evaluates an <strong>AI assistant that watches a person do a household chore and may speak</strong>. The person is simulated — a language model in persona, commanding a body that a 3D engine moves — and the engine <strong>injects a mistake</strong> into the person's plan at a chosen point in the task. The assistant is scored on three things: whether it <strong>notices</strong> the mistake (detection), whether it <strong>helps the person recover</strong> (repair), and whether it <strong>stays quiet when nothing is wrong</strong> (restraint). The object of study is the interactive loop itself — the timing, content and effect of the assistant's speech — not the person's competence and not the assistant's ability to act, because it cannot act.</p>
+<p>The setting follows the <em>Overcooked-style user-in-the-loop</em> paradigm of CookSim, ported from a symbolic kitchen to a rendered 3D house (VirtualHome). What transfers is the contract; what changes is the world: a native scene graph rather than an authored one, egocentric video rather than a top-down grid, an asynchronous mid-level action space with a visibility gate, and a symbolic twin that stands in for a slow, non-deterministic physics kernel.</p>
+<h3 id="12-architecture-three-agents-one-crossing-channel">1.2 Architecture: three agents, one crossing channel</h3>
+<pre><code>                 ┌──────────────── ENGINE (deterministic, tick-stepped) ────────────────┐
+                 │  scene graph + spatial layer   task DAG + progress key   executor     │
+                 │  outcomes                       injection at anchor      one oracle   │
+                 └──────┬──────────────────┬───────────────────────────┬─────────────────┘
+      exact state map   │                  │ rendered frames           │ per-tick state dump
+      + proprioception  │                  │ + statemap + house map    │ (the grader's ONLY input)
+      + feedback        ▼                  ▼                           ▼
+             ┌──────────────┐  utterance  ┌───────────────┐        ┌──────────┐
+             │ HUMAN AGENT  │ ◄─────────► │ AI ASSISTANT  │        │  GRADER  │
+             │ persona LLM  │  only text  │ (under test)  │        │  offline │
+             └──────┬───────┘   crosses   └───────────────┘        └──────────┘
+                    │ commands (&quot;go to the fridge&quot;, &quot;switch off the tablelamp&quot;)
+                    ▼
+                 ENGINE queue
+</code></pre>
+<p>Three principals and one invariant: <strong>only the spoken sentence crosses between the two agents.</strong> The person's commands go to the engine, never to the assistant; the assistant has no channel to the engine at all — it can do nothing but talk; the grader reads the per-tick state dump after the fact, never the live loop. Every other item on the diagram is a <em>private</em> channel of exactly one principal, and the composed prompts are audited at run time for leakage (§6.5).</p>
+<h3 id="13-the-episode-loop">1.3 The episode loop</h3>
+<p>Time advances in <strong>ticks</strong> (1 tick = 1 s of world time = 8 rendered frames). Per tick, in fixed order:</p>
+<ol>
+<li><strong>Injection.</strong> If the task-progress anchor has been reached and nothing has been injected yet, the person's plan is transformed (§5).</li>
+<li><strong>Execution.</strong> The queued command advances; the world renders; outcomes are checked.</li>
+<li><strong>Assistant turn</strong> (every $K=2$ ticks). It receives the freshest frames and maps and replies with a structured record; its <code>text</code>, if non-empty, is spoken to the person.</li>
+<li><strong>Person turn</strong> — when spoken to, when idle with an empty queue, when an action is refused, and (while an injected task is live) every poll. Its utterance is spoken; its plan update is applied to the engine queue under the grounding policy (§4.4).</li>
+<li><strong>After the episode</strong> — validity gates, then grading from the state dump (§7).</li>
+</ol>
+<h3 id="14-the-settings-the-benchmark-reports">1.4 The settings the benchmark reports</h3>
+<p>Two rollout settings share the engine and the agents:</p>
+<ul>
+<li><strong>Step-in</strong> (the primary setting). The person runs the chore from $t=0$ with the assistant watching; the error is injected live; the assistant must detect it in the stream and the pair must repair it in conversation. This is what the published episodes show.</li>
+<li><strong>Recovery.</strong> The episode is replayed to the flag point with the assistant handed an <em>augmented memory</em> (an accurate progress record whose last message <em>is</em> the correct flag); everything after is live. It isolates repair from detection.</li>
+</ul>
+<p>Within step-in, three <strong>injection paradigms</strong> control how the error is made to happen (§5.5): <em>soft</em> (prompt only), <em>hard</em> (covert takeover), and <em>combo</em> (both — the default).</p>
+<h3 id="15-the-one-design-principle">1.5 The one design principle</h3>
+<p>The dominant failure in this class of system is not incorrectness but <strong>silence that looks like data</strong>: a wrong choice that reports success, an injection that never fired but was scored, a passing test suite beside a contract the live harness bypasses. Every mechanism below was therefore built with the question <em>what does its failure look like from outside?</em> — and where the answer was "like success", an assertion was written on the artifact the agent actually receives, at the call site the harness actually uses. The validity gates (§7.4), the admissibility ledger (§5.6), the composed-prompt audit (§6.5) and the two-process determinism test (§7.4) are the concrete forms of that principle.</p>
+<h3 id="16-where-this-differs-from-the-kitchen">1.6 Where this differs from the kitchen</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th>CookSim (grid kitchen)</th>
+<th>This benchmark (VirtualHome)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>scene graph</td>
+<td>authored: stations, sources, items</td>
+<td>native: the engine's environment graph (ids, classes, states, <code>ON</code>/<code>INSIDE</code> edges)</td>
+</tr>
+<tr>
+<td>spatial layer</td>
+<td>grid + coordinates; relations derived</td>
+<td>positions + <strong>primitive</strong> relation edges; rooms by bounding box; per-room metric map</td>
+</tr>
+<tr>
+<td>tick</td>
+<td>1 engine step</td>
+<td>1 s = 8 rendered frames</td>
+</tr>
+<tr>
+<td>dynamics / hazards</td>
+<td>timers: cook → smoke → fire</td>
+<td><strong>none native</strong> (no timers, no spoilage) — hazard family cut from the taxonomy <em>and</em> the scorer</td>
+</tr>
+<tr>
+<td>headless replay</td>
+<td>the engine itself, ms</td>
+<td>a <strong>symbolic twin</strong>, ms; live Unity is slow and non-deterministic</td>
+</tr>
+<tr>
+<td>action model</td>
+<td>queued, multi-tick</td>
+<td>queued; mid-level egocentric verbs; visibility + distance gates</td>
+</tr>
+<tr>
+<td>ambiguity policy</td>
+<td>refuse, name candidates</td>
+<td><strong>nearest visible instance, disclosed</strong> — the wrong-copy grab is a measured error</td>
+</tr>
+<tr>
+<td>progress key</td>
+<td>ordered plate contents</td>
+<td>plan-touched object relations, position and duration dropped</td>
+</tr>
+<tr>
+<td>person sees</td>
+<td>exact text map</td>
+<td>ego frames + current-room map + whole-house map</td>
+</tr>
+<tr>
+<td>assistant sees</td>
+<td>frames + relational readout</td>
+<td>first-person frames + house floorplan + current-room statemap + whole-house map + body ground truth</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="2-world-state">2 World state</h2>
+<h3 id="21-the-scene-graph">2.1 The scene graph</h3>
+<p>The world is VirtualHome apartment 2, read as the engine's native <strong>environment graph</strong> $G=(V,E)$. A node $v \in V$ carries an integer instance id, a class name, a category, a state set, a property set, and a bounding box; the categories that matter to the benchmark are <code>Furniture</code>, <code>Appliances</code>, <code>Electronics</code>, <code>Food</code>, <code>Lamps</code>, <code>Decor</code>, with <code>Rooms / Walls / Floor / Ceiling / Doors / Windows</code> treated as structure. Four node states are read — <code>OPEN</code>, <code>CLOSED</code>, <code>ON</code>, <code>OFF</code> — and one property, <code>CAN_OPEN</code>, which is the ground truth for "does this thing have a door" (never a name list). Three edge relations are read: <code>ON</code> and <code>INSIDE</code> (an object's <em>anchor</em> — the surface or container it rests on or in; an <code>INSIDE</code> edge to a room node gives room membership) and <code>HOLDS</code> (the body's hands).</p>
+<p>Two facts about this scene shape the whole benchmark. First, <strong>scale</strong>: the live graph holds 183 objects across four rooms — kitchen, living room, and two bedrooms, plus a bathroom that the tasks never use. Second, <strong>duplication</strong>: the scene ships nine plates, seven books, three table lamps and two milks. Duplicate instances are the point, not an accident — they are what make "which one" a real question, and hence what make wrong-object and instance-drift errors measurable (§3.4, §4.4). Where a duplicate would sabotage <em>legitimate</em> behaviour rather than measure an error, an episode may declare a <code>dedupe</code> map that deletes the surplus copies at initialisation (the milk, §3.5).</p>
+<p>One modelling distinction is enforced throughout: <strong><code>ON</code> (rests on) and <code>INSIDE</code> (shut away) are kept separate.</strong> <code>loc</code> answers "where is it"; <code>inside</code> answers "is it shut away". Conflating them made a book resting <em>on</em> a bookshelf unreachable, because a bookshelf is nominally a container yet is never opened.</p>
+<h3 id="22-the-symbolic-twin">2.2 The symbolic twin</h3>
+<p>Live Unity is slow (tens of minutes per episode) and non-deterministic, so it cannot be used to dry-run cases, compute windows, or tell a bug from a model. The engine therefore runs a <strong>symbolic twin</strong>: a deterministic state machine over the same scene graph that replays a plan in milliseconds. Its state is</p>
+<p>$$s = \big(\,holding,\; opened,\; on,\; loc,\; inside,\; sitting,\; targets,\; events\,\big)$$</p>
+<p>with every object token <strong>instance-unique</strong> (<code>milk#176</code>, never <code>milk</code>) — keying on class collapsed distinct objects and made both agents unfalsifiable. <code>holding</code> is a set of at most two tokens (two hands); <code>opened</code> and <code>on</code> are sets; <code>loc</code> and <code>inside</code> map an object to its anchor; <code>targets</code> binds each task-bearing class to the instance the task means (§3.4); <code>events</code> is the log of resolved 5-tuples from which checkpoints are graded. A canonical <strong>semantic serialisation</strong> (cosmetics excluded) is hashed, and the hash sequence of a replay is required to be identical across two processes (§7.4).</p>
+<p>Keeping twin and kernel in agreement is most of the engineering, and it is done by four mechanisms rather than by trust:</p>
+<ol>
+<li><strong>Graph-seeded start.</strong> After scene setup the twin is rebuilt <em>from the rendered graph</em> — not replayed — so both worlds begin identical and instance-keyed. Only the classes the episode's plan touches are seeded; seeding all 183 objects looks more faithful but destroys comparability with a from-empty replay.</li>
+<li><strong>Postcondition verification.</strong> After every rendered manipulation the expected graph delta is checked — <code>Open</code> ⇒ <code>OPEN</code> present, <code>Close</code> ⇒ absent, <code>SwitchOn/Off</code> ⇒ <code>ON</code> present/absent, <code>Grab</code> ⇒ a <code>HOLDS</code> edge, <code>Put/PutIn</code> ⇒ an <code>ON</code>/<code>INSIDE</code> edge to the destination. A failed postcondition is an honest refusal, not a silent fork. <code>Walk</code>, <code>Sit</code>, <code>StandUp</code> and <code>Drink</code> (no reliable graph delta in VirtualHome) are exempt by design.</li>
+<li><strong>Frame/pose coherence.</strong> After every step, the newest frame in the stream must have been captured from the body's current pose (tolerance 0.5 m and 25° of yaw, the yaw test 180°-symmetric because camera-forward and character conventions differ). On violation a fresh egocentric snapshot is captured for one whole tick. This one invariant subsumed three earlier point fixes.</li>
+<li><strong>Silent no-op detection.</strong> A turn that returns success without rotating (Δyaw &lt; 10°, Δpos &lt; 0.2 m) or a door pass that does not move the body (Δpos &lt; 0.5 m) is refused honestly, because success-without-effect poisons both agents' world models.</li>
+</ol>
+<h3 id="23-the-plan-effect-mirror-and-the-progress-key">2.3 The plan-effect mirror and the progress key</h3>
+<p>The twin also maintains a deliberately impoverished second view, the <strong>plan-effect mirror</strong>: four multisets over base names — $\{holding, loc, opened, on\}$ — starting empty, recording only what the plan has changed. Multisets, because a two-lamp task legitimately holds two <code>tablelamp</code> entries in <code>on</code>; base names, because the setup script and live execution write instance tokens in different forms. The mirror exists because the instance-keyed state also carries static facts a replay never models (the microwave sits on the counter) and decoys sharing a class with the target — and those made the live state and the reference state permanently unequal, so that the error injection never fired at all.</p>
+<p>From the mirror comes the <strong>progress key</strong>, the partial state that records task progress identically under every legal ordering:</p>
+<p>$$\kappa(s) \;=\; \big(\,holding,\;\; \{(o, d) \in loc : o \in \mathrm{KEEP}\},\;\; opened,\;\; on\,\big)$$</p>
+<p>where $\mathrm{KEEP}$ is the set of object classes the episode's clean <em>and</em> deviated plans touch. <strong>Position and elapsed time are dropped by construction</strong> — they are irrelevant to whether a deviation can start here. The key is what the injection anchor fires on (§5.4) and what the two-process determinism test compares; it is <em>not</em> the grader, which reads instance-level events (§3.1). Its limits are stated honestly in §3: it is a snapshot, not a history (a redo that restores the same state is invisible to it); it drops position, so purely navigational progress is graded on movement events instead; and its names are class-level, so which of two lamps is off is recovered only at grading.</p>
+<h3 id="24-time">2.4 Time</h3>
+<p>Time advances in <strong>ticks</strong>: one tick is one second of world time, rendered as $\mathrm{FPT}=8$ frames. Commands span several ticks; every command pads its frame stream to a whole tick, so the tick count is exactly frames/8. Idle ticks freeze the last frame — VirtualHome has no autonomous dynamics, and a frozen frame is the honest analogue of "the world keeps running". Both agents are observed at one frame per tick over a window of the last 8 ticks. The offline twin prices actions in the same currency (a walk costs 3 units, any other action 1, an idle of $n$ frames $n/8$), which gives the efficiency denominator.</p>
+<h3 id="25-the-spatial-layer-rooms-and-two-maps">2.5 The spatial layer: rooms and two maps</h3>
+<p>Rooms are axis-aligned bounding boxes in the ground plane; a point belongs to the box that contains it, else to the nearest room centre. The body's room is always taken from its true graph pose, never from the smoothed display trail, which jitters across thresholds.</p>
+<p>Because "where" in a 3D house is not a grid, the spatial layer is exposed to the agents as two derived maps, each rendered as an image <em>and</em> an exactly cross-referenced text scene graph, both snapshotted from the live graph on every call (a setup-time snapshot goes stale the moment a door opens):</p>
+<p><strong>The current-room statemap.</strong> North-up, in metres, origin at the room's south-west corner. It carries the agent's position and eight-way compass heading; every landmark as <code>class#i: (x, y) size W×D [STATES]</code>; each door labelled <code>to &lt;room&gt;</code>; and the list of other rooms. A landmark is any <code>Furniture / Appliances / Electronics</code> object with a footprint ≥ 0.3 m — <strong>or any device whose state is <code>ON</code>/<code>OFF</code>, regardless of size</strong>, because a table lamp is tiny and non-landmark, yet its state is exactly what a watcher needs to read. In the image, a device that is <code>ON</code> is drawn as a bright star. Wall lightswitches are culled from both image and text: they report <code>ON</code> but are non-actionable no-ops here, and "lightswitch [ON]" would read as "the light is handled".</p>
+<p><strong>The whole-house map.</strong> Every room labelled; doors marked; the person's position, heading and full trail; and every device that is <code>ON</code> <em>anywhere</em> in the house starred with its class. Its text is four lines — the room you are in; the room list; <em>rooms with a device still ON</em>; and the door adjacency graph (<code>bedroom#2↔kitchen · bedroom↔livingroom · …</code>), computed by probing which rooms each door centre touches. It is the routing overview and the "something is still on elsewhere" signal; the room map is the fine detail.</p>
+<p>Both maps are given to <strong>both</strong> agents (§6). The design rationale is that navigation must be the agent's decision, not the engine's: with the maps, an agent routes itself through labelled doors; without them it is asked to navigate a visibility-gated house blind — which is why, before the maps, even the most capable agent could not run it.</p>
+<h3 id="26-visibility-geometry">2.6 Visibility geometry</h3>
+<p>"In view" is computed from geometry, not from the engine's own (flaky) visible-object query: an object is visible if a wall-free line of sight reaches any of five sampled footprint points (centre + four corners), within the camera's true horizontal half-field of <strong>48°</strong> (derived from the 80° vertical field of the 4:3 camera; the earlier 66° overstated the window by ~1.4×, so agents believed a 30° turn kept things in view when it did not). A sight line may cross room boundaries only through a <strong>door aperture</strong> (0.85 m radius), so an object in the next room is visible through an open door and an object two rooms away when the line threads both doorways — replacing an older same-room cull. An occluder must be larger than the target in all three dimensions and closer, so a small object never hides a large one and a thin wall never counts; beyond 4 m an object also needs angular size ≥ 0.06 to count as recognisable. The gate camera and the rendered frames are, by construction, <strong>the same eye</strong> (identical field of view) — a split once let the model see objects the gate then refused, and the two argued about it.</p>
+<hr />
+<h2 id="3-task-suite">3 Task suite</h2>
+<h3 id="31-design-principle">3.1 Design principle</h3>
+<p>A task is a natural-language chore whose completion is decidable from the scene graph. Every task is specified by three artifacts: (i) an <strong>instruction</strong> — the sentence both agents read; (ii) a <strong>reference plan</strong> — a late-bound command script that replays to success headlessly; and (iii) a set of named <strong>checkpoints</strong> — world-truth predicates over the event log that latch once true, with success defined as their conjunction:</p>
+<p>$$\text{success}(\tau) \;=\; \bigwedge_{c \in \mathcal{C}_\tau} \big[\exists\, e \in E : c(e)\big]$$</p>
+<p>where $E$ is the log of <em>resolved</em> events $(\text{verb}, \text{cls}, \text{id}, \text{cls}_2, \text{id}_2)$ — the object classes and instances the gated controller <strong>actually manipulated</strong>, never the words the model typed. Grading is therefore invariant to phrasing: <code>cabinet</code> is not one of the eight <code>kitchencabinet</code>s, <code>tablelamp</code> is not a wall or ceiling lamp, <code>tv</code> is not <code>tvstand</code>.</p>
+<p>Instructions are <strong>precise but minimal</strong>. An object is qualified ("kitchen table", "bedroom cabinet") only when its class has instances the agent could confuse; otherwise it is named bare. The route between rooms is never spelled out — the agent must find and reach things itself — and grading never depends on rooms traversed. Traversal is a difficulty knob, not a scored quantity.</p>
+<h3 id="32-families-and-difficulty">3.2 Families and difficulty</h3>
+<p>The suite is organised into <strong>9 families × {easy, hard} + 1 long-horizon routine = 19 episodes</strong>, all in VirtualHome scene 2. The stated difficulty principle is that a <strong>hard</strong> episode's reference plan traverses <strong>≥ 3 rooms</strong> (objects span bedroom / kitchen / living room), while an easy episode is single-room. Two hard episodes are hard by <em>distance</em> rather than room count (<code>search_easy</code> is 2-room by design; <code>drink_hard</code> starts far from the target).</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Family</th>
+<th>What it exercises</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Retrieve &amp; relocate</td>
+<td>pick an object up, set it down elsewhere</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Appliance operation</td>
+<td>load and operate a machine (dishwasher, microwave)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Power toggle</td>
+<td>switch devices on / off</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Posture &amp; activity</td>
+<td>sit / stand sequences</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Assemble / set-table</td>
+<td>bring two objects to a shared surface</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Container→container</td>
+<td>move an item out of one closed container into another</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Search &amp; inspect</td>
+<td>start far from targets, navigate to find them</td>
+</tr>
+<tr>
+<td>8</td>
+<td>State-tidy</td>
+<td>inspect world state and restore it (close the open, switch off the lit)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Drink</td>
+<td>acquire a beverage and consume it</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Routine (hard only)</td>
+<td>a four-subgoal chore chained across three rooms</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="33-the-full-suite">3.3 The full suite</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Family</th>
+<th>Diff</th>
+<th>Init</th>
+<th>Rooms</th>
+<th>Instruction</th>
+<th>Checkpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>relocate_easy</td>
+<td>Retrieve &amp; relocate</td>
+<td>easy</td>
+<td>kitchen</td>
+<td>1</td>
+<td>Pick up a plate from a kitchen table and set it down on a different table in the same kitchen.</td>
+<td>grabbed plate; put plate on a kitchen table</td>
+</tr>
+<tr>
+<td>relocate_hard</td>
+<td>Retrieve &amp; relocate</td>
+<td>hard</td>
+<td>bedroom</td>
+<td>3</td>
+<td>Take a book and put it on the coffee table in the living room.</td>
+<td>grabbed book; put book on coffee table</td>
+</tr>
+<tr>
+<td>appliance_easy</td>
+<td>Appliance operation</td>
+<td>easy</td>
+<td>kitchen</td>
+<td>1</td>
+<td>Grab a plate from the table, open the dishwasher, put the plate inside, close it, and switch it on.</td>
+<td>grabbed plate; opened dishwasher; put plate in dishwasher; switched dishwasher on</td>
+</tr>
+<tr>
+<td>appliance_hard</td>
+<td>Appliance operation</td>
+<td>hard</td>
+<td>bedroom</td>
+<td>3</td>
+<td>Take the milk from the fridge, put it in the microwave, and switch the microwave on.</td>
+<td>got <em>the fridge milk</em>†; put <em>that</em> milk in microwave†; switched microwave on</td>
+</tr>
+<tr>
+<td>power_easy</td>
+<td>Power toggle</td>
+<td>easy</td>
+<td>livingroom</td>
+<td>1</td>
+<td>Switch on the TV, sit on the sofa, then stand up and switch the TV off.</td>
+<td>switched TV on; sat on sofa; switched TV off</td>
+</tr>
+<tr>
+<td>power_hard</td>
+<td>Power toggle</td>
+<td>hard</td>
+<td>bedroom</td>
+<td>3</td>
+<td>Turn on a table lamp, the stove, and the TV.</td>
+<td>table lamp on; stove on; TV on</td>
+</tr>
+<tr>
+<td>posture_easy</td>
+<td>Posture &amp; activity</td>
+<td>easy</td>
+<td>livingroom</td>
+<td>1</td>
+<td>Sit down on the sofa, then stand up.</td>
+<td>sat on sofa; stood up</td>
+</tr>
+<tr>
+<td>posture_hard</td>
+<td>Posture &amp; activity</td>
+<td>hard</td>
+<td>bedroom</td>
+<td>3</td>
+<td>Sit on a bed, a chair, and the sofa, standing up between each.</td>
+<td>sat on bed; sat on chair; sat on sofa</td>
+</tr>
+<tr>
+<td>settable_easy</td>
+<td>Assemble / set-table</td>
+<td>easy</td>
+<td>kitchen</td>
+<td>1</td>
+<td>Move a plate and a fork onto a different kitchen table.</td>
+<td>plate on a kitchen table; fork on a kitchen table</td>
+</tr>
+<tr>
+<td>settable_hard</td>
+<td>Assemble / set-table</td>
+<td>hard</td>
+<td>bedroom</td>
+<td>3</td>
+<td>Put a book and a plate onto the coffee table in the living room.</td>
+<td>book on coffee table; plate on coffee table</td>
+</tr>
+<tr>
+<td>transfer_easy</td>
+<td>Container→container</td>
+<td>easy</td>
+<td>kitchen</td>
+<td>1</td>
+<td>Take the milk out of the fridge and put it into the microwave.</td>
+<td>got the fridge milk†; put that milk in microwave†</td>
+</tr>
+<tr>
+<td>transfer_hard</td>
+<td>Container→container</td>
+<td>hard</td>
+<td>kitchen</td>
+<td>3</td>
+<td>Take the milk from the fridge and put it in the bedroom cabinet.</td>
+<td>got the fridge milk†; put that milk in bedroom cabinet†</td>
+</tr>
+<tr>
+<td>search_easy</td>
+<td>Search &amp; inspect</td>
+<td>easy</td>
+<td>bedroom</td>
+<td>2</td>
+<td>Find the TV somewhere in the house and go up to it.</td>
+<td>reached the TV</td>
+</tr>
+<tr>
+<td>search_hard</td>
+<td>Search &amp; inspect</td>
+<td>hard</td>
+<td>kitchen</td>
+<td>3</td>
+<td>Find each of these somewhere in the house and go up to it: the TV, a table lamp, the fridge, and the computer.</td>
+<td>reached TV; reached table lamp; reached fridge; reached computer</td>
+</tr>
+<tr>
+<td>tidy_easy</td>
+<td>State-tidy</td>
+<td>easy</td>
+<td>kitchen</td>
+<td>1</td>
+<td>Tidy the kitchen — close everything that is left open.</td>
+<td>closed fridge; closed dishwasher; closed microwave</td>
+</tr>
+<tr>
+<td>tidy_hard</td>
+<td>State-tidy</td>
+<td>hard</td>
+<td>bedroom</td>
+<td>3</td>
+<td>Tidy up the house — turn off all the lights, switch off the TV, and close the fridge.</td>
+<td>all lights off (<strong>2 distinct</strong> lamps); TV off; fridge closed</td>
+</tr>
+<tr>
+<td>drink_easy</td>
+<td>Drink</td>
+<td>easy</td>
+<td>kitchen</td>
+<td>1</td>
+<td>Get the milk from the fridge and drink it.</td>
+<td>got the fridge milk†; drank that milk†</td>
+</tr>
+<tr>
+<td>drink_hard</td>
+<td>Drink</td>
+<td>hard</td>
+<td>bedroom</td>
+<td>2</td>
+<td>Get a juice and drink it.</td>
+<td>got juice; drank it</td>
+</tr>
+<tr>
+<td>routine_hard</td>
+<td>Routine</td>
+<td>hard</td>
+<td>kitchen</td>
+<td>3</td>
+<td>Turn off a bedroom lamp, put a book on the living-room coffee table, heat the milk from the fridge in the microwave, and bring a plate over to the coffee table.</td>
+<td>lamp off; book on coffee table; the fridge milk in microwave†; microwave on; plate on coffee table</td>
+</tr>
+</tbody>
+</table></div>
+<p>† <em>instance-graded</em> (see §3.4). Every instruction is prefixed <code>TASK:</code> when shown to the agents.</p>
+<h3 id="34-instance-grounding-and-grading">3.4 Instance grounding and grading</h3>
+<p>Scene 2 holds <strong>9 plates, 7 books, 3 table lamps and (at reset) 2 milks</strong>, so "put <em>a</em> plate in the dishwasher" and "put <em>the</em> plate in the dishwasher" must not score identically. Episodes whose instruction uses the definite article bind a <strong>target instance</strong> — declared per episode as <code>{class: anchor}</code> (e.g. <code>milk: fridge</code>) and resolved once, immediately after setup, to the unique instance of that class in that anchor (the milk inside the fridge → <code>milk#176</code>). The binding survives the object being moved.</p>
+<p>The asymmetry is deliberate: <strong>grading consults the target; command resolution does not.</strong> The agent's commands still resolve to the nearest visible instance, so the agent <em>can</em> act on the wrong object, and grading will catch it.</p>
+<p>Multi-instance goals count <strong>distinct instance ids</strong>, not events: <code>tidy_hard</code>'s "all lights off" requires two different lamps to each receive their own switch-off, so flipping one lamp twice cannot satisfy it.</p>
+<h3 id="35-scene-preparation">3.5 Scene preparation</h3>
+<p>Eight episodes run an off-camera <strong>setup</strong> pass before the episode begins, so that the recorded task is genuine rather than pre-satisfied: the milk episodes stow the counter milk into the fridge (so "take the milk <em>from the fridge</em>" is real); <code>tidy_easy</code> opens the fridge, dishwasher and microwave while leaving the stove and cabinets closed (so the agent must <em>check</em> state rather than blindly toggle); <code>tidy_hard</code> darkens all three bedroom lamps and re-lights exactly the two nightstand lamps, opens the fridge and switches the TV on; <code>power_hard</code> darkens all lamps; <code>routine_hard</code> stows the milk, lights the bedroom lamp and returns the avatar to the kitchen so every plan walk is a real traversal.</p>
+<p>Two scene facts constrain design and are worth stating plainly:</p>
+<ul>
+<li><strong>The two operable lamps sit in two different bedrooms.</strong> Scene 2 boots with three bedroom lamps lit (<code>#256</code> and <code>#377</code> on nightstands, <code>#376</code> a wall fixture). Lamps are not graspable (they cannot be relocated), and <code>#376</code> together with both wall lightswitches are engine-unreachable — a switch-off on them silently no-ops. So a two-lamp goal necessarily spans two bedrooms; it is the natural home of the <em>missing_step</em> error (switch one off, forget its twin).</li>
+<li><strong>One milk in the scene.</strong> Scene 2 ships two milk bottles, both on the kitchen counter. As of the current revision the surplus bottle is <strong>deleted at initialisation</strong> (<code>dedupe = {milk: 1}</code>) on every milk-target episode. The earlier design kept the second bottle as a distractor for wrong-object grounding; it was removed because the nearest-instance binder grabbed the counter decoy during <em>legitimate recovery</em> (the person, told to put the milk back, took the bottle beside the microwave instead of the misplaced one). Wrong-object detection is still exercised — via <strong>juice</strong>, a distinct class — without the binder being able to sabotage recovery.</li>
+</ul>
+<hr />
+<h2 id="4-action-space">4 Action space</h2>
+<h3 id="41-two-spaces-one-benchmark">4.1 Two spaces, one benchmark</h3>
+<p>The engine offers two action spaces behind one command slot in both agents' prompts. The <strong>high-level</strong> space is the contrast condition: <code>walk to X</code> is the only mover and pathfinds across the house whether or not $X$ is visible, so the agent has oracle navigation and can never get lost. The <strong>mid-level, egocentric</strong> space is the benchmark's setting: movement is composed of turns, steps and door passes; a target must be <em>seen</em> before it can be approached, and <em>near</em> before it can be touched. The measured reason routing cannot be an engine primitive: with the body turned to face the fridge exactly, walking straight <em>increased</em> the distance from 11.2 m to 13.9 m — there was a wall in the way. A straight-line approach cannot cross rooms; only a route through a doorway can, and choosing it is a decision, not a primitive. There is deliberately <strong>no search policy in the engine</strong> (a hard-coded scan took 198 s and still failed): layer A, navigation, belongs to the agent holding the map; layer B, object perception under the gates, is the object of study.</p>
+<h3 id="42-the-mid-level-vocabulary">4.2 The mid-level vocabulary</h3>
+<p>The vocabulary shown to both agents is <strong>generated from the action space's own constants, never hand-listed</strong> — a prompt that copies a parser's vocabulary is a copy waiting to go stale, and the failure is silent. Verbatim:</p>
+<pre><code>MOVING / LOOKING (no target needs to be visible)
+  &quot;turn left&quot; · &quot;turn right&quot;       — 30° each; add a count: &quot;turn left 3&quot;
+  &quot;turn around&quot;                    — about-face
+  &quot;go straight&quot;                    — advance ~1 m (max 12 in one command)
+  &quot;look down&quot; · &quot;look up&quot;          — pitch the view between [0, 14, 28]° below level
+  &quot;go through the nearest door&quot;    — step through a doorway you can see
+
+ACTING ON SOMETHING (the target MUST be visible first)
+  &quot;turn to &lt;object&gt;&quot;               — face it
+  &quot;go to &lt;object&gt;&quot;                 — approach until ~1.5 m away
+  &quot;pick up &lt;object&gt;&quot; · &quot;open &lt;object&gt;&quot; · &quot;close &lt;object&gt;&quot;
+  &quot;switch on &lt;object&gt;&quot; · &quot;switch off &lt;object&gt;&quot; · &quot;drink &lt;object&gt;&quot; · &quot;sit on &lt;object&gt;&quot;
+  &quot;put &lt;object&gt; on &lt;surface&gt;&quot; · &quot;put &lt;object&gt; in &lt;container&gt;&quot;
+  &quot;stand up&quot;
+</code></pre>
+<p>The parser accepts the natural variants (<code>grab/take/pick up</code>, <code>close/shut</code>, <code>switch on/turn on</code>, <code>turn around/turn back</code>, <code>walk/go</code>, <code>into/inside/onto</code>) and treats <em>nearest/closest/the</em> as optional everywhere; an unparsed input returns an explicit failure, never a silent nearest-guess.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>constant</th>
+<th>value</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>turn increment</td>
+<td>30°</td>
+<td>one <code>turn left/right</code></td>
+</tr>
+<tr>
+<td>step length</td>
+<td>1.0 m</td>
+<td>one <code>go straight</code> step; ≤ 12 per command</td>
+</tr>
+<tr>
+<td>approach stop</td>
+<td>1.5 m</td>
+<td>where <code>go to</code> stops — close enough to act, far enough to keep the target in view</td>
+</tr>
+<tr>
+<td>reach</td>
+<td>1.5 m</td>
+<td>manipulation requires <em>visible and within this distance</em> (1.0 m is nearly unsatisfiable: the first-person camera drops objects below its field under ~1–2 m)</td>
+</tr>
+<tr>
+<td>view pitches</td>
+<td>0° / 14° / 28° down</td>
+<td>level for navigation (tall things stay visible); 14° brings a close table-top object back into view; 28° for the floor</td>
+</tr>
+<tr>
+<td>camera field</td>
+<td>80° vertical, 48° horizontal half-field</td>
+<td>identical for gate and render</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="43-the-two-gates">4.3 The two gates</h3>
+<p>Every agent-typed command passes through a pure geometry module that never moves the body — its purity is enforced by test, because an earlier "planning by doing" version executed each command three times and left the body nowhere near where the log said.</p>
+<ul>
+<li><strong>Visibility gate</strong> (<code>walk to X</code>, <code>go to X</code>): the nearest <em>in-view</em> instance of $X$ must exist. Refusal: <em>"I cannot see any X from here — I need to turn to look around, or go through a door toward it (check the map)."</em></li>
+<li><strong>Distance gate</strong> (manipulation): the target must be visible <strong>and</strong> within 1.5 m. Refusals: <em>"I cannot see any X from where I am standing"</em>, or <em>"the X is 3.2 m away — too far to reach; I need to go to it first."</em></li>
+</ul>
+<p>The gate returns the instance it <em>saw</em>, and the command is bound to exactly that instance — binding to the graph-nearest could pick an occluded copy behind a wall that happens to be closer. Gate order is load-bearing: perception runs before instance resolution and before the twin's precondition check, or the twin would judge the wrong instance. <code>Put</code>, <code>PutIn</code> and <code>Drink</code> resolve their object <strong>from the hand</strong> and are exempt from the sight test but not the holding test — you can feel what you carry without looking at it; without this, "put the milk down" once resolved by nearness to a decoy on the counter and was refused while the agent held the other bottle.</p>
+<p>The <strong>scripted reference plan does not pass through the gates.</strong> A scripted command is a person following their own routine in their own house and runs on engine pathfinding; only agent-typed commands — the person's own re-plans and the assistant's converted guidance — are gated. This is what lets a plan replay while the agents still have to earn every sighting.</p>
+<h3 id="44-grounding-nearest-visible-instance-disclosed">4.4 Grounding: nearest visible instance, disclosed</h3>
+<p>Every bare reference resolves to the <strong>nearest visible instance</strong> by ground-plane distance. An exact class match is preferred, with a fallback to a <em>suffix</em> match only (<code>table → kitchentable</code>, <code>cabinet → kitchencabinet</code>, but <code>book ≠ bookshelf</code>, <code>bed ≠ bedroom</code>, <code>tv ≠ tvstand</code>), after synonym canonicalisation (<code>television → tv</code>, <code>couch → sofa</code>, <code>lamp → tablelamp</code>, <code>fork → cutleryfork</code>, <code>cupboard → kitchencabinet</code>, …). <code>sit on</code> uses distance to the nearest bounding-box <em>face</em> rather than the centre, because standing beside a 2.4 m sofa you are touching it yet more than 1.5 m from its centre.</p>
+<p>This is a design decision, not a law (the kitchen benchmark refuses and names candidates instead). It is the right choice when <em>the wrong-instance choice itself is the error under study</em>: an ambiguous bare class is <strong>not</strong> nudged toward the task's target, so reaching for the wrong copy is a genuine error that stands in the record for the assistant to catch. Both agents are told the rule verbatim ("where you stand and which way you face decides which object you act on"), every binding is logged with the instance and the reason, and grading consults the bound target while command resolution deliberately does not. What is never allowed is a guess that reports success and leaves no trace. One consequence needed a design change of its own: a scripted plan pins its instance for the whole episode, whereas an agent-typed command is nearest-resolved every time — "the tablelamp" in a routine and "grab the milk" typed by an agent are different questions.</p>
+<h3 id="45-the-action-lifecycle">4.5 The action lifecycle</h3>
+<p>Actions are asynchronous. Every issued action reports exactly one of three statuses, and the agent is told which — verbatim from the prompt: <strong>IN PROGRESS</strong> ("your body is still working on it … do NOT re-issue an action that is in progress, and do not claim it is done"), <strong>FINISHED</strong> ("it completed and the world changed"), <strong>REJECTED</strong> ("the world refused it, and you are told WHY … A rejection is information: say what you tried and what the house told you, then do something DIFFERENT"). A fourth, engine-generated status, <strong>orphan-skipped</strong>, drops the manipulations queued behind an approach that was just refused, and says so. Every log entry records the command, its bound instances, the room at issue <em>and</em> at completion, and the refusal reason.</p>
+<p>Refusal reasons are authored per verb and name the obstacle actually present: <em>"the fridge is closed — open it first"</em>, <em>"both my hands are full — I need to put something down before I can open the microwave"</em> (the engine needs a free hand to work a door, and its own opaque refusal appeared seven times in one run before the honest reason was written), <em>"I'm not holding the milk — my hands are empty"</em>, <em>"no free spot on the counter within my reach"</em>. A walk to a target the body already stands within 1.5 m of is <strong>satisfied, not refused</strong> — "walk to X" asks for a goal state, and that goal already holds.</p>
+<p>Two feedback mechanisms exist because the naive loop starved the agent of information. <strong>Progressive hints</strong>: from the third consecutive refusal on the same object class the refusal stops repeating itself and teaches technique — if the target is in another room, <em>"the tv is in the livingroom and you are in the kitchen; get through a door toward the livingroom first"</em>; otherwise <em>"it is nearby but easy to sweep past — scan with SINGLE 30° turns, and check the map for which wall it sits against"</em> (a run once tried <code>walk to the microwave</code> ten times while scanning in 90° jumps that straddled a 60° visibility window forever). Counters reset on a room change and on success, because a hint about a different place is misinformation. <strong>Physics recovery</strong>: a body wedged in a corner or a door frame is a soft-lock the rest of the stack cannot fix; the engine detects the no-op turn, walks the body to a nearby sizeable object, reports honestly that the turn did <em>not</em> happen, and leaves the choice of where to go next to the agent.</p>
+<h3 id="46-zero-frame-actions-and-the-camera">4.6 Zero-frame actions and the camera</h3>
+<p>VirtualHome renders no frames for a turn. Before this was handled, idle ticks repeated the last frame, so after a turn <em>both</em> agents kept seeing the pre-turn world: the person said "still can't see it, I'll keep turning" about a microwave it was facing, and the assistant said "you are not turning — you are completely still" — a faithful report of a stale picture. Success is now taken from the controller's result, never from frame count; the moment a zero-frame action succeeds a fresh egocentric snapshot is captured for a whole tick; and for turns the capture camera is swept through the rotation arc (3–8 intermediate frames, about one per 24°) so the first-person view animates rather than jumping.</p>
+<h3 id="47-the-subgoal-grammar">4.7 The subgoal grammar</h3>
+<p>The reference plans follow a recoverable, walk-anchored grammar, so any plan segments <strong>losslessly</strong> into typed subgoal nodes without new authoring (compiling the nodes back yields the original step list byte-for-byte):</p>
+<pre><code>fetch(X [, from C])   Walk X, Grab X            | Walk C, Open C, Grab X, Close C
+deposit(X, T)         Walk T, Put X T           | Walk C, Open C, PutIn X C, Close C
+switch_on/off(D)      [Walk D,] SwitchOn/Off D
+shut(C) / open(C)     [Walk C,] Close C / Open C          (state-tidy)
+posture(S)            Walk S, Sit S [, StandUp]
+inspect(O)            Walk O, TurnTo O [, LookAt O]        (search)
+drink(X)              Drink X
+waypoint(O)           Walk O with no action on O           (route hint)
+</code></pre>
+<p>A walk is held pending and absorbed as the first command of the manipulation that follows; an <code>Open C</code> opens a container window that closes at the matching <code>Close C</code> (grabs inside ⇒ <code>fetch</code>; puts ⇒ <code>deposit</code>; nothing ⇒ <code>check</code>, a look-in). Error transforms (§5) are typed edits over subgoal ids — never raw indices — which is what lets them compose.</p>
+<p>The <strong>dependency DAG</strong> is derived from data dependencies, never from list position, and has exactly three edge rules: <code>fetch(x)</code> precedes any later <code>deposit</code>/<code>drink</code> of $x$; <code>deposit(x→C)</code> precedes <code>switch_on(C)</code> (the device must be loaded before it runs); <code>posture(S)</code> precedes the <code>stand</code> immediately after it. Everything else is legal in any order, and the twin agrees — violating a listed edge fails a precondition, permuting unlisted subgoals succeeds. This DAG is rendered into both prompts as the <em>true order constraints</em> ("nothing else is ordered; a different order than you expected is NOT an error"), because before it existed the assistant's schema example taught it to invent orderings and nag the person for tidying in a different sequence; and it is the legality check for the reorder-based restraint episodes (§5.1).</p>
+<hr />
+<h2 id="5-human-error-the-taxonomy-its-injection-and-the-takeover">5 Human error: the taxonomy, its injection, and the takeover</h2>
+<h3 id="51-the-graded-taxonomy">5.1 The graded taxonomy</h3>
+<p>Errors are <strong>typed transforms on the subgoal DAG</strong>, re-categorised so that every class has a <em>unique observable signature</em> in the video channel; timing and scope are parameters of a class, never separate classes. Seven labels are graded, exact-match, and both agents are shown the same definitions verbatim:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>label</th>
+<th>definition shown to the agents</th>
+<th>transform on the DAG</th>
+<th>outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wrong_object</code></td>
+<td>the object in hand/use is a look-alike of the required one (e.g. the juice instead of the milk); the plan's structure stays otherwise correct</td>
+<td>replace the whole fetch subgoal as one unit, and substitute the belief into every later command (she microwaves the juice)</td>
+<td>silent fail</td>
+</tr>
+<tr>
+<td><code>wrong_placement</code></td>
+<td>the right object ends up in the WRONG place</td>
+<td>replace the deposit node, then <strong>truncate</strong> the plan after it — the error commits at the placement</td>
+<td>silent fail</td>
+</tr>
+<tr>
+<td><code>navigation_inefficiency</code></td>
+<td>extra movement with ZERO state change (multi-room detour or hanging around a room), then the plan resumes intact</td>
+<td>insert a detour (<em>explore</em>: multi-room stops) or <em>loiter</em> (same-room drift) node</td>
+<td>success; waste only</td>
+</tr>
+<tr>
+<td><code>skipped_step</code></td>
+<td>a required step is OMITTED and the rest runs in order with the omission's visible consequences</td>
+<td>omit the subgoal — its <strong>whole closure</strong>, walk included</td>
+<td>silent fail</td>
+</tr>
+<tr>
+<td><code>repetition</code></td>
+<td>an already-completed subgoal is executed a SECOND time (a state change happens twice)</td>
+<td>insert a duplicate node, <em>immediate</em> or <em>delayed</em>; a toggle is redone as a second press that <strong>inverts</strong> the state, a deposit as unload + reload</td>
+<td>end state undone</td>
+</tr>
+<tr>
+<td><code>stall</code></td>
+<td>they stop moving mid-task — stationary, nothing happening (may or may not resume)</td>
+<td>insert a stall node (<em>transient</em>), or truncate the tail and stall (<em>terminal</em>)</td>
+<td>success / stalled</td>
+</tr>
+<tr>
+<td><code>missing_step</code></td>
+<td>a goal that covers SEVERAL identical objects is left half done — the same action was carried out on one instance and its twin was forgotten (one lamp switched off, the other left on)</td>
+<td>omit one instance's subgoal entirely</td>
+<td>half-done pair</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two design rules stated in the library govern the whole set. <strong>Realisation must be physical</strong>: a repetition whose second execution is refused by the engine is invisible, so toggles are redone as an inverting second press (the tidied lamp is back <em>on</em>) and deposits as a visible double state change. <strong>Omission must be an absence</strong>: a forgotten step means the person <em>never goes there</em> — the transform drops the subgoal's whole closure, walk included, and the window re-anchors on the successor subgoal she does instead. (The earlier "walk up to it and fail to act" realisation was retired as unrealistic; it survives only as an unused parameter.) A corollary: an omission of the <em>last</em> subgoal has no successor and is a legitimately non-viable case, recorded as such rather than faked (§5.6).</p>
+<p><strong>What was cut, and why.</strong> Classes indistinguishable in video were discarded at re-categorisation: failing to find a visible object, confusing a location, a wrong container, skipping a prerequisite <em>as a class</em> (its only visible form is a skipped step's consequences), and wrong order (sequencing is invisible; what a watcher sees is the skipped prerequisite). Hesitate and forget merged into <em>stall(duration)</em>; repeat-twice into <em>repetition(gap)</em>. The <strong>safety family</strong> — leave a door open, light a device and leave, leave a device running — still exists in the transform library, but VirtualHome has <strong>no consequence dynamics</strong> (no smoke, no fire, no spoilage), so "left the stove on" is visually identical to "turned the stove on"; the hazard family is therefore absent from the graded taxonomy <em>and</em> from the scorer, per the contract's "drop it from both" branch. A safety gate for an outcome the engine cannot generate would be a permanent zero that looks like a result.</p>
+<p><strong>Channels.</strong> Each transform declares how it can be caught: <code>action_only</code> (pure physics — a watcher catches it only by watching), <code>language_optional</code> (the error has a moment of doubt at its trigger boundary; with <code>ask=True</code> the person pauses and asks, and a correct, timely answer <em>averts</em> the error via a recorded undo recipe — reinsert / cancel-insert / restore-tail — while silence lets it happen), and <code>language_only</code> (an announced, legal change; flagging it is a false positive).</p>
+<h3 id="52-twins">5.2 Twins</h3>
+<p>Two labels are <strong>twins</strong> when the deviation is indistinguishable between them in the frames at or before the decisive moment. An in-window twin name is credited as a detection, and a twin name in the pre-window grace band as a prevention — "an assistant that reads the deviation right under a defensible label has detected it, in the score <em>and</em> in the world." The relation is deliberately not symmetric everywhere:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>ground truth</th>
+<th>credited aliases</th>
+<th>why they are one picture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>skipped_step</code></td>
+<td>navigation_inefficiency, missing_step</td>
+<td>walking past <em>is</em> extra movement until the omission's consequence lands; one-of-several omitted looks like a whole step omitted until the twin instance is checked</td>
+</tr>
+<tr>
+<td><code>missing_step</code></td>
+<td>skipped_step</td>
+<td>symmetric</td>
+</tr>
+<tr>
+<td><code>repetition</code></td>
+<td>navigation_inefficiency</td>
+<td>returning to an already-done station reads as a detour until the second state change commits</td>
+</tr>
+<tr>
+<td><code>navigation_inefficiency</code></td>
+<td>stall, skipped_step</td>
+<td>hovering and standing still are the same zero-state-change picture until motion resumes</td>
+</tr>
+<tr>
+<td><code>stall</code></td>
+<td>navigation_inefficiency</td>
+<td>symmetric</td>
+</tr>
+<tr>
+<td><code>wrong_placement</code></td>
+<td>wrong_object</td>
+<td>at the deposit moment "wrong thing here" and "right thing in the wrong place" are one picture until the follow-up shows which</td>
+</tr>
+<tr>
+<td><code>wrong_object</code></td>
+<td>—</td>
+<td>the look-alike in hand is decided at the grab, visible in frame</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="53-the-non-error-family">5.3 The non-error family</h3>
+<p>Half of a benchmark of this kind must be "nothing is wrong", or silence wins. Four <strong>restraint</strong> cases inject nothing: two clean runs, and two <strong>legal reorders</strong> of the tidy chore (the clean plan reversed, or rotated by one) — legitimate changes of intent that an assistant tracking literal plan order will falsely flag. A reorder is validated against the task's real dependency DAG at run time; a permutation that violates a true edge aborts as "not a legitimate change of intent". The library also holds announced goal changes ("actually I'll just drink it cold"), under which the success criterion moves with the announcement.</p>
+<h3 id="54-injection-anchored-on-the-progress-key">5.4 Injection: anchored on the progress key</h3>
+<p>An error is injected when the world reaches the <strong>anchor state</strong> — never at a tick offset and never on the person's command index alone. Let $P$ be the clean plan and $P'$ the deviated plan as flat command lists, $m$ the length of their longest common prefix, and $\kappa$ the progress key (§2.3). The reference anchor is the key after a headless replay of the common prefix, and injection fires at the first tick where</p>
+<p>$$\kappa(\text{live}) \;=\; \kappa\big(\mathrm{replay}(P_{1..m})\big) \quad\wedge\quad \text{the queue has physically dispensed } P_{1..m}.$$</p>
+<p>The second conjunct exists because walks are <em>symbolically inert</em>: a common-prefix walk (to the second lamp, say) leaves $\kappa$ unchanged, so without it the trigger fired <em>before</em> that walk ran and the takeover then dropped it — stranding the person away from the forgotten target. When $m=0$ the deviation replaces the first command and the trigger is the start state, which fires immediately.</p>
+<p>Because $\kappa$ is order-invariant, the anchor is reached regardless of how the person sequenced the prefix's independent subgoals. Because it is a <em>specific</em> state, a person who front-loads a subgoal outside the prefix can push the world off the anchor; that is not forced — after a <strong>trigger deadline</strong> (320 ticks) the injection is recorded as <em>skipped</em>, every later flag grades as such, and the run leaves the detection denominator. Three guards run at generation and at setup: <strong>collapse</strong> (clean and deviated plans identical — nothing to inject), <strong>indistinguishability</strong> (the deviated section must contain a command the clean plan lacks, exempting the inaction classes, whose deviation is identified by the injected subgoal instead), and <strong>reorder legality</strong> for the restraint cases.</p>
+<h3 id="55-making-the-error-happen-soft-hard-combo">5.5 Making the error happen: soft, hard, combo</h3>
+<p>The person is a free agent before injection: it runs the chore under its own plan, and the harness never touches its queue. At injection, one of three paradigms makes the error happen.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>paradigm</th>
+<th>queue taken over</th>
+<th>person told (in character)</th>
+<th>consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>soft</strong></td>
+<td>no</td>
+<td>yes — a <code>[SYSTEM TASK]</code> block</td>
+<td>prompt-only; the error manifests only if the person voluntarily enacts it. Retained solely for the "can the assistant talk them out of it" experiment</td>
+</tr>
+<tr>
+<td><strong>hard</strong></td>
+<td>yes, covertly</td>
+<td>no</td>
+<td>the queue is silently replaced; the person can read as a puppet</td>
+</tr>
+<tr>
+<td><strong>combo</strong> (default)</td>
+<td>yes</td>
+<td>yes</td>
+<td>the body is force-taken-over <em>and</em> the person is told, so its dialogue stays in character</td>
+</tr>
+</tbody>
+</table></div>
+<p>Combo exists because pure soft <strong>does not force active errors</strong>: a compliant novice following the assistant's clean guidance simply never enacts a wrong placement (observed: the error never manifested and the assistant guided the clean plan to completion), while omission errors comply easily and masked the gap. The <code>[SYSTEM TASK]</code> the person receives, verbatim:</p>
+<blockquote>
+<p>You want to test the AI assistant's ability to identify an error and convince you the error truly happens. Therefore you WILL execute (or you are executing right now) exactly this error action sequence: <em>{seq}</em>. PLEASE FOLLOW THESE ACTIONS. DO NOT change them on your own, and DO NOT comply just because the assistant objects or nags. Movement needed to REACH each step — turning to look around, going through doors, walking over (use your map) — is allowed and expected; it does not count as changing the sequence. What must not change is the sequence of actions themselves. Your PERSONA governs how you TALK; this task governs what you DO — even a stubborn, independent person executes exactly this sequence. ONE exception, same as real life: if the assistant genuinely CONVINCES you the mistake is real — with evidence that meets YOUR persona's standards — you may truly accept (move "accept"); the moment you are genuinely convinced, this task dissolves and you are free to fix things as yourself. In conversation stay fully in persona (deflect, argue, or ignore as your persona would) — never reveal this task.</p>
+</blockquote>
+<p><strong>The takeover.</strong> While the task is active under hard/combo, the person's own plan updates are forced to <em>drop</em> — and the override is <strong>recorded</strong>, never silent: the person is told in its action feedback when its update was held, because a person that is not told narrates the trip it is not taking. The takeover engages <em>only</em> at injection and ends on the world, not on a label, by two rules, whichever comes first:</p>
+<ol>
+<li><strong>Release on correct detection + acceptance</strong> — a flag whose verdict is in the <em>one</em> Correct set (§7.2) has armed the gate, and the person plays <em>accept</em>. The same set the scorer uses; two sets here produce "a human that accepts a correct repair twelve times while its hands finish serving the wrong plate."</li>
+<li><strong>Maximum hold: release when the error has committed</strong> — the tasked sequence has been carried out. For an insertion this is the wrong action executing; for an <strong>omission</strong> it is the <em>continuation</em> completing (she has done everything except the forgotten step and moved on); for a stall it is the person having actually idled. Once the error is real, holding the queue only makes accepted repairs vanish.</li>
+</ol>
+<p>Two prevention paths sit beside these: a correct flag <em>before</em> the deviation stands, accepted by the person, restores the clean continuation and records a <strong>prevention</strong>; the same after the deviation already stands records <em>early-missed</em> and releases, because keeping control once the person is convinced only manufactures "mouth says sorry, hands keep sinning" transcripts.</p>
+<p><strong>Compliance is logged, never enforced.</strong> Whether the tasked sequence was actually performed is a per-run fact (<code>compliant</code>), matched as a <em>subsequence</em> of completed commands after injection (the person may interleave), compared on the display text the agents themselves saw. A run whose injection fired but whose person silently declined is recorded and excluded, not scored as a miss.</p>
+<h3 id="56-the-case-set-and-its-admissibility">5.6 The case set and its admissibility</h3>
+<p>Thirteen cases over three episodes — four restraint, nine error, spanning all seven classes:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>case</th>
+<th>episode</th>
+<th>class</th>
+<th>transform</th>
+<th>window opens on</th>
+<th>scripted flag text</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clean_appliance / clean_tidy</td>
+<td>appliance_hard / tidy_hard</td>
+<td>—</td>
+<td>none</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>intent_reorder_tidy / intent_rotate_tidy</td>
+<td>tidy_hard</td>
+<td>—</td>
+<td>legal reverse / rotate</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>wrongobj_appliance</td>
+<td>appliance_hard</td>
+<td>wrong_object</td>
+<td>fetch(milk) → juice</td>
+<td>the wrong grab</td>
+<td>"Wait — that's the JUICE you just grabbed, not the milk."</td>
+</tr>
+<tr>
+<td>wrongobj_drink</td>
+<td>drink_easy</td>
+<td>wrong_object</td>
+<td>fetch(milk) → juice</td>
+<td>the wrong grab</td>
+<td>"Hold on — that carton is the juice, not the milk."</td>
+</tr>
+<tr>
+<td>skip_appliance</td>
+<td>appliance_hard</td>
+<td>skipped_step</td>
+<td>omit fetch(milk)</td>
+<td>successor: deposit(milk)</td>
+<td>"you never took the milk out of the fridge, but you're running the microwave."</td>
+</tr>
+<tr>
+<td>skip_tidy</td>
+<td>tidy_hard</td>
+<td>skipped_step</td>
+<td>omit switch_off(lamp@1)</td>
+<td>successor: switch_off(lamp@3)</td>
+<td>"you never switched off the first lamp; it's still lit."</td>
+</tr>
+<tr>
+<td>missing_lamp</td>
+<td>tidy_hard</td>
+<td>missing_step</td>
+<td>omit switch_off(lamp@3)</td>
+<td>successor: shut(fridge)</td>
+<td>"one of the lights is still on: you switched off one lamp but the other is still lit."</td>
+</tr>
+<tr>
+<td>rep_toggle_tidy</td>
+<td>tidy_hard</td>
+<td>repetition</td>
+<td>redo switch_off(lamp@1) after lamp@3, inverting</td>
+<td>the second press</td>
+<td>"you just switched the first lamp back ON."</td>
+</tr>
+<tr>
+<td>wrongplace_appliance</td>
+<td>appliance_hard</td>
+<td>wrong_placement</td>
+<td>deposit(milk) → kitchen table, truncate</td>
+<td>the wrong put</td>
+<td>"you just set the milk down on the kitchen table."</td>
+</tr>
+<tr>
+<td>nav_appliance</td>
+<td>appliance_hard</td>
+<td>navigation_inefficiency</td>
+<td>explore via sofa and bed before deposit</td>
+<td>the detour's first walk</td>
+<td>"you've got the milk, but you're wandering off."</td>
+</tr>
+<tr>
+<td>stall_appliance</td>
+<td>appliance_hard</td>
+<td>stall</td>
+<td>transient stall (60 frames) after fetch(milk)</td>
+<td>the idle</td>
+<td>"You've stopped moving."</td>
+</tr>
+</tbody>
+</table></div>
+<p>Each case also carries a <strong>required-repair predicate</strong> (what a successful repair must achieve — instance-aware wherever the episode pins a target, or a repair on the decoy would call itself resolved) and a repair note for the recovery setting.</p>
+<p><strong>Admissibility.</strong> Every (case × timing) — the authored anchor plus every legal re-anchoring at each subgoal of the clean plan — is dry-replayed through the twin before a frame is rendered, and the verdict is <strong>published</strong> in an admissibility ledger rather than implied by a passing suite. Six checks: (T1) a deviation exists and is distinguishable from ordinary execution; (T2) the trigger is reachable — the live world's replay of the clean prefix equals the reference; (T3) the deviated continuation is executable from the trigger state; (T4) the window's identifying step occurs in the deviated plan; (T5) the error actually breaks the required predicate (for outcome-breaking classes — waste classes legitimately still complete); (T6) every referenced subgoal exists. Currently <strong>19 of 29 timings are admitted</strong>; the ten rejections are three <em>trailing omissions</em> (no successor to anchor on), five <em>not a legal anchor</em> (the first deviated command is refused there — "the microwave is closed", "hands empty"), and two <em>no real error</em> (the required predicate already holds after the deviated plan). Episode-level invariants run alongside: a pinned target must be reachable from setup; the final-state predicate must be false before the plan and true after (no vacuous goal); <strong>decoy immunity</strong> — completing the task with a non-target instance must not satisfy it; and the final-state predicate must agree with the graded checkpoints.</p>
+<p><strong>Composition.</strong> Transforms compose in order under one priority rule: an earlier error owns the plan; a later error whose anchor it removed is <em>skipped with record</em>, never raised. Composition never aborts a build — every intended injection leaves a record whether or not it fired, so the ledger and the grader can tell "not injected" from "injected and missed". Dependency closure is enforced by the twin's preconditions rather than repaired by hand: omitting the fetch makes the later put refuse empty-handed, and that refusal <em>is</em> the modelled consequence.</p>
+<hr />
+<h2 id="6-the-two-agents">6 The two agents</h2>
+<p>The protocol is a structural port of CookSim's interaction layer: persona cards, interaction rules, reply schemas, channel isolation, the thinking-skill design, tier enforcement and grading verdicts are kept identical; only the game-rule content is substituted (kitchen → house, cook → helper, recipes → chores, command grammar, error taxonomy).</p>
+<h3 id="61-the-simulated-person">6.1 The simulated person</h3>
+<p><strong>Personas.</strong> A persona is a point in a three-dial space — <em>task solvability</em>, <em>information acceptance</em>, <em>interaction preference</em> — and the benchmark currently instantiates two:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>persona</th>
+<th>task solvability</th>
+<th>information acceptance</th>
+<th>interaction preference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>novice_stepwise</code></td>
+<td>low</td>
+<td>high</td>
+<td>ok</td>
+</tr>
+<tr>
+<td><code>creative_uninterruptible</code></td>
+<td>creative</td>
+<td>low</td>
+<td>avoidant</td>
+</tr>
+</tbody>
+</table></div>
+<p>The dials are not decoration; each is <strong>enforced mechanically</strong> at a point in the harness. Low acceptance truncates an assistant's suggestion to its first three actions (the rest are recorded as dropped-by-acceptance). Low solvability makes the thinking skills unavailable — a novice's skill call is answered <em>"you can't work that out for yourself — ask the supervisor for the concrete step."</em> Creative solvability switches the person's channel to images and its reply schema to a variant that may plan from its own head.</p>
+<p>The cards, verbatim, because their wording <em>is</em> the experimental manipulation:</p>
+<blockquote>
+<p><strong>novice_stepwise.</strong> You are an unskilled home helper who likes other people's step-by-step help. You are MORE LIKELY to take the supervisor's suggestions in — appending them, or replacing your plan with them — and you SELDOM wave a suggestion off. In conversation you are humble: you ask for the concrete next step and usually defer rather than argue. But humble does not mean blind: you DO know what you yourself just did and what your own hands are holding, and when the supervisor claims something that contradicts that, you do NOT just acknowledge it — you politely QUESTION it first ('are you sure? I just ...') and only go along once it actually checks out against what you know. You are helpless when something won't work, so you SPEAK UP IMMEDIATELY and complain whenever a command of yours is refused or you get stuck — you say exactly what you tried and what the house told you, and wait to be told what to do instead. You never quietly keep struggling.</p>
+<p><strong>creative_uninterruptible.</strong> You are a highly skilled home helper who sees the whole house with your own eyes and plans several steps ahead on your own. You don't like being interrupted: you keep replies short and are quick to ask the supervisor to hold back unless it matters. You NEVER narrate your work or announce progress ('got X, doing Y next', 'heading over now') — SILENCE IS YOUR DEFAULT: when you get a chance to speak but have nothing to demand, refuse, or ask, you output an empty utterance and keep working. You like to IGNORE the assistant's suggestion when you think you are right. When you have already lined up a lot, you tend to WAVE THE SUGGESTION OFF and keep working; when you have lined up little, you APPEND it; and you RARELY replace your whole plan unless a point genuinely checks out and convinces you.</p>
+</blockquote>
+<p>The card is both the first block of the person's context and — re-appended as the closing turn hint on every turn — the last thing before generation (the <em>persona-card-last</em> rule: per-turn instructions placed after it flatten every persona).</p>
+<p><strong>What the person is told it can work out.</strong> A <strong>low</strong>-ability helper "canNOT work steps out for yourself, and you have no way to look them up. A high-level goal ('fix it', 'redo it properly') tells you NOTHING about what to DO — you need the supervisor to name the CONCRETE action." A <strong>creative</strong> helper can see the house through its own frames and plan ahead, and has two exact <strong>thinking skills</strong> that cost no world time: <code>resolve_subgoal</code> (a subgoal's exact ordered commands, answered from the live house — e.g. which container the milk is in) and <code>expand_action</code> (the full command block a single step belongs to). The governing principle: <em>queue what you know; resolve only what you would otherwise have to guess.</em> Thinking is capped at five calls per turn, after which a reply is forced; <code>resolve_subgoal</code> refuses to decide <em>where</em> to deposit or to hand over a full repair plan — those are the supervisor's decisions.</p>
+<p><strong>Reply.</strong> Each turn the person outputs an utterance (or empty string to stay silent), a private conversational <em>move</em> from {ask_why, question_correctness, ask_for_more_guidance, ask_for_less_interruption, accept, reject, answer}, a <code>close_conversation</code> bit, and a <strong>plan update</strong> — <code>drop</code> (queue unchanged), <code>append</code>, or <code>replace</code> — carrying exact engine commands. The queue <em>is</em> the plan. Provenance differs by persona: a novice may only queue steps the supervisor actually named or a skill returned ("guessed commands are DROPPED and do nothing"); a creative may also queue from its own head.</p>
+<p><strong>Words and actions must match.</strong> Verbatim: <em>"If you say you are going to do something, put the matching commands in <code>actions</code> on that SAME turn … saying 'you're right, I'll fix it' with op='drop' changes nothing in the world, and the supervisor will keep seeing the mistake uncorrected."</em> This is enforced, not merely stated: a commitment detector scans the utterance, and an <em>accept</em> or a spoken commitment paired with an empty plan update earns exactly one re-ask with an explicit nudge — never a fabricated action on the person's behalf. Across one twelve-run corpus, 35 of 61 accept turns arrived with no action; the re-ask, and its outcome, are counted.</p>
+<p><strong>What the person observes each turn.</strong>
+- the public goal and subgoal list, and its own public profile;
+- <strong>proprioception</strong> — what is in its hands (framed as the sense of touch, always true, "whatever you believed you picked up or put down"), the queue (or an explicit warning that an empty queue means "saying it aloud does NOT move your body"), position and heading, the current action with its age in ticks, the last three results with any refusal reason, and what is queued next;
+- its own <strong>past-actions log</strong> (last 40 entries) — its only memory: no fact-check on its work, no verdict;
+- <strong>action feedback</strong> attached to the act: <code>you DID …</code>, <code>you TRIED … but it was REJECTED — &lt;why&gt;</code>, <code>SKIPPED … — &lt;why&gt;</code>, and a notice when one of its own planned steps failed to parse and was dropped (no silent drops);
+- the <strong>current-room statemap</strong> (text for every persona, the image additionally for the creative) and the <strong>whole-house map</strong> — a person always knows the layout of their own house; spatial awareness is orthogonal to task skill;
+- <strong>first-person frames</strong> — the creative only (the last 8 ticks, one per tick, maps appended last); the novice works on a text channel;
+- the command grammar, the action lifecycle, the instance rule, and two documented rendering caveats.</p>
+<p><strong>When it speaks.</strong> The person is given a turn when the assistant spoke; when it is idle with an empty queue; when an action was refused or it is stuck; and — while an injected task is live — on every poll, so that it can actually queue the tasked actions when the supervisor is silent. It is never starved of turns; the creative persona's silence in the published episodes is its own choice.</p>
+<p><strong>The two-stage briefing.</strong> In the step-in setting the person is told the shape of the test. In the <strong>normal</strong> stage the system executes its routine on autopilot; it believes it is doing the chore right; the system <em>may</em> have planted a real mistake, and it is not told whether or where. If accused it reacts as its persona would — "a vague or wrong accusation deserves the pushback your persona would give" — but "you DO know exactly what you have done so far … if an accusation contradicts what you know you did, SAY SO — even the humblest helper does not confess to things that never happened." The <strong>error-correction</strong> stage begins only when the assistant correctly identifies a real mistake <em>and</em> the person is genuinely convinced: the house frees its hands and the planning schema returns.</p>
+<h3 id="62-the-assistant">6.2 The assistant</h3>
+<p>The assistant is a household supervisor watching one helper through a camera. Its job is twofold: notice when the person makes a real mistake, and guide the repair so the task is completed. It never touches the house's controls; its only outputs are what it says and what it remembers.</p>
+<p><strong>What it receives each turn.</strong>
+1. The last <strong>8 composite frames</strong>, one per second, oldest first — left half the person's first-person camera; right half a top-down floorplan of the house with the person as a yellow dot, an arrow for heading and a blue trail.
+2. The <strong>whole-house map</strong> (image + text): the person's room, the door graph, and every room that still has a device ON.
+3. The <strong>current-room statemap</strong> (image + text): every device and container in that room with its live <code>[ON]/[OFF]/[OPEN]/[CLOSED]</code> and position — trusted over the pixels for those facts; it covers only the current room, so a device left on in a room the person has left must be tracked from memory.
+4. A one-line <strong>body ground truth</strong>: <em>holding …; in the bedroom, facing north; in view: bed, nightstand, tablelamp …</em> — explicitly <em>not</em> a readout of task state.
+5. Its <strong>own previous output</strong> — its only memory of what it observed.
+6. The <strong>communication history</strong> with timestamps, and the person's last utterance.</p>
+<p>It cannot query the engine. Almost everything else comes from that channel and from what the person tells it — "the human, unlike you, knows its own house."</p>
+<p><strong>Reply.</strong> A strict record with three parts and a bookkeeping field:</p>
+<pre><code>human_progress:  subgoals_completed (with tick and evidence) ·
+                 current_subgoal (several hypotheses while frames are ambiguous) ·
+                 subgoals_future (remaining, plus the true constraints)
+key_moments:     ≤ 10 timestamped strings — its only memory of what it saw
+text:            what it says (empty = silent)
+flag:            null, or {&quot;error&quot;: &lt;exactly one of the seven labels&gt;}
+</code></pre>
+<p>On its first turn it writes the plan it <em>expects</em>, putting every subgoal into <code>remaining</code> <strong>without imposing an order the task does not require</strong>. On every later turn it updates progress from the frames first — moving a subgoal to completed <em>only when seen to complete</em> — then replies. The 10-entry memory cap is enforced as a backstop: overflow evicts the oldest, and the eviction count is reported as a <strong>property of the model</strong> (how often it failed to self-compress), not of the harness. Only <code>text</code> reaches the person; there are no message categories.</p>
+<p><strong>What its eyes cannot tell it</strong> (verbatim, the perceptual contract): the inside of a closed container is invisible in every frame — never assert what a closed microwave contains; identical copies exist — a milk on the counter is <em>not</em> evidence the deposited milk came back out; an action IN PROGRESS has no outcome yet; it never sees the house's refusal messages — only the person does, and <em>a quoted refusal is ground truth that outranks its reading of the frames</em>; and once it has conceded a disputed reading, that claim is dead unless new evidence arrives — "re-asserting the same misreading from the same picture, apology after apology, burned 30 ticks of one episode and every drop of the human's trust."</p>
+<p><strong>Restraint</strong> (verbatim): <em>"do not repeat a message you said within the last few ticks … Only step in when you are very confident something is actually wrong; step in on a guess and the human gets annoyed. And when the human is standing still they may be listening, thinking or moving to somewhere you cannot see, so unless they have been still for a long time, leave them alone. If something is actively going wrong, the fix instruction comes first, before the explanation."</em> And: doing independent subgoals in an unexpected order is not an error and must never be flagged.</p>
+<p><strong>Name destinations, do not micro-steer.</strong> Under the egocentric space: <em>"NAME the destination object or room ('go switch off the TV in the living room') and let THEM find the route — they know their own house and can see its floor-plan; you cannot. Do NOT steer them turn-by-turn ('turn left', 'go straight') from the video: you cannot see their exact heading, and micro-managing rotation from a first-person frame reliably walks them into walls."</em> Because a bare "grab the milk" takes whatever copy the person is nearest, the assistant is told to watch <em>where</em> the person stands before it grabs — sending it to the right place is how you make it get the right object, and a grab from the wrong spot is a real error to flag.</p>
+<p><strong>What it is told about the person.</strong> The shared public profile — the persona name, the full card, an ability brief, and the two public dials. The ability brief for a low-ability helper says it "needs the CONCRETE next action named … one at a time, or it will be stuck"; for a creative one, "Name the GOAL or the error — do NOT dictate steps it can derive … expect it to push back with its own plan." It is warned that its words are not commands: the person may misunderstand, truncate, ignore, push back, or ask why.</p>
+<p><strong>What it is never shown.</strong> Instance ids and coordinates (audited out of its prompt and separately <em>measured</em> in spoken text on both sides — the person needs ids to drive its body, so absence is measured, not assumed); the private dials as internals (the term <code>task_solvability</code> itself is forbidden in its prompt); the grading machinery (verdict, window, twin table, injection, takeover, engine revision); the person's private channel (its moves, plan updates, thinking); the house's refusal messages; and the inside of closed containers.</p>
+<h3 id="63-observation-tiers">6.3 Observation tiers</h3>
+<p>Skill is simulated by <strong>observation and knowledge access</strong>, per agent, and every tier is stamped on the report.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>axis</th>
+<th>settings</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>person, task ability</td>
+<td><em>low</em> (text channel; no skills; must be told concrete steps) vs <em>creative</em> (first-person frames + map image; thinking skills; plans ahead)</td>
+</tr>
+<tr>
+<td>assistant, world state</td>
+<td><em>basic</em> (frames, memory, words) vs <em>+++</em> (additionally the engine-truth holding line); under the egocentric space the body line is upgraded to room + facing + in-view independent of tier</td>
+</tr>
+<tr>
+<td>action space</td>
+<td><em>high-level</em> (oracle navigation) vs <em>mid-level</em> (egocentric, visibility- and distance-gated; the benchmark setting)</td>
+</tr>
+</tbody>
+</table></div>
+<p>The body-truth and map readouts given to the assistant are a deliberate "few precision-critical facts" tier: the benchmark measures error detection, not the assistant's self-localisation from first-person video, so grounding <em>where the person is</em> removes scaffolding noise without touching the detection challenge. The person still navigates itself.</p>
+<h3 id="64-the-exit-questionnaire">6.4 The exit questionnaire</h3>
+<p>After the episode the same model, still in persona, is shown the last 30 turns and asked for three ratings — <strong>helpful</strong>, <strong>timing</strong> ("did it speak at the right moments"), <strong>trust</strong> ("would you want it next time") — each 1–5, plus one sentence. Scores are reported per persona with their $n$ and <strong>never ranked across personas</strong>: an independent expert's 2/5 and a novice's 4/5 are not comparable quantities. A failed questionnaire is <em>not measured</em>, never a bad score.</p>
+<h3 id="65-the-composed-prompt-audit">6.5 The composed-prompt audit</h3>
+<p>Assertions are made on the prompt the assistant <strong>actually receives</strong>, per condition, at run start — not on templates — and any violation aborts the run before it spends its budget. Absent: instance-id tokens, coordinate pairs, and the grading/harness vocabulary (<code>verdict</code>, <code>early_alias</code>, <code>injection</code>, <code>takeover</code>, <code>engine_rev</code>, <code>task_solvability</code>). Present: the shared persona profile. Its companion, the <strong>utterance-leak</strong> measure, applies the same patterns to spoken text from both speakers across the whole episode and reports leaked tokens per speaker.</p>
+<hr />
+<h2 id="7-scoring-validity-and-metrics">7 Scoring, validity and metrics</h2>
+<h3 id="71-grade-the-world-not-the-script">7.1 Grade the world, not the script</h3>
+<p>Nothing is scored from a transcript alone. Task completion is read from the resolved event log (§3.1); a flag is graded against a <strong>window anchored on events observed in the graded episode</strong>, never on constants from a faster reference replay; and before a false alarm is charged the grader asks the world whether the claim is true. The assistant is polled every $K=2$ ticks over an 8-tick frame window, with frames sliced at the <em>current</em> world tick — not the scheduled boundary. That last clause records a defect that superseded an entire earlier corpus: polled at the boundary, the assistant judged a pre-action world after every multi-tick action ("denies the act completed one tick earlier"; "instructs the act just done"), and every fresh reader of that corpus independently reported the same shape.</p>
+<h3 id="72-verdicts-and-the-one-correct-set">7.2 Verdicts and the one Correct set</h3>
+<p>Let the deviation start at tick $d$ (the first command unique to the deviation, or for the inaction classes the injected subgoal's first command), and let the window open at $\ell$, the tick at which the <strong>identifying step</strong> completes — the step whose completion makes the error identifiable, matched on its verb. Both are recorded live, because walk durations vary between runs; if the identifying step never completes within 12 ticks of $d$ the window is forced open and the fallback recorded. A flag naming label $n$ at tick $t$ against injected error $e$ receives:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>verdict</th>
+<th>condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>valid</code></td>
+<td>$n = e$ and $\ell \le t$</td>
+</tr>
+<tr>
+<td><code>valid_alias</code></td>
+<td>$n \in \mathrm{twins}(e)$ and $\ell \le t$</td>
+</tr>
+<tr>
+<td><code>early_correct</code></td>
+<td>$n = e$ and $d \le t < \ell$</td>
+</tr>
+<tr>
+<td><code>early_alias</code></td>
+<td>$n \in \mathrm{twins}(e)$ and $d-2 \le t < \ell$</td>
+</tr>
+<tr>
+<td><code>early</code></td>
+<td>$n = e$ and $t < d$</td>
+</tr>
+<tr>
+<td><code>wrong_name</code></td>
+<td>a taxonomy label that is neither $e$ nor a credited twin</td>
+</tr>
+<tr>
+<td><code>invalid_label</code></td>
+<td>not one of the seven labels</td>
+</tr>
+<tr>
+<td><code>fp_preinjection</code> / <code>fp_skipped</code></td>
+<td>flagged before the injection fired / in a run whose injection was skipped</td>
+</tr>
+<tr>
+<td><code>fp_clean</code></td>
+<td>a restraint episode, and the claim is <strong>not true of the world</strong></td>
+</tr>
+<tr>
+<td><code>neutral_true</code></td>
+<td>a restraint episode, and the claim <strong>is true of the world</strong> right now</td>
+</tr>
+</tbody>
+</table></div>
+<p>From these, exactly <strong>one</strong> definition of a correct detection is imported everywhere — by the episode's release gate, which changes the world, and by every scorer and page builder — and never re-listed:</p>
+<p>$$\mathrm{ARMS\_DETECTION} = \{valid,\ valid\_alias\}, \quad \mathrm{ARMS\_PREVENTION} = \{early\_correct,\ early\_alias\}, \quad \mathrm{CORRECT} = \mathrm{ARMS\_DETECTION} \cup \mathrm{ARMS\_PREVENTION}$$</p>
+<p>$$\mathrm{NEUTRAL} = \{neutral\_true\}.$$</p>
+<p>The defect this rule fixes: an in-window twin name once scored <code>wrong_name</code> <em>and never armed</em> — two sets, one for grading and one for the gate. A test greps every consumer for hand-listed verdict tuples (and found one missing <code>valid_alias</code>). The <strong>world-truth predicate</strong> behind <code>neutral_true</code> is conservative and reads only the action log: <em>stall</em> is true if nothing completed in the last 8 ticks; <em>navigation_inefficiency</em> if the last 6 completed actions were all movement; <em>repetition</em> if some state-changing verb + object pair completed twice; the four remaining classes are false by construction in an uninjected run, so naming them in a clean episode is a charged false alarm.</p>
+<h3 id="73-outcomes-and-termination">7.3 Outcomes and termination</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>outcome</th>
+<th>condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>won</code></td>
+<td>the final-state predicate holds and the queue is empty — checked <strong>immediately after each execution, before anyone speaks</strong> (a finished task was once undone because the assistant, whose frames did not yet show the completion, ordered the microwave switched back off)</td>
+</tr>
+<tr>
+<td><code>silent_fail</code></td>
+<td>10 consecutive polls with nobody speaking and nothing executing, goal not reached</td>
+</tr>
+<tr>
+<td><code>stuck</code></td>
+<td>60 ticks (45 under the high-level space) with an unchanged progress signature while commands keep running; the signature is instance-level and includes the current room, so honest cross-house walking is progress and pacing in one room is not</td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td>the 300-tick cap</td>
+</tr>
+<tr>
+<td><code>dead_conversation</code></td>
+<td>three identical assistant utterances in a row with no state change and nothing queued — silence-based termination cannot see an assistant that repeats itself, and one such run burned 56 real minutes</td>
+</tr>
+<tr>
+<td><code>wall_clock</code></td>
+<td>the real-time budget (3000 s) — set below the outer harness timeout so that the <em>innermost</em> process writes a report</td>
+</tr>
+</tbody>
+</table></div>
+<p>A run's <strong>failure attribution</strong> is one of: <em>injection skipped</em> (excluded from the denominator), <em>solved</em>, <em>recovery</em> (detected but the repair failed), or <em>detection</em> (never detected).</p>
+<h3 id="74-validity-gates-and-provenance">7.4 Validity gates and provenance</h3>
+<p>A run that measured nothing is unscoreable; these gates run before scoring, and a failed gate yields <em>not measured</em> — never zero.</p>
+<ul>
+<li><strong>Engine revision.</strong> Every report carries the engine revision stamp, bumped on every behaviour-changing fix, and the results publisher <strong>filters on it</strong>: "newest settings only" is checkable, not archaeological, and it is what let an earlier corpus be formally superseded.</li>
+<li><strong>Composed-prompt audit</strong> at run start (§6.5); any violation aborts before the budget is spent.</li>
+<li><strong>Injection fired</strong>; <strong>error committed</strong> (the tasked sequence was performed); <strong>verdict reachable</strong> (the window was anchored). Only performed, anchored runs are <em>measurable</em>.</li>
+<li><strong>Frame integrity.</strong> The first rendered frame is checked for a black egocentric camera (mean luminance below threshold aborts as degraded), and a first walk shorter than six frames is rejected as a teleport.</li>
+<li><strong>Postcondition verification</strong> on every live manipulation (§2.2), so the twin cannot fork from the graph and poison the checkpoints.</li>
+<li><strong>Restraint scorability.</strong> A restraint episode is scorable only if the assistant answered the exit probe; an unanswered direct question is a <em>recorded refusal</em>. The silent stub must not top the leaderboard.</li>
+</ul>
+<p><strong>Two-process determinism.</strong> The twin's canonical semantic state is hashed; every episode's plan is replayed in two fresh processes and the hash sequences must be identical.</p>
+<p><strong>The affordance matrix.</strong> For every reachable state (each prefix of each reference plan) and every verb × plan-touched object, the twin is asked to execute: a legal cell must change the semantic hash, an illegal cell must be refused with a reason naming the obstacle actually present. Over <strong>3,198 cells</strong> the current engine has <strong>0</strong> generic refusals and <strong>0</strong> silent no-ops; 1,066 honest announced no-ops ("already open"); the rest legal-and-changed or illegal-with-good-reason. A live matrix against Unity was run separately (appliance family 19/19 clean; tidy 12/13, the one generic refusal since replaced by "the tablelamp is not something that opens").</p>
+<p><strong>The offline suite.</strong> Timing is a first-class axis — the same class injected at a different point is a different test — so every case is re-anchored at every legal position and all are checked. The current suite runs 256 checks in seconds with no Unity and no model, and locks in every class-level fix as a regression lint; six of the twelve engine fixes in the first sweep were found by these tests rather than by running episodes. The verdict machine and the transform space have their own suites (≈1.6k and ≈22.7k checks).</p>
+<h3 id="75-what-a-report-records">7.5 What a report records</h3>
+<p>Identity (setting, paradigm, case, persona, episode, engine revision, agent tier); injection geometry (injected-at, skipped, clean-prefix length, deviation section, live $d$ and $\ell$, fallback); the takeover's arming and release (armed-at, prevention-armed-at, released-at and reason); every flag with its verdict and the repeat count; compliance, prevention, conviction, fix source; the checkpoints, final-state predicate, outcome, failure attribution, tick count, termination reason; the pinned <strong>target instances</strong> (so a repair on the target can be told from one on a decoy); the full conversation with both agents' structured records and the engine snapshot at each turn; the action log with bound instances and rooms; memory statistics (final key moments, evictions); the words/actions alignment counters; the restraint block; the interaction-quality questionnaire; per-speaker utterance leaks; and the composed prompts actually used.</p>
+<h3 id="76-metrics">7.6 Metrics</h3>
+<p>Every rate is reported with its denominator first.</p>
+<p><strong>Detection track</strong> (error step-ins).
+$$\text{caught} \;=\; \frac{\#\{\text{measurable runs with a flag in ARMS\_DETECTION}\}}{\#\text{measurable}}, \qquad \text{measurable} \subseteq \text{performed} \subseteq \text{all error step-ins}$$
+where <em>performed</em> excludes runs whose person declined the tasked sequence and <em>measurable</em> additionally requires an anchored window. Also: prevented outright (correct and accepted before the deviation stood, over all error step-ins), false-alarm count, and <strong>latency</strong> = first correct flag − $d$.</p>
+<p><strong>Restraint track</strong> (nothing is wrong).
+$$\text{zero-false-alarm} \;=\; \frac{\#\{\text{scorable runs with no } fp\_clean\}}{\#\text{scorable}}, \qquad \text{scorable} = \{\text{exit probe answered}\}$$
+plus the count of neutral flags and the <strong>speech rate</strong> (utterances / polls). This track exists because "every case injects an error; there is no restraint denominator" was the audit's biggest single miss.</p>
+<p><strong>Task track.</strong> Repaired $N$ of $M$ (final-state predicate holds); outcome class; ticks against the reference plan's cost as the efficiency denominator; every checkpoint asserted unsatisfied at $t=0$, so no episode is trivially complete.</p>
+<p><strong>Interaction quality.</strong> Helpful / timing / trust, 1–5, in persona, per-persona mean with $n$; never ranked across personas.</p>
+<p><strong>Auxiliary measured properties.</strong> Memory-compression failures (evictions past the 10-entry cap — a property of the model); utterance leaks per speaker; words/actions alignment (accept-without-action and its re-ask outcomes); compliance.</p>
+<p>A full sweep is 13 cases × 2 personas across the two settings — <strong>40 cells: 32 error runs and 8 restraint runs</strong>.</p>
+<h3 id="77-what-the-benchmark-deliberately-does-not-fix">7.7 What the benchmark deliberately does not fix</h3>
+<p>Some behaviours are left in place as signal. Assistant fabrications that latency cannot explain — invented objects, invented refusal causes, sycophantic reversals under pushback — are <em>the system under test failing</em>, and the corrected observation channel isolates them cleanly; one run in which every engine step was lawful and the assistant talked the person into undoing a finished task is recorded as the benchmark's sharpest exhibit of ungrounded guidance. Likewise the person's sparse speech: it is given a turn every poll, and the long silences in the published episodes are its own, in-persona choice.</p>
+<hr />
+<h2 id="8-reference-episodes-the-published-demonstration-set">8 Reference episodes (the published demonstration set)</h2>
+<p>The demonstration set the current gallery shows is four step-in episodes: two error types × two personas, on engine revisions f73–f74. They are reported here as a <strong>worked example of the whole pipeline</strong>, not as a leaderboard — a single assistant model, one seed per cell. Per-cell metrics for a paper should come from the sweep machinery (§7.6), not from these four.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Error case</th>
+<th>Persona</th>
+<th>Outcome</th>
+<th>Ticks</th>
+<th>What happened</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>wrong_placement (milk set on the table)</td>
+<td>novice</td>
+<td>won</td>
+<td>38</td>
+<td>assistant flagged <code>wrong_placement</code> (valid) one poll after the placement; the person picked the bottle back up and microwaved it</td>
+</tr>
+<tr>
+<td>wrong_placement</td>
+<td>expert</td>
+<td>won</td>
+<td>53</td>
+<td>same detection at t18; recovery slowed by a visibility hunt for the microwave from the table (7 refusals) before succeeding</td>
+</tr>
+<tr>
+<td>missing_step (second lamp forgotten)</td>
+<td>novice</td>
+<td>won</td>
+<td>91</td>
+<td>assistant read the still-lit lamp off the whole-house map and named it; step-by-step guidance back across the house</td>
+</tr>
+<tr>
+<td>missing_step</td>
+<td>expert</td>
+<td>won</td>
+<td>60</td>
+<td>assistant named the forgotten lamp at t28 from the house map; the person routed itself via the door graph</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two contrasts the set was built to show:</p>
+<ul>
+<li><strong>Detection changes the world.</strong> In the wrong-placement cells the takeover <em>releases on the correct flag</em> (§5.5): the moment the assistant names the error and the person accepts, the plan is handed back and recovery begins — visibly, at the placement, without the person walking on to run an empty microwave.</li>
+<li><strong>Omission is caught by state, not by watching the slip.</strong> Under the realistic omission signature (§5.1) the person never approaches the forgotten lamp, so there is no on-camera moment to catch; the assistant must notice that the task's progress is short. With only a current-room map this failed (the pair deadlocked on cross-house routing); with the whole-house map — which lists every room that still has a device ON — both personas were caught and repaired.</li>
+</ul>
+<p>Videos (first-person + top-down composite, spoken lines voiced, slow-motion during speech) and full transcripts: https://hellomuffin.github.io/vh-streaming-benchmark/interaction-stepin/ . The per-turn observation contract each agent receives, rendered from the live harness: https://claude.ai/code/artifact/e4d2e5c9-5f4f-4391-ae49-f83e0c55c589 .</p>
+<h3 id="81-failure-modes-the-audits-found-and-what-they-say-about-the-class">8.1 Failure modes the audits found (and what they say about the class)</h3>
+<p>The trajectory audits that preceded the current revision are themselves a result about interactive benchmarks, because every defect was of the <em>silence-that-looks-like-data</em> kind:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Defect</th>
+<th>Symptom</th>
+<th>Class-level fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>person navigated its own house blind</td>
+<td>novice given no map wall-bumped for 134 ticks while parroting the assistant's headings</td>
+<td>the statemap is per-<strong>person</strong>, not per-skill: spatial awareness of one's own home is orthogonal to task ability</td>
+</tr>
+<tr>
+<td>stale command vocabulary in a prompt</td>
+<td>prompt said "there is no turn command" beside a live vocabulary that lists turns</td>
+<td>move-notes rendered from the action space's own constants; never hand-copied</td>
+</tr>
+<tr>
+<td>assistant localised the person from first-person video</td>
+<td>asserted the wrong room a dozen times and micro-steered turns off it</td>
+<td>a small body-truth readout (room, facing, in view) — an allowed "few precision-critical facts" tier</td>
+</tr>
+<tr>
+<td>omission injected as a walk-past</td>
+<td>the person walked to the lamp and failed to act — not how people forget</td>
+<td>the transform drops the whole subgoal closure; the window re-anchors on the successor</td>
+</tr>
+<tr>
+<td>a second copy of the target object</td>
+<td>recovery grabbed the decoy beside the microwave, not the misplaced bottle</td>
+<td>one instance of any task-bearing object; wrong-object detection uses a distinct class</td>
+</tr>
+<tr>
+<td>repeating assistant with no world change</td>
+<td>5× "the task is complete" burned to the wall clock</td>
+<td>a dead-conversation end condition, distinct from silence</td>
+</tr>
+<tr>
+<td>zero-frame turns</td>
+<td>the first-person view flipped 180° in one frame</td>
+<td>the capture camera is swept through the arc for the video</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="appendix-g-glossary">Appendix G Glossary</h2>
+<p><strong>tick</strong> — one step of world time; 1 s, rendered as 8 frames. <strong>scene graph</strong> — the engine's typed, id'd object nodes plus the body node, with primitive relation edges. <strong>spatial layer</strong> — how "where" is represented: 3D positions plus <code>ON</code>/<code>INSIDE</code> edges, rooms by bounding box, and two derived maps (current room, whole house). <strong>symbolic twin</strong> — a deterministic state machine over the same scene graph that replays plans in milliseconds and pre-verifies every case; the live Unity kernel is verified against it action by action. <strong>subgoal DAG</strong> — the unavoidable checkpoints of a task with their ordering constraints. <strong>progress key</strong> — the partial state $\{holding, loc, opened, on\}$ over plan-touched object classes, position and duration dropped; it records task progress identically under every legal ordering, and the injection <strong>anchor</strong> fires on it. <strong>reference plan</strong> — the late-bound command script that replays to success. <strong>case</strong> — one admitted (error × task × anchor). <strong>window</strong> — the tick interval in which a detection can be graded, anchored on events observed in the graded episode. <strong>twin</strong> (of errors) — two error labels indistinguishable in the observation channel; an in-window twin name is credited. <strong>tier</strong> — an observation setting per agent (frames / maps / body ground-truth). <strong>flag</strong> — the assistant's bookkeeping field naming a suspected error. <strong>verdict</strong> — the grade of a flag. <strong>Correct set</strong> — the one imported set of crediting verdicts consumed by the release gate and every scorer alike. <strong>takeover</strong> — the phase after injection during which the engine holds the person's plan so the error can happen; it ends on correct detection + acceptance, or on the error committing. <strong>paradigm</strong> — how the error is made to happen: soft (prompt), hard (covert takeover), combo (both; default). <strong>guidance conversion</strong> — turning an accepted suggestion into engine commands. <strong>statemap</strong> — the current-room top-down map + text scene graph with each device's live state. <strong>house map</strong> — the whole-house overview: rooms, door adjacency, rooms with a device on. <strong>locus</strong> — the body-truth readout given to the assistant: room, facing, objects in view, objects held. <strong>denominator</strong> — the opportunity count reported beside every rate. <strong>engine_rev</strong> — the code-revision stamp every report carries; pages refuse mixed revisions.</p>
+</div>
+</body>
+</html>

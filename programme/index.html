@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Household Assistant Programme</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#eef1f3; --panel:#fbfcfc; --ink:#141a1d; --muted:#5a686e; --line:#d9e1e4; --line2:#e7edef;
+  --accent:#0f6e6e; --accent-soft:#dcecec; --code:#eff3f4; --win:#0f6e6e; --rule:#3d6ea8;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1114; --panel:#141a1e; --ink:#e4ebee; --muted:#93a3aa; --line:#242e34; --line2:#1b2429;
+  --accent:#4fbdbd; --accent-soft:#122a2a; --code:#111820; --win:#4fbdbd; --rule:#79a9dd;
+}}
+:root[data-theme="dark"]{
+  --bg:#0d1114; --panel:#141a1e; --ink:#e4ebee; --muted:#93a3aa; --line:#242e34; --line2:#1b2429;
+  --accent:#4fbdbd; --accent-soft:#122a2a; --code:#111820; --win:#4fbdbd; --rule:#79a9dd;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Source Serif 4",Georgia,serif;font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.shell{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:212px minmax(0,1fr);gap:34px;padding:0 20px}
+nav{position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;padding:38px 0 40px;
+  display:flex;flex-direction:column;gap:1px;font-family:Archivo,system-ui,sans-serif;font-size:13px}
+nav a{color:var(--muted);text-decoration:none;padding:5px 9px;border-radius:5px;border-left:2px solid transparent}
+nav a:hover{color:var(--ink);background:var(--panel)}
+nav a:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+main{padding:38px 0 90px;min-width:0}
+h1,h2,h3{font-family:Archivo,system-ui,sans-serif;margin:0;text-wrap:balance;letter-spacing:-.012em}
+h1{font-size:clamp(30px,4.6vw,44px);font-weight:700;line-height:1.08}
+h2{font-size:clamp(21px,2.8vw,27px);font-weight:600;margin:2.6em 0 .1em;padding-top:.55em;border-top:2px solid var(--line)}
+h3{font-size:16.5px;font-weight:600;margin:1.7em 0 .3em}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+p{margin:.75em 0;max-width:74ch}
+.lede{font-size:18px;color:var(--muted);max-width:70ch}
+.lede b{color:var(--ink);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px;margin:26px 0 6px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.stat b{display:block;font-family:"IBM Plex Mono",monospace;font-size:21px;font-weight:600;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:12.5px}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:9px;background:var(--panel);margin:1em 0}
+table{border-collapse:collapse;width:100%;font-family:Archivo,system-ui,sans-serif;font-size:13.5px;min-width:660px}
+th,td{text-align:left;padding:8px 11px;border-bottom:1px solid var(--line2);vertical-align:top}
+thead th{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--muted);background:var(--code);white-space:nowrap}
+thead th .ah{display:block;font-size:9.5px;letter-spacing:.05em;opacity:.75;font-weight:400}
+tbody tr:last-child td,tbody tr:last-child th{border-bottom:none}
+td.k,.mono{font-family:"IBM Plex Mono",monospace;font-size:12.5px}
+td.c{text-align:center;font-variant-numeric:tabular-nums}
+td.sm{font-size:13px;color:var(--muted)}
+td.rn{font-weight:600}
+td.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:14px}
+td.num.win{color:var(--win);font-weight:600}
+.den{display:block;color:var(--muted);font-size:10.5px;font-weight:400}
+th[scope=row]{font-weight:400;min-width:210px}
+.mn{display:block;font-weight:600} .mb{display:block;color:var(--muted);font-size:12px;line-height:1.35}
+code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--code);border:1px solid var(--line2);
+  border-radius:4px;padding:.06em .32em}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:13px 15px;overflow-x:auto;
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.5}
+blockquote{margin:1em 0;padding:.6em 1em;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 7px 7px 0}
+blockquote p{margin:.2em 0}
+.finds{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px;margin-top:14px}
+.find{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--rule);border-radius:9px;padding:13px 15px}
+.ft{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.find p{font-size:13.5px;margin:.4em 0 0;color:var(--muted);max-width:none}
+ul,ol{max-width:74ch;padding-left:1.15em} li{margin:.28em 0}
+footer{margin-top:46px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+@media(max-width:920px){.shell{grid-template-columns:1fr} nav{position:static;max-height:none;flex-direction:row;flex-wrap:wrap;padding:20px 0 0}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<meta name="color-scheme" content="light dark">
+<style>.backlink{position:fixed;top:10px;left:10px;z-index:99;font:600 12px/1 system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:#0f6e6e;background:rgba(255,255,255,.88);border:1px solid #cfdadd;border-radius:6px;padding:6px 10px}@media (prefers-color-scheme:dark){.backlink{color:#4fbdbd;background:rgba(13,17,20,.88);border-color:#2a353b}}</style>
+</head>
+<body>
+<a class="backlink" href="../">&larr; index</a>
+<div class="shell">
+<nav><a href="#overview">Overview</a><a href="#environment">1 · Environment</a><a href="#tasks">2 · Tasks</a><a href="#errors">3 · Error taxonomy</a><a href="#single">4 · Single-error suite</a><a href="#composite">5 · Composite suite</a><a href="#phases">6 · Multi-error rollout</a><a href="#sweep">7 · Assistant sweep</a><a href="#results">8 · Results</a><a href="#findings">9 · Findings</a><a href="#limits">10 · Limits</a><a href="#repro">11 · Reproducing</a></nav>
+<main>
+
+<div class="eyebrow" id="overview">VirtualHome · streaming interactive agents</div>
+<h1>The household assistant programme</h1>
+<p class="lede">A simulated person does a chore in a rendered house while an AI assistant watches
+through a camera and may speak. The engine <b>injects mistakes</b> into the person's plan. The
+assistant is scored on noticing each one, naming it correctly, guiding the repair, and staying
+quiet when nothing is wrong. This is the complete record: the environment, the tasks, the error
+taxonomy, two benchmarks built on them, and the results of running five assistants through the
+harder one.</p>
+
+<div class="stats">
+  <div class="stat"><b>19</b><span>task episodes, 10 families</span></div>
+  <div class="stat"><b>7</b><span>graded error classes</span></div>
+  <div class="stat"><b>9+4</b><span>single-error + restraint cases</span></div>
+  <div class="stat"><b>12</b><span>multi-error episodes</span></div>
+  <div class="stat"><b>3</b><span>personas</span></div>
+  <div class="stat"><b>180</b><span>scored rollouts</span></div>
+  <div class="stat"><b>364</b><span>offline checks, 0 failing</span></div>
+</div>
+
+<h2 id="environment">1 · The environment</h2>
+<p>The world is VirtualHome apartment 2, read as the engine's native scene graph: typed object
+nodes with ids, states and <code>ON</code>/<code>INSIDE</code> relation edges, plus a body node.
+The scene holds 183 objects across a kitchen, a living room and two bedrooms — and, deliberately,
+duplicates: nine plates, seven books, three table lamps. Duplication is what makes <em>which
+one</em> a real question, and therefore what makes wrong-object errors measurable.</p>
+
+<h3>The symbolic twin</h3>
+<p>Live Unity is slow and non-deterministic, so it cannot dry-run cases or tell a bug from a
+model. A deterministic twin over the same graph replays a plan in milliseconds and pre-verifies
+every case. Keeping the two in agreement is most of the engineering, and is done by four
+mechanisms rather than trust: the twin is seeded from the rendered graph rather than replayed;
+every manipulation's postcondition is checked against the expected graph delta; every frame must
+have been captured from the body's current pose; and a movement command that reports success
+without moving is refused honestly.</p>
+
+<h3>Time, and the progress key</h3>
+<p>One tick is one second, rendered as eight frames. Task progress is carried by a partial state —
+what is held, where the tracked objects sit, what is open, what is on — restricted to the classes
+the plan touches, <em>with position and duration dropped</em>. That key is order-invariant, which
+is what lets a single injection anchor fire correctly however the person sequences the chore.</p>
+
+<h3>What each agent sees</h3>
+<p>The person gets its own camera, proprioception (hands, queue, position, the outcome of each
+action), its own past-action log, and two maps: the current room's scene graph with every device's
+live state, and a whole-house overview with the door graph and every room that still has something
+on. The assistant gets eight first-person frames per turn, the same two maps, a one-line body
+ground-truth, its own previous reply as its only memory, and the conversation. It never sees
+object ids, coordinates, the grading machinery, or the person's private channel — asserted on the
+composed prompt at run time, not on the template.</p>
+
+<h2 id="tasks">2 · The tasks</h2>
+<p>19 episodes over 10 families. A task is specified by an instruction, a reference plan
+that replays to success headlessly, and named checkpoints that latch on <em>resolved events</em> —
+the object classes and instances the gated controller actually manipulated, never the words the
+model typed. Hard episodes traverse three or more rooms. Instructions are precise but minimal:
+an object is qualified only when its class has confusable instances, and the route is never spelled
+out.</p>
+<div class="tw"><table>
+<thead><tr><th>episode</th><th>family</th><th>diff</th><th>subgoals</th><th>instance-pinned</th><th>instruction</th></tr></thead>
+<tbody><tr><td class="k">relocate_easy</td><td>Retrieve &amp; relocate</td><td class="c">easy</td><td class="c">2</td><td class="c">—</td><td class="sm">Pick up a plate from a kitchen table and set it down on a different table in the same kitchen.</td></tr><tr><td class="k">relocate_hard</td><td>Retrieve &amp; relocate</td><td class="c">hard</td><td class="c">2</td><td class="c">—</td><td class="sm">Take a book and put it on the coffee table in the living room.</td></tr><tr><td class="k">appliance_easy</td><td>Appliance operation</td><td class="c">easy</td><td class="c">4</td><td class="c">—</td><td class="sm">Grab a plate from the table, open the dishwasher, put the plate inside, close it, and switch it on.</td></tr><tr><td class="k">appliance_hard</td><td>Appliance operation</td><td class="c">hard</td><td class="c">3</td><td class="c">yes</td><td class="sm">Take the milk from the fridge, put it in the microwave, and switch the microwave on.</td></tr><tr><td class="k">power_easy</td><td>Power toggle</td><td class="c">easy</td><td class="c">3</td><td class="c">—</td><td class="sm">Switch on the TV, sit on the sofa, then stand up and switch the TV off.</td></tr><tr><td class="k">power_hard</td><td>Power toggle</td><td class="c">hard</td><td class="c">3</td><td class="c">—</td><td class="sm">Turn on a table lamp, the stove, and the TV.</td></tr><tr><td class="k">posture_easy</td><td>Posture &amp; activity</td><td class="c">easy</td><td class="c">1</td><td class="c">—</td><td class="sm">Sit down on the sofa, then stand up.</td></tr><tr><td class="k">posture_hard</td><td>Posture &amp; activity</td><td class="c">hard</td><td class="c">3</td><td class="c">—</td><td class="sm">Sit on a bed, a chair, and the sofa, standing up between each.</td></tr><tr><td class="k">settable_easy</td><td>Assemble / set-table</td><td class="c">easy</td><td class="c">4</td><td class="c">—</td><td class="sm">Move a plate and a fork onto a different kitchen table.</td></tr><tr><td class="k">settable_hard</td><td>Assemble / set-table</td><td class="c">hard</td><td class="c">4</td><td class="c">—</td><td class="sm">Put a book and a plate onto the coffee table in the living room.</td></tr><tr><td class="k">transfer_easy</td><td>Container→container</td><td class="c">easy</td><td class="c">2</td><td class="c">yes</td><td class="sm">Take the milk out of the fridge and put it into the microwave.</td></tr><tr><td class="k">transfer_hard</td><td>Container→container</td><td class="c">hard</td><td class="c">2</td><td class="c">yes</td><td class="sm">Take the milk from the fridge and put it in the bedroom cabinet.</td></tr><tr><td class="k">search_easy</td><td>Search &amp; inspect</td><td class="c">easy</td><td class="c">1</td><td class="c">—</td><td class="sm">Find the TV somewhere in the house and go up to it.</td></tr><tr><td class="k">search_hard</td><td>Search &amp; inspect</td><td class="c">hard</td><td class="c">4</td><td class="c">—</td><td class="sm">Find each of these somewhere in the house and go up to it: the TV, a table lamp, the fridge, and the computer.</td></tr><tr><td class="k">tidy_easy</td><td>State-tidy</td><td class="c">easy</td><td class="c">3</td><td class="c">—</td><td class="sm">Tidy the kitchen — close everything that is left open.</td></tr><tr><td class="k">tidy_hard</td><td>State-tidy</td><td class="c">hard</td><td class="c">4</td><td class="c">—</td><td class="sm">Tidy up the house — turn off all the lights, switch off the TV, and close the fridge.</td></tr><tr><td class="k">drink_easy</td><td>Drink</td><td class="c">easy</td><td class="c">2</td><td class="c">yes</td><td class="sm">Get the milk from the fridge and drink it.</td></tr><tr><td class="k">drink_hard</td><td>Drink</td><td class="c">hard</td><td class="c">2</td><td class="c">—</td><td class="sm">Get a juice and drink it.</td></tr><tr><td class="k">routine_hard</td><td>Routine</td><td class="c">hard</td><td class="c">8</td><td class="c">yes</td><td class="sm">Turn off a bedroom lamp, put a book on the living-room coffee table, heat the milk from the fridge in the microwave, and bring a plate over to the coffee table.</td></tr></tbody></table></div>
+
+<h2 id="errors">3 · The error taxonomy</h2>
+<p>Errors are typed transforms on the subgoal graph, re-categorised so every class has a unique
+observable signature; timing and scope are parameters, never separate classes. Two labels are
+<b>twins</b> when the deviation is indistinguishable between them in the video channel at the
+decisive moment — an in-window twin name is credited, because an assistant that reads the
+deviation right under a defensible label has detected it.</p>
+<div class="tw"><table>
+<thead><tr><th>label</th><th>definition given to both agents</th><th>credited twins</th></tr></thead>
+<tbody><tr><td class="k">wrong_object</td><td class="sm">the object in hand/use is a look-alike of the required one (e.g. the juice instead of the milk); the plan&#x27;s structure stays otherwise correct</td><td class="sm mono">—</td></tr><tr><td class="k">wrong_placement</td><td class="sm">the right object is set down in the WRONG place — the destination the task called for never receives it, and she treats the job as finished there</td><td class="sm mono">wrong_object</td></tr><tr><td class="k">navigation_inefficiency</td><td class="sm">extra movement with ZERO state change (multi-room detour or hanging around a room), then the plan resumes intact</td><td class="sm mono">skipped_step, stall</td></tr><tr><td class="k">skipped_step</td><td class="sm">a required step is OMITTED ENTIRELY — she never goes to its target at all, simply carrying on with the next thing, and the rest runs in order with the omission&#x27;s visible consequences</td><td class="sm mono">missing_step, navigation_inefficiency</td></tr><tr><td class="k">repetition</td><td class="sm">she goes back to something she has ALREADY FINISHED and does it again. On a switch, a door or any toggle the second press INVERTS what she achieved — the lamp she turned off is lit again, the fridge she shut is open again — so the tell is that she REVISITED a finished target, not that the end state is &#x27;done twice&#x27;. On a placement she takes the object out and puts it back.</td><td class="sm mono">navigation_inefficiency</td></tr><tr><td class="k">stall</td><td class="sm">they stop moving mid-task — stationary, nothing happening (may or may not resume)</td><td class="sm mono">navigation_inefficiency</td></tr><tr><td class="k">missing_step</td><td class="sm">a goal that covers SEVERAL identical objects is left half done — the same action was carried out on one instance and its twin was forgotten (one lamp switched off, the other left on); differs from skipped_step, where a whole distinct step is omitted in passing</td><td class="sm mono">skipped_step</td></tr></tbody></table></div>
+<p>Classes indistinguishable in video were cut at re-categorisation. The <b>safety family</b> —
+leave a door open, light a device and leave — exists in the transform library but is absent from
+the graded taxonomy <em>and</em> the scorer: VirtualHome has no consequence dynamics, so "left the
+stove on" is visually identical to "turned the stove on", and a metric for an outcome the engine
+cannot generate is a permanent zero that looks like a result.</p>
+
+<h2 id="single">4 · Benchmark A — the single-error suite</h2>
+<p>9 error cases over three episodes, spanning all seven classes, plus 4 restraint
+cases where nothing is wrong (two clean runs and two dependency-legal reorders that an assistant
+tracking literal plan order will falsely flag). Without a restraint denominator, silence scores at
+the top.</p>
+<div class="tw"><table>
+<thead><tr><th>case</th><th>episode</th><th>class</th><th>anchor</th><th>scripted flag text</th></tr></thead>
+<tbody><tr><td class="k">iv_wrongobj_appliance</td><td>appliance_hard</td><td class="mono sm">wrong_object</td><td class="mono sm">fetch(milk)</td><td class="sm">Wait — that&#x27;s the JUICE you just grabbed, not the milk.</td></tr><tr><td class="k">iv_wrongobj_drink</td><td>drink_easy</td><td class="mono sm">wrong_object</td><td class="mono sm">fetch(milk)</td><td class="sm">Hold on — that carton is the juice, not the milk.</td></tr><tr><td class="k">iv_skip_appliance</td><td>appliance_hard</td><td class="mono sm">skipped_step</td><td class="mono sm">fetch(milk)</td><td class="sm">Hold on — you never took the milk out of the fridge, but you&#x27;re running the microwave.</td></tr><tr><td class="k">iv_skip_tidy</td><td>tidy_hard</td><td class="mono sm">skipped_step</td><td class="mono sm">switch_off(tablelamp@1)</td><td class="sm">Hold on — you never switched off the first lamp; it&#x27;s still lit.</td></tr><tr><td class="k">iv_missing_lamp</td><td>tidy_hard</td><td class="mono sm">missing_step</td><td class="mono sm">switch_off(tablelamp@3)</td><td class="sm">Hold on — one of the lights is still on: you switched off one lamp but the other is stil</td></tr><tr><td class="k">iv_rep_toggle_tidy</td><td>tidy_hard</td><td class="mono sm">repetition</td><td class="mono sm">switch_off(tablelamp@1)</td><td class="sm">Hold on — you just switched the first lamp back ON. You already turned that off earlier.</td></tr><tr><td class="k">iv_wrongplace_appliance</td><td>appliance_hard</td><td class="mono sm">wrong_placement</td><td class="mono sm">deposit(milk)</td><td class="sm">Hold on — you just set the milk down on the kitchen table. That&#x27;s meant to go inside the</td></tr><tr><td class="k">iv_nav_appliance</td><td>appliance_hard</td><td class="mono sm">navigation_inefficiency</td><td class="mono sm">deposit(milk)</td><td class="sm">Hold on — you&#x27;ve got the milk, but you&#x27;re wandering off. The microwave is in the kitchen</td></tr><tr><td class="k">iv_stall_appliance</td><td>appliance_hard</td><td class="mono sm">stall</td><td class="mono sm">fetch(milk)</td><td class="sm">You&#x27;ve stopped moving — you&#x27;ve been standing still with the milk in your hands for a whi</td></tr></tbody></table></div>
+<p>Every case is dry-replayed at its authored anchor <em>and</em> at every legal re-anchoring
+before a frame is rendered, and the verdict is published rather than implied by a passing suite:
+<b>19 of 29</b> timings admitted. The ten rejections are three trailing omissions
+(no successor to anchor a window on), five anchors that are not legal moments, and two that
+produce no real error.</p>
+
+<h2 id="composite">5 · Benchmark B — the composite suite</h2>
+<p>The single-error suite asks whether an assistant can catch one thing going wrong. The composite
+suite asks what the single-error setting cannot: whether it can hold a running model of the task
+while <b>more than one thing</b> goes wrong — notice a second mistake after committing to a first,
+avoid attributing both to one cause, and keep the repair of one from masking the other. Every
+episode carries two or more errors of different classes; one carries three.</p>
+<div class="tw"><table>
+<thead><tr><th>episode</th><th>task</th><th>errors</th><th>n</th><th>gap</th><th>the run, in one sentence</th></tr></thead>
+<tbody><tr><td class="k">cx_routine_skip_obj</td><td>routine_hard</td><td class="mono sm">skipped_step + wrong_object</td><td class="c">2</td><td class="c">2</td><td class="sm">She leaves the bedroom lamp burning, does the book correctly, and then opens the fridge and takes the juice instead of the milk.</td></tr><tr><td class="k">cx_routine_skip_obj_stall</td><td>routine_hard</td><td class="mono sm">skipped_step + wrong_object + stall</td><td class="c">3</td><td class="c">2</td><td class="sm">She leaves the lamp on, microwaves the juice instead of the milk, and then freezes with the plate in her hands before carrying it through.</td></tr><tr><td class="k">cx_routine_nav_place</td><td>routine_hard</td><td class="mono sm">navigation_inefficiency + wrong_placement</td><td class="c">2</td><td class="c">5</td><td class="sm">On her way to the fridge she wanders over to the sofa and through to the bedroom, and at the end she leaves the plate on the kitchen counter instead of the coffee table.</td></tr><tr><td class="k">cx_routine_rep_obj</td><td>routine_hard</td><td class="mono sm">repetition + wrong_object</td><td class="c">2</td><td class="c">2</td><td class="sm">Having switched the bedroom lamp off she goes back and switches it on again, and later takes the juice out of the fridge instead of the milk.</td></tr><tr><td class="k">cx_tidy_missing_rep</td><td>tidy_hard</td><td class="mono sm">missing_step + repetition</td><td class="c">2</td><td class="c">2</td><td class="sm">She switches off one bedroom lamp but forgets its twin in the other bedroom, and after the television she goes back to the fridge she already shut and opens it again.</td></tr><tr><td class="k">cx_tidy_missing_stall</td><td>tidy_hard</td><td class="mono sm">missing_step + stall</td><td class="c">2</td><td class="c">2</td><td class="sm">She forgets the second bedroom lamp, finishes the fridge and the television, and then stands motionless in the living room.</td></tr><tr><td class="k">cx_settable_stall_place</td><td>settable_hard</td><td class="mono sm">stall + wrong_placement</td><td class="c">2</td><td class="c">2</td><td class="sm">After setting the book on the coffee table she stops and stands still for a long moment, then leaves the plate on the kitchen counter instead of carrying it through.</td></tr><tr><td class="k">cx_settable_nav_place</td><td>settable_hard</td><td class="mono sm">navigation_inefficiency + wrong_placement</td><td class="c">2</td><td class="c">4</td><td class="sm">She drifts through the living room and bedroom before even picking the book up, and ends by leaving the plate on the kitchen counter.</td></tr><tr><td class="k">cx_settable_nav_place_easy</td><td>settable_easy</td><td class="mono sm">navigation_inefficiency + wrong_placement</td><td class="c">2</td><td class="c">4</td><td class="sm">She wanders out of the kitchen and back before starting, and finishes by dropping the fork on the counter rather than the table she set.</td></tr><tr><td class="k">cx_appliance_obj_stall</td><td>appliance_hard</td><td class="mono sm">wrong_object + stall</td><td class="c">2</td><td class="c">2</td><td class="sm">She opens the fridge and takes the juice instead of the milk, loads it into the microwave, and then stands there doing nothing before starting the machine.</td></tr><tr><td class="k">cx_appliance_nav_place</td><td>appliance_hard</td><td class="mono sm">navigation_inefficiency + wrong_placement</td><td class="c">2</td><td class="c">2</td><td class="sm">She wanders through the living room and bedroom before going to the fridge, then sets the milk down on the counter instead of putting it in the microwave.</td></tr><tr><td class="k">cx_search_skip_stall</td><td>search_hard</td><td class="mono sm">skipped_step + stall</td><td class="c">2</td><td class="c">3</td><td class="sm">She never goes to look at the fridge at all, and after finding the computer she stops and stands still.</td></tr></tbody></table></div>
+<p>Label coverage: missing_step ×2, navigation_inefficiency ×4, repetition ×2, skipped_step ×3, stall ×5, wrong_object ×4, wrong_placement ×5.</p>
+
+<h3>When two errors may share an episode</h3>
+<p>Errors that collide measure nothing. Eight rules, each checked mechanically per episode; the
+ledger records every verdict and every rejection's reason.</p>
+<div class="tw"><table>
+<thead><tr><th>rule</th><th>name</th><th>why</th></tr></thead><tbody><tr><td class="k">R1</td><td class="rn">Direct-twin exclusion</td><td class="sm">No error may be an observation-channel twin of another in the same episode. Twins are the labels the grader already credits for one another, so a correct flag for one would be creditable for both and the episode could not say which the assistant saw.</td></tr><tr><td class="k">R2</td><td class="rn">Anchor survival</td><td class="sm">Every declared error must survive composition. Transforms apply in order and a later error whose anchor an earlier one removed is skipped-with-record — which forbids anchoring anything after a truncating error, or on a subgoal an omission deletes.</td></tr><tr><td class="k">R3</td><td class="rn">Window separation</td><td class="sm">The errors&#x27; anchors must be distinct and separated by at least one surviving subgoal, so their detection windows do not touch and each flag attributes to exactly one error.</td></tr><tr><td class="k">R4</td><td class="rn">Independent observability</td><td class="sm">No two errors may act on the same object, and an earlier error must not make a later one unobservable — skipping a fetch makes a later misplacement of that object impossible.</td></tr><tr><td class="k">R5</td><td class="rn">Semantic plausibility</td><td class="sm">The combination must read as one person having a plausibly bad run rather than two unrelated glitches. The one rule a replay cannot check, so it is audited per episode by a VLM and by independent readers.</td></tr><tr><td class="k">R6</td><td class="rn">Visible state</td><td class="sm">A repetition&#x27;s inverting press must change the picture. A microwave, dishwasher or stove switch renders identically to not pressing it, so a repetition there has no evidence on camera; lamps, the TV and container doors do.</td></tr><tr><td class="k">R7</td><td class="rn">The misplacement must move something</td><td class="sm">A wrong placement may not put the object on the same kind of surface it started on — a lift-and-replace has no state change and reads as a pointless detour.</td></tr><tr><td class="k">R8</td><td class="rn">Per-phase distinctiveness</td><td class="sm">Each error separately must add a command the clean plan lacks (the inaction classes excepted). Checking only the whole composed plan let one error supply the distinctive commands while another added nothing and was indistinguishable from ordinary execution.</td></tr></tbody></table></div>
+<blockquote><p><b>A structural result.</b> Under the corrected separation rule, every two- and
+three-subgoal task fails: there is nowhere to put a second error with a surviving subgoal between
+it and the first. Multi-error work lives in tasks of four or more subgoals, and only the
+eight-subgoal routine hosts three.</p></blockquote>
+
+<h3>How each episode was verified</h3>
+<p>Three passes that did not share verdicts, so agreement is evidence rather than an echo:
+a mechanical dry-replay through the twin (<b>12/12</b> admitted);
+a VLM audit of each episode alone, on executability, whether every error is observable, whether a
+watcher could attribute each correctly, and plausibility; and three independent readers given the
+engine sources and told to be sceptical. The readers found the most, and every finding was a real
+defect — several engine-wide rather than specific to this suite.</p>
+
+<h2 id="phases">6 · Making a multi-error episode runnable</h2>
+<p>The plan layer always composed several errors correctly; the rollout did not, and the reason was
+structural. <b>It modelled an error as a divergence of the whole plan, not as an event.</b> One
+prefix diff gave exactly one deviation point, so two errors fused into a single deviation, a single
+tasked sequence and a single takeover; the takeover was a one-shot latch; and recovery was
+<em>defined</em> as clearing the queue, which deleted the second error the moment the assistant
+succeeded on the first.</p>
+<p>The fix changes the unit from <em>the plan diverged</em> to <em>an error happened</em>. Phase
+<i>k</i> is the single-error problem taken against the baseline of every earlier error having
+already happened — build the plan with the first <i>k</i> calls and with the first <i>k+1</i>, and
+diff those two:</p>
+<pre>phase 0  skipped_step   m=0   tasked: walk to the book, grab the book, ...
+phase 1  wrong_object   m=6   tasked: grab the juice, close the fridge, ...
+phase 2  stall          m=15  tasked: stand still</pre>
+<p>The rollout's existing single-error state cells <em>are</em> the current phase; a phase advance
+saves them back and loads the next in, so a single-error case is exactly one phase and the shipped
+path is unchanged. Release hands the chore back, re-bases the next trigger deadline, and re-queues
+the remaining steps so the person carries on and can reach the next anchor. Grading needed no new
+machinery: the verdict function was already a pure function of one error, window and deviation
+tick, so it is called once per fired phase and the flag is credited to the phase that grades it
+best — which dissolves twin-laundering by construction, since naming the second error exactly
+outranks the alias it would earn against a twin first error.</p>
+<blockquote><p>Verified live: in <code>cx_routine_skip_obj</code> phase 0 injected at t0 and
+released at t12, and phase 1 injected at t20 and released at t22 — each with its own trigger,
+tasked sequence and release. A single-error control ran alongside and behaved as before.</p></blockquote>
+
+<h2 id="sweep">7 · Benchmark C — the assistant sweep</h2>
+<p>Every composite episode × three personas × five assistants: <b>180 scored rollouts</b>.
+Only the assistant varies between arms; the simulated person stays on the reference model
+throughout, because it is the environment rather than the system under test.</p>
+<h3>The three personas</h3>
+<p>The first two vary ability and receptiveness together — the novice is unskilled and receptive,
+the expert skilled and closed — so any result could be explained by either dial. The third is
+skilled <em>and</em> genuinely receptive, which is the cell that separates them.</p>
+<div class="tw"><table>
+<thead><tr><th>persona</th><th>task ability</th><th>information acceptance</th><th>interruption preference</th></tr></thead>
+<tbody><tr><td class="k">novice_stepwise</td><td>low</td><td>high</td><td>ok</td></tr><tr><td class="k">creative_uninterruptible</td><td>creative</td><td>low</td><td>avoidant</td></tr><tr><td class="k">capable_receptive</td><td>creative</td><td>high</td><td>ok</td></tr></tbody></table></div>
+<h3>Harness</h3>
+<p>The assistant is swapped by environment variable, with per-model sampling profiles (the shape a
+model requires, not a tuning knob), three retries and then an <em>empty</em> reply — the harness
+never repairs a model's output, because a repaired reply measures the repair. Per-call token and
+latency accounting is stamped on every report. Local models are served on an OpenAI-compatible
+endpoint that accepts image parts.</p>
+
+<h2 id="results">8 · Results</h2>
+<p>Every rate carries its denominator. Best in each row is highlighted; a dash means the metric had
+no opportunity to be measured for that assistant.</p>
+<div class="tw"><table>
+<thead><tr><th>metric</th><th scope="col">Gemini 3.1 Pro<span class="ah">API</span></th><th scope="col">Gemini 3 Flash<span class="ah">API</span></th><th scope="col">Qwen3-VL 8B<span class="ah">open weights</span></th><th scope="col">Qwen2.5-VL 7B<span class="ah">open weights</span></th><th scope="col">Silent floor<span class="ah">control</span></th></tr></thead>
+<tbody><tr><th scope="row"><span class="mn">In-time success</span><span class="mb">won within twice the reference time</span></th><td class="num win">0.361<span class="den">n=36</span></td><td class="num">0.222<span class="den">n=36</span></td><td class="num">0.028<span class="den">n=36</span></td><td class="num">0.056<span class="den">n=36</span></td><td class="num">0.083<span class="den">n=36</span></td></tr><tr><th scope="row"><span class="mn">Efficiency</span><span class="mb">time and interruption, weighted by the person&#x27;s preferences; successful runs only</span></th><td class="num">0.498<span class="den">n=13</span></td><td class="num">0.488<span class="den">n=8</span></td><td class="num win">0.733<span class="den">n=1</span></td><td class="num">0.675<span class="den">n=2</span></td><td class="num">0.731<span class="den">n=3</span></td></tr><tr><th scope="row"><span class="mn">Conversation efficiency</span><span class="mb">1 = never interrupts, 0 = talks continuously</span></th><td class="num">0.415<span class="den">n=36</span></td><td class="num">0.355<span class="den">n=36</span></td><td class="num">0.393<span class="den">n=36</span></td><td class="num">0.982<span class="den">n=36</span></td><td class="num win">1.000<span class="den">n=36</span></td></tr><tr><th scope="row"><span class="mn">Detection timing</span><span class="mb">1 prevented, 0.5 caught after it commits, 0 missed</span></th><td class="num win">0.396<span class="den">n=36</span></td><td class="num">0.352<span class="den">n=36</span></td><td class="num">0.146<span class="den">n=36</span></td><td class="num">0.000<span class="den">n=36</span></td><td class="num">0.000<span class="den">n=36</span></td></tr><tr><th scope="row"><span class="mn">Precision</span><span class="mb">of the errors it named, how many were real</span></th><td class="num">0.683<span class="den">n=35</span></td><td class="num">0.724<span class="den">n=35</span></td><td class="num win">0.817<span class="den">n=21</span></td><td class="num">—<span class="den">n=0</span></td><td class="num">—<span class="den">n=0</span></td></tr><tr><th scope="row"><span class="mn">Recall</span><span class="mb">of the errors that happened, how many it named</span></th><td class="num win">0.792<span class="den">n=36</span></td><td class="num">0.704<span class="den">n=36</span></td><td class="num">0.292<span class="den">n=36</span></td><td class="num">0.000<span class="den">n=36</span></td><td class="num">0.000<span class="den">n=36</span></td></tr><tr><th scope="row"><span class="mn">Detection F1</span><span class="mb">the balance of the two</span></th><td class="num win">0.715<span class="den">n=35</span></td><td class="num">0.694<span class="den">n=35</span></td><td class="num">0.602<span class="den">n=21</span></td><td class="num">—<span class="den">n=0</span></td><td class="num">—<span class="den">n=0</span></td></tr><tr><th scope="row"><span class="mn">Flag schema compliance</span><span class="mb">how often the flag arrived in the declared shape</span></th><td class="num win">1.000<span class="den">n=35</span></td><td class="num">0.714<span class="den">n=35</span></td><td class="num">0.036<span class="den">n=21</span></td><td class="num">—<span class="den">n=0</span></td><td class="num">—<span class="den">n=0</span></td></tr></tbody></table></div>
+<div class="tw"><table>
+<thead><tr><th>totals</th><th scope="col">Gemini 3.1 Pro<span class="ah">API</span></th><th scope="col">Gemini 3 Flash<span class="ah">API</span></th><th scope="col">Qwen3-VL 8B<span class="ah">open weights</span></th><th scope="col">Qwen2.5-VL 7B<span class="ah">open weights</span></th><th scope="col">Silent floor<span class="ah">control</span></th></tr></thead><tbody><tr><th scope="row"><span class="mn">errors that fired</span></th><td class="num">62</td><td class="num">57</td><td class="num">69</td><td class="num">72</td><td class="num">72</td></tr><tr><th scope="row"><span class="mn">errors caught</span></th><td class="num">49</td><td class="num">38</td><td class="num">21</td><td class="num">0</td><td class="num">0</td></tr><tr><th scope="row"><span class="mn">false alarms</span></th><td class="num">29</td><td class="num">21</td><td class="num">6</td><td class="num">0</td><td class="num">0</td></tr><tr><th scope="row"><span class="mn">things said</span></th><td class="num">1121</td><td class="num">1312</td><td class="num">565</td><td class="num">19</td><td class="num">0</td></tr></tbody></table></div>
+<p><b>Reading it.</b> Gemini Pro leads every detection measure that matters and is the only arm
+that lifts task success meaningfully above the silent floor — the comparison the floor exists to
+make. Flash is close on detection but converts it into completed chores far less often. Qwen3-VL is
+the precision leader while recalling under a third of the errors: it speaks rarely and is usually
+right. Qwen2.5-VL is functionally a second silent floor, with nineteen utterances across
+thirty-six episodes.</p>
+<p>In-time success is a hard bar by construction: every composite episode contains an
+outcome-breaking error, so it can only rise when the assistant actually guides a repair.</p>
+
+<h2 id="findings">9 · Findings</h2>
+<p>The rankings are one result. These are the durable ones — each was a real defect, found by
+audit or by the sweep, and each generalises past this engine.</p>
+<div class="finds"><article class="find"><div class="ft"><h3>The flag-shape trap</h3><span class="tag">assistant sweep</span></div><p>Qwen3-VL first scored a flat zero on every detection metric. It emitted 115 of its 118 flags as a bare string (&quot;flag&quot;: &quot;wrong_placement&quot;) where the harness accepted only {&quot;error&quot;: …}, so every genuine detection was discarded. Regraded from the models&#x27; own replies it has the highest precision in the sweep, at 3.6% schema compliance. Gemini Flash shows the same failure milder (71%). A harness that accepts only its declared schema scores formatting failures as perception failures — and would have published &quot;open-weight models cannot detect errors at all&quot;.</p></article><article class="find"><div class="ft"><h3>Definitions must describe the realization</h3><span class="tag">taxonomy</span></div><p>Three graded labels described behaviour the engine had stopped producing: repetition said &quot;a state change happens twice&quot; while the realization inverts a toggle; skipped_step said &quot;walks right past its target&quot; after omissions stopped navigating; wrong_placement promised a later device running empty after the error was made to commit at the placement. An assistant told to look for evidence that never appears will mislabel a correct perception.</p></article><article class="find"><div class="ft"><h3>Composition breaks transforms written for one error</h3><span class="tag">engine</span></div><p>wrong_placement truncated the plan at the first injected node it found. With any earlier error&#x27;s node present it deleted the rest of the plan including its own placement, while both records reported success — one pair composed down to a single command.</p></article><article class="find"><div class="ft"><h3>Grade offline, from what was recorded</h3><span class="tag">grading</span></div><p>The live rollout closed a detection window when the next error began; the contract runs a window to end of episode. Closing early scored a correct-but-late twin detection as a miss. Grading now recomputes from stored flag ticks, which also means a grading rule can be corrected without re-running a single episode.</p></article><article class="find"><div class="ft"><h3>An error&#x27;s evidence must exist on some channel</h3><span class="tag">engine</span></div><p>A forgotten fridge door was unobservable on every channel at once: the person never returns to it, the frames never show it, and the whole-house map reported only devices left ON. The map now reports open containers too.</p></article><article class="find"><div class="ft"><h3>Decoys must be deliberate</h3><span class="tag">scene</span></div><p>routine_hard never darkened the scene&#x27;s other two lit lamps, so an assistant could flag &quot;a lamp is still on&quot; without ever observing the injected omission. A second milk beside the microwave was likewise what the nearest-instance binder grabbed during a legitimate repair.</p></article><article class="find"><div class="ft"><h3>Short tasks cannot host two attributable errors</h3><span class="tag">benchmark design</span></div><p>Under the corrected separation rule every two- and three-subgoal task fails: there is nowhere to put a second error with a surviving subgoal between. Multi-error work lives in tasks of four or more subgoals, and only the eight-subgoal routine hosts three.</p></article><article class="find"><div class="ft"><h3>The bottleneck was rendering, not compute</h3><span class="tag">operations</span></div><p>Episodes are 12–20 minutes of software-GL rendering. The node has 243 cores; going from 4 engines to 16 took a 180-cell sweep from roughly ten hours to about four, with the GPUs untouched by the simulator.</p></article></div>
+
+<h2 id="limits">10 · Limits, stated</h2>
+<ul>
+<li><b>Three metrics are not measured</b>, and are reported as such rather than as zeros: answer
+accuracy (these chores ask the assistant no scored questions), alert score (no standing "tell me
+when it's done" request), and the fifteen-item assistance-quality rubric (its judge was not run).</li>
+<li><b>Substitutions.</b> No OpenAI key existed in this environment, so every GPT arm was
+impossible. The reference spec's flash tier was not offered on the available key; a sibling stands
+in. The spec's three local models are not on this filesystem; two open-weight VLMs that are were
+served instead.</li>
+<li><b>One arm's task metrics are not comparable.</b> Because the live harness did not recognise
+Qwen3-VL's flags, its takeover never released on detection, so its success and efficiency figures
+understate it. Its detection figures are fair, having been regraded from what it actually said.</li>
+<li><b>One seed per cell.</b> No confidence intervals are reported, matching the reference
+programme, which reports reliability through cross-model agreement instead.</li>
+<li><b>An omission in an order-free task is only strictly true at the end.</b> Its window opens on
+the successor subgoal, at which moment the person could still return to the target. The assistant
+is therefore reasoning about progress, not reading a committed fact — an honest asymmetry with the
+other classes.</li>
+</ul>
+
+<h2 id="repro">11 · Reproducing</h2>
+<div class="tw"><table>
+<thead><tr><th>artifact</th><th>what it is</th></tr></thead><tbody>
+<tr><td class="k">tools/episodes.py · episode_goals.py</td><td class="sm">the 19 tasks: reference plans, setups, instructions, checkpoints</td></tr>
+<tr><td class="k">tools/behavior_lib_vh.py · plan_ir_vh.py</td><td class="sm">the error transforms and the subgoal grammar they edit</td></tr>
+<tr><td class="k">tools/iv_cases.py</td><td class="sm">single-error and composite cases, with per-phase anchors derived from the composed plan</td></tr>
+<tr><td class="k">tools/composite_vh_spec.py</td><td class="sm">the multi-error episode set and the eight conflict rules</td></tr>
+<tr><td class="k">tools/tmp/verify_composite_vh.py</td><td class="sm">mechanical verifier → docs/COMPOSITE_LEDGER.json</td></tr>
+<tr><td class="k">tools/tmp/audit_composite_vlm.py</td><td class="sm">per-episode VLM audit → docs/COMPOSITE_VLM_AUDIT.json</td></tr>
+<tr><td class="k">tools/iv_e2e_stepin_rollout.py</td><td class="sm">the episode loop, phase machinery, injection and takeover</td></tr>
+<tr><td class="k">tools/assist_sweep.py</td><td class="sm">resume-safe worker pool; one rollout per engine port</td></tr>
+<tr><td class="k">tools/assist_metrics.py</td><td class="sm">the metrics, regraded offline from recorded flag ticks</td></tr>
+<tr><td class="k">tools/tmp/test_engine.py</td><td class="sm">364 offline checks: affordance matrix, determinism, admissibility, phase decomposition</td></tr>
+</tbody></table></div>
+<p>Scale note: the bottleneck is software-GL rendering, not GPUs or API throughput. Sixteen engine
+instances run comfortably on this node; the simulator never touches the GPUs, which serve the local
+models instead.</p>
+
+<footer>Engine revision 2026-08-26.f74+ · every table on this page generated from the live
+artifacts, none transcribed · companion pages: the benchmark specification and the results
+dashboard.</footer>
+</main></div>
+</body>
+</html>
