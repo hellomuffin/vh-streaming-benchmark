@@ -1,0 +1,119 @@
+<title>New tasks — all seven apartments</title>
+<style>
+:root{--bg:#fbfaf8;--fg:#1a1a1a;--dim:#6b6b6b;--line:#e2ded8;--card:#fff;--ac:#2f5d8a}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16181c;--fg:#e8e6e3;--dim:#9a9a9a;--line:#2c2f36;--card:#1d2026;--ac:#7fb2e0}}
+:root[data-theme="dark"]{--bg:#16181c;--fg:#e8e6e3;--dim:#9a9a9a;--line:#2c2f36;--card:#1d2026;--ac:#7fb2e0}
+body{background:var(--bg);color:var(--fg);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0}
+.wrap{max-width:1000px;margin:0 auto;padding:30px 20px 70px}
+h1{font-size:28px;margin:0 0 8px} h2{font-size:19px;color:var(--ac);margin:0 0 4px}
+.sc{font-size:12px;color:var(--dim);font-weight:400}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:22px 0}
+.ins{font-style:italic;margin:0 0 10px}
+.row{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:start}
+@media(max-width:800px){.row{grid-template-columns:1fr}}
+video{width:100%;border-radius:8px;background:#000;border:1px solid var(--line)}
+.dim{color:var(--dim);font-size:13px;margin:0 0 6px}
+code{font:12px ui-monospace,Menlo,monospace;background:rgba(127,127,127,.13);padding:1px 4px;border-radius:3px}
+ul{margin:6px 0 0;padding-left:18px;font-size:13px}
+</style>
+<div class="wrap">
+<h1>New tasks — all seven apartments</h1>
+<p>Ten tasks added on 3 September 2026. Every one is filmed here completing correctly with a
+silent assistant, so the clip shows what the task looks like when nothing goes wrong. Each was
+designed only from objects a live probe found in that apartment, and each is verified by running
+it: the checkpoints below are the engine's own, read off the run in the video.</p>
+<p class="dim">The suite previously used one apartment and never entered a bathroom. It now spans
+all seven, all four room types, and adds two verbs the grammar never had — <code>Read</code> and
+<code>Watch</code>.</p>
+<section>
+<h2>reading_hard <span class="sc">apartment 0</span></h2>
+<p class="ins">“Get a book from the bedroom, sit down on the living-room sofa, and read it.”</p>
+<div class="row">
+ <div><video controls preload="metadata" src="video/reading_hard.mp4"></video></div>
+ <div>
+  <p class="dim">rooms: bedroom, livingroom · 23 ticks · outcome <b>won</b></p>
+  <p class="dim">plan: <code>fetch(book)</code> → <code>posture(sofa)</code> → <code>read(book)</code> → <code>stand</code></p>
+  <ul><li>✔ got the book</li><li>✔ sat on the sofa</li><li>✔ read the book</li></ul>
+ </div></div></section><section>
+<h2>tvnight_hard <span class="sc">apartment 1</span></h2>
+<p class="ins">“Pick up the remote, switch the TV on, then sit on the sofa and watch it.”</p>
+<div class="row">
+ <div><video controls preload="metadata" src="video/tvnight_hard.mp4"></video></div>
+ <div>
+  <p class="dim">rooms: livingroom · 20 ticks · outcome <b>won</b></p>
+  <p class="dim">plan: <code>fetch(remotecontrol)</code> → <code>switch_on(tv)</code> → <code>posture(sofa)</code> → <code>watch(tv)</code> → <code>stand</code></p>
+  <ul><li>✔ got the remote</li><li>✔ TV on</li><li>✔ sat on the sofa</li><li>✔ watched the TV</li></ul>
+ </div></div></section><section>
+<h2>breakfast_hard <span class="sc">apartment 1</span></h2>
+<p class="ins">“Put the apple on the kitchen table, then switch on the toaster and the coffee maker.”</p>
+<div class="row">
+ <div><video controls preload="metadata" src="video/breakfast_hard.mp4"></video></div>
+ <div>
+  <p class="dim">rooms: kitchen · 15 ticks · outcome <b>won</b></p>
+  <p class="dim">plan: <code>fetch(apple)</code> → <code>deposit(apple)</code> → <code>switch_on(toaster)</code> → <code>switch_on(coffeemaker)</code></p>
+  <ul><li>✔ apple on the table</li><li>✔ toaster on</li><li>✔ coffee maker on</li></ul>
+ </div></div></section><section>
+<h2>bathroom_reset <span class="sc">apartment 2</span></h2>
+<p class="ins">“Put the toothbrush and the toothpaste away in the bathroom cabinet, shut the cabinet, and turn the tap off.”</p>
+<div class="row">
+ <div><video controls preload="metadata" src="video/bathroom_reset.mp4"></video></div>
+ <div>
+  <p class="dim">rooms: bathroom · 26 ticks · outcome <b>won</b></p>
+  <p class="dim">plan: <code>fetch(toothbrush)</code> → <code>open(bathroomcabinet)</code> → <code>deposit(toothbrush)</code> → <code>fetch(toothpaste)</code> → <code>deposit(toothpaste)</code> → <code>shut(bathroomcabinet)</code> → <code>switch_off(faucet)</code></p>
+  <ul><li>✔ toothbrush in the cabinet</li><li>✔ toothpaste in the cabinet</li><li>✔ cabinet shut</li><li>✔ tap off</li></ul>
+ </div></div></section><section>
+<h2>dishwasher_load <span class="sc">apartment 2</span></h2>
+<p class="ins">“Put the plate and the water glass into the dishwasher, close it, and switch it on.”</p>
+<div class="row">
+ <div><video controls preload="metadata" src="video/dishwasher_load.mp4"></video></div>
+ <div>
+  <p class="dim">rooms: kitchen · 25 ticks · outcome <b>won</b></p>
+  <p class="dim">plan: <code>fetch(plate)</code> → <code>open(dishwasher)</code> → <code>deposit(plate)</code> → <code>fetch(waterglass)</code> → <code>deposit(waterglass)</code> → <code>shut(dishwasher)</code> → <code>switch_on(dishwasher)</code></p>
+  <ul><li>✔ plate in the dishwasher</li><li>✔ glass in the dishwasher</li><li>✔ dishwasher shut</li><li>✔ dishwasher running</li></ul>
+ </div></div></section><section>
+<h2>coffee_hard <span class="sc">apartment 2</span></h2>
+<p class="ins">“Bring the mug from the bedroom to the kitchen table, then switch the coffee maker on.”</p>
+<div class="row">
+ <div><video controls preload="metadata" src="video/coffee_hard.mp4"></video></div>
+ <div>
+  <p class="dim">rooms: bedroom, kitchen · 15 ticks · outcome <b>won</b></p>
+  <p class="dim">plan: <code>fetch(mug)</code> → <code>deposit(mug)</code> → <code>switch_on(coffeemaker)</code></p>
+  <ul><li>✔ got the mug</li><li>✔ mug on the kitchen table</li><li>✔ coffee maker on</li></ul>
+ </div></div></section><section>
+<h2>kitchenreset_hard <span class="sc">apartment 3</span></h2>
+<p class="ins">“Put the plate in the dishwasher, close it, and switch the coffee maker on.”</p>
+<div class="row">
+ <div><video controls preload="metadata" src="video/kitchenreset_hard.mp4"></video></div>
+ <div>
+  <p class="dim">rooms: kitchen · 13 ticks · outcome <b>won</b></p>
+  <p class="dim">plan: <code>fetch(plate)</code> → <code>deposit(plate)</code> → <code>switch_on(coffeemaker)</code></p>
+  <ul><li>✔ plate in the dishwasher</li><li>✔ dishwasher shut</li><li>✔ coffee maker on</li></ul>
+ </div></div></section><section>
+<h2>cleartable_hard <span class="sc">apartment 4</span></h2>
+<p class="ins">“Take the plate and the water glass from the living room and load them into the kitchen dishwasher, then close it.”</p>
+<div class="row">
+ <div><video controls preload="metadata" src="video/cleartable_hard.mp4"></video></div>
+ <div>
+  <p class="dim">rooms: kitchen, livingroom · 20 ticks · outcome <b>won</b></p>
+  <p class="dim">plan: <code>fetch(plate)</code> → <code>open(dishwasher)</code> → <code>deposit(plate)</code> → <code>fetch(waterglass)</code> → <code>deposit(waterglass)</code> → <code>shut(dishwasher)</code></p>
+  <ul><li>✔ plate in the dishwasher</li><li>✔ glass in the dishwasher</li><li>✔ dishwasher shut</li></ul>
+ </div></div></section><section>
+<h2>office_hard <span class="sc">apartment 5</span></h2>
+<p class="ins">“Put the book on the desk, switch the computer on, and turn the bedroom lamp on.”</p>
+<div class="row">
+ <div><video controls preload="metadata" src="video/office_hard.mp4"></video></div>
+ <div>
+  <p class="dim">rooms: bedroom, livingroom · 22 ticks · outcome <b>won</b></p>
+  <p class="dim">plan: <code>fetch(book)</code> → <code>deposit(book)</code> → <code>switch_on(computer)</code> → <code>switch_on(tablelamp)</code></p>
+  <ul><li>✔ book on the desk</li><li>✔ computer on</li><li>✔ bedroom lamp on</li></ul>
+ </div></div></section><section>
+<h2>study_hard <span class="sc">apartment 6</span></h2>
+<p class="ins">“Put the book on the bedroom coffee table, switch the computer on, then go and switch the living-room TV off.”</p>
+<div class="row">
+ <div><video controls preload="metadata" src="video/study_hard.mp4"></video></div>
+ <div>
+  <p class="dim">rooms: bedroom, livingroom · 25 ticks · outcome <b>won</b></p>
+  <p class="dim">plan: <code>fetch(book)</code> → <code>deposit(book)</code> → <code>switch_on(computer)</code> → <code>switch_off(tv)</code></p>
+  <ul><li>✔ book on the coffee table</li><li>✔ computer on</li><li>✔ TV off</li></ul>
+ </div></div></section>
+</div>
