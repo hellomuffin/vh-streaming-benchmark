@@ -23,25 +23,25 @@ setup does the leaving-wrong; the person is asked only for the goal. Eight tasks
 apartments. Each was filmed completing, and the film with the instruction was sent to Gemini 3.1 Pro to
 ask whether they align clause by clause; the verdict is beside each.</p>
 <section>
-<h2>guest_hard <span class="sc">apartment 1 · bedroom, kitchen, livingroom · 9 subgoals</span> <span class="bad">drop</span></h2>
+<h2>guest_hard <span class="sc">apartment 1 · bedroom, kitchen, livingroom · 9 subgoals</span> <span class="ok">aligned</span></h2>
 <p class="ins">“A guest is coming and the living room was left as it was. Put the dishes on the coffee table into the dishwasher, put the pillow from the sofa back on the bed, and switch the TV off.”</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/guest_hard.mp4"></video></div>
  <div>
   <p class="dim">engine: outcome <b>won</b>, 62 ticks · checkpoints 4/4</p>
   <p class="dim">plan: <code>fetch(plate)</code> → <code>open(dishwasher)</code> → <code>deposit(plate)</code> → <code>fetch(mug)</code> → <code>deposit(mug)</code> → <code>shut(dishwasher)</code> → <code>fetch(pillow)</code> → <code>deposit(pillow)</code> → <code>switch_off(tv)</code></p>
-  <h3>Gemini audit — clauses seen 2/3</h3><ul class="cl"><li>✘ Put the dishes on the coffee table into the dishwasher <span class="dim"> The agent picks up the plate but leaves the mug on the coffee table. A mug then magically appears in the dishwasher without being fetched.</span></li><li>✔ put the pillow from the sofa back on the bed <span class="dim">00:36-00:51 </span></li><li>✔ and switch the TV off. <span class="dim">00:52-01:01 </span></li></ul>
-  <h3>Problems</h3><ul class="cl"><li>The video contains a continuity error or bug: the agent leaves the mug on the coffee table, but later deposits a mug into the dishwasher without ever going back to fetch it.</li></ul>
+  <h3>Gemini audit — clauses seen 3/3</h3><ul class="cl"><li>✔ Put the dishes on the coffee table into the dishwasher <span class="dim">00:07-00:33 Plate and mug moved to dishwasher</span></li><li>✔ put the pillow from the sofa back on the bed <span class="dim">00:39-00:51 White pillow moved to bed</span></li><li>✔ and switch the TV off. <span class="dim">00:58-01:01 TV screen goes black</span></li></ul>
+  <h3>Problems</h3><ul class="cl"><li>Ambiguous reference to &#x27;the pillow&#x27; when multiple pillows are present.</li></ul>
  </div></div></section><section>
-<h2>putback_hard <span class="sc">apartment 2 · bathroom, bedroom · 6 subgoals</span> <span class="bad">drop</span></h2>
+<h2>putback_hard <span class="sc">apartment 2 · bathroom, bedroom · 6 subgoals</span> <span class="ok">aligned</span></h2>
 <p class="ins">“Someone left a pile of things on the living-room sofa that belong in other rooms. Put each of them back where it belongs.”</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/putback_hard.mp4"></video></div>
  <div>
   <p class="dim">engine: outcome <b>won</b>, 60 ticks · checkpoints 3/3</p>
   <p class="dim">plan: <code>fetch(toothbrush)</code> → <code>deposit(toothbrush)</code> → <code>fetch(book)</code> → <code>deposit(book)</code> → <code>fetch(pillow)</code> → <code>deposit(pillow)</code></p>
-  <h3>Gemini audit — clauses seen 0/2</h3><ul class="cl"><li>✘ Someone left a pile of things on the kitchen table that belong in other rooms. <span class="dim">00:05 A toothbrush and book are on the table, but no pillow is visible.</span></li><li>✘ Put each of them back where it belongs. <span class="dim">00:06-00:34 The toothbrush and book are moved, but the pillow is deposited on the bed at 00:34 without ever being picked up from the kitchen table.</span></li></ul>
-  <h3>Problems</h3><ul class="cl"><li>The pillow is deposited at the end without ever being fetched from the kitchen table.</li><li>The destination &#x27;where it belongs&#x27; is too ambiguous for a benchmark.</li></ul>
+  <h3>Gemini audit — clauses seen 1/1</h3><ul class="cl"><li>✔ Put each of them back where it belongs. <span class="dim">00:04-00:59 Moves toothbrush to bathroom cabinet, book to desk, and pillow to bed.</span></li></ul>
+  <h3>Problems</h3><ul class="cl"><li>The instruction relies on subjective common sense for the destinations, making it impossible to know exactly where to place the items without guessing.</li></ul>
  </div></div></section><section>
 <h2>dishes_hard <span class="sc">apartment 2 · kitchen · 12 subgoals</span> <span class="ok">aligned</span></h2>
 <p class="ins">“There are dirty plates and glasses lying around the house — three plates and two glasses. Collect ALL of them, load them into the dishwasher, and close it.”</p>
