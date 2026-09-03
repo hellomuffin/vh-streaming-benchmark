@@ -1,4 +1,4 @@
-<title>Redesigned tasks — video-aligned</title>
+<title>Tasks v3 — a house left wrong</title>
 <style>
 :root{--bg:#fbfaf8;--fg:#1a1a1a;--dim:#6b6b6b;--line:#e2ded8;--card:#fff;--ac:#2f5d8a;--ok:#1a7f5a;--bad:#b03030}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16181c;--fg:#e8e6e3;--dim:#9a9a9a;--line:#2c2f36;--card:#1d2026;--ac:#7fb2e0;--ok:#4ec99a;--bad:#e0736b}}
@@ -15,109 +15,81 @@ video{width:100%;border-radius:8px;background:#000;border:1px solid var(--line)}
 .dim{color:var(--dim);font-size:13px;margin:0 0 6px} code{font:12px ui-monospace,Menlo,monospace;background:rgba(127,127,127,.13);padding:1px 4px;border-radius:3px}
 ul.cl{margin:4px 0 0;padding-left:18px;font-size:13px}
 </style>
-<div class="wrap"><h1>Redesigned tasks — checked against their own films</h1>
-<p>Ten routines across all seven apartments, each spanning three rooms and six to nine subgoals, using only
-actions whose effect is visible on camera. Every named object is reduced to a single copy in the room the
-instruction names. Each task was filmed completing, and the film plus the instruction were sent to
-Gemini 3.1 Pro to ask whether they align clause by clause; the verdict is shown beside each.</p>
+<div class="wrap"><h1>Tasks v3 — one goal, a house left wrong</h1>
+<p>Each task is a single natural goal — put things back where they belong, load <i>all</i> the dishes,
+put the groceries away, shut the house down — and the steps come from the state the house is left in:
+things carried to other rooms, every plate and glass scattered, lamps and screens on, doors open. The
+setup does the leaving-wrong; the person is asked only for the goal. Eight tasks across all seven
+apartments. Each was filmed completing, and the film with the instruction was sent to Gemini 3.1 Pro to
+ask whether they align clause by clause; the verdict is beside each.</p>
 <section>
-<h2>tidyliving_hard <span class="sc">apartment 0 · bedroom, kitchen, livingroom · 7 subgoals</span> <span class="ok">aligned</span></h2>
-<p class="ins">“Take the pillow from the sofa in the living room and put it on the bed, take the book from the living room to the desk in the bedroom, switch off the television in the living room, and bring the mug from the living room to the kitchen table.”</p>
+<h2>guest_hard <span class="sc">apartment 1 · bedroom, kitchen, livingroom · 9 subgoals</span> <span class="bad">drop</span></h2>
+<p class="ins">“A guest is coming and the living room was left as it was. Put the dishes on the coffee table into the dishwasher, put the pillow from the sofa back on the bed, and switch the TV off.”</p>
 <div class="row">
- <div><video controls preload="metadata" src="video/tidyliving_hard.mp4"></video></div>
+ <div><video controls preload="metadata" src="video/guest_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 52 ticks · checkpoints 4/4</p>
-  <p class="dim">plan: <code>fetch(pillow)</code> → <code>deposit(pillow)</code> → <code>fetch(book)</code> → <code>deposit(book)</code> → <code>switch_off(tv)</code> → <code>fetch(mug)</code> → <code>deposit(mug)</code></p>
-  <h3>Gemini audit — clauses seen 7/7</h3><ul class="cl"><li>✔ Take the pillow from the sofa in the living room <span class="dim">00:04 Pillow taken from sofa.</span></li><li>✔ and put it on the bed <span class="dim">00:15 Pillow placed on bed.</span></li><li>✔ take the book from the living room <span class="dim">00:24 Book taken from shelf.</span></li><li>✔ to the desk in the bedroom <span class="dim">00:32 Book placed on desk.</span></li><li>✔ switch off the television in the living room <span class="dim">00:42 TV screen goes black.</span></li><li>✔ and bring the mug from the living room <span class="dim">00:46 Mug picked up.</span></li><li>✔ to the kitchen table <span class="dim">00:51 Mug placed on table.</span></li></ul>
+  <p class="dim">engine: outcome <b>won</b>, 62 ticks · checkpoints 4/4</p>
+  <p class="dim">plan: <code>fetch(plate)</code> → <code>open(dishwasher)</code> → <code>deposit(plate)</code> → <code>fetch(mug)</code> → <code>deposit(mug)</code> → <code>shut(dishwasher)</code> → <code>fetch(pillow)</code> → <code>deposit(pillow)</code> → <code>switch_off(tv)</code></p>
+  <h3>Gemini audit — clauses seen 2/3</h3><ul class="cl"><li>✘ Put the dishes on the coffee table into the dishwasher <span class="dim"> The agent picks up the plate but leaves the mug on the coffee table. A mug then magically appears in the dishwasher without being fetched.</span></li><li>✔ put the pillow from the sofa back on the bed <span class="dim">00:36-00:51 </span></li><li>✔ and switch the TV off. <span class="dim">00:52-01:01 </span></li></ul>
+  <h3>Problems</h3><ul class="cl"><li>The video contains a continuity error or bug: the agent leaves the mug on the coffee table, but later deposits a mug into the dishwasher without ever going back to fetch it.</li></ul>
+ </div></div></section><section>
+<h2>putback_hard <span class="sc">apartment 2 · bathroom, bedroom · 6 subgoals</span> <span class="bad">drop</span></h2>
+<p class="ins">“Someone left a pile of things on the living-room sofa that belong in other rooms. Put each of them back where it belongs.”</p>
+<div class="row">
+ <div><video controls preload="metadata" src="video/putback_hard.mp4"></video></div>
+ <div>
+  <p class="dim">engine: outcome <b>won</b>, 60 ticks · checkpoints 3/3</p>
+  <p class="dim">plan: <code>fetch(toothbrush)</code> → <code>deposit(toothbrush)</code> → <code>fetch(book)</code> → <code>deposit(book)</code> → <code>fetch(pillow)</code> → <code>deposit(pillow)</code></p>
+  <h3>Gemini audit — clauses seen 0/2</h3><ul class="cl"><li>✘ Someone left a pile of things on the kitchen table that belong in other rooms. <span class="dim">00:05 A toothbrush and book are on the table, but no pillow is visible.</span></li><li>✘ Put each of them back where it belongs. <span class="dim">00:06-00:34 The toothbrush and book are moved, but the pillow is deposited on the bed at 00:34 without ever being picked up from the kitchen table.</span></li></ul>
+  <h3>Problems</h3><ul class="cl"><li>The pillow is deposited at the end without ever being fetched from the kitchen table.</li><li>The destination &#x27;where it belongs&#x27; is too ambiguous for a benchmark.</li></ul>
+ </div></div></section><section>
+<h2>dishes_hard <span class="sc">apartment 2 · kitchen · 12 subgoals</span> <span class="ok">aligned</span></h2>
+<p class="ins">“There are dirty plates and glasses lying around the house — three plates and two glasses. Collect ALL of them, load them into the dishwasher, and close it.”</p>
+<div class="row">
+ <div><video controls preload="metadata" src="video/dishes_hard.mp4"></video></div>
+ <div>
+  <p class="dim">engine: outcome <b>won</b>, 66 ticks · checkpoints 3/3</p>
+  <p class="dim">plan: <code>fetch(plate@3)</code> → <code>open(dishwasher)</code> → <code>deposit(plate@3)</code> → <code>fetch(plate@2)</code> → <code>fetch(waterglass@2)</code> → <code>deposit(plate@2)</code> → <code>deposit(waterglass@2)</code> → <code>fetch(plate@1)</code> → <code>fetch(waterglass@1)</code> → <code>deposit(plate@1)</code> → <code>deposit(waterglass@1)</code> → <code>shut(dishwasher)</code></p>
+  <h3>Gemini audit — clauses seen 3/3</h3><ul class="cl"><li>✔ Collect ALL of them [three plates and two glasses] <span class="dim">00:07, 00:26, 00:31, 00:47, 00:53 Picks up 3 plates and 2 glasses from various rooms.</span></li><li>✔ load them into the dishwasher <span class="dim">00:18, 00:39, 01:00 Deposits all collected items into the dishwasher.</span></li><li>✔ and close it <span class="dim">01:04 Closes the dishwasher door.</span></li></ul>
   
  </div></div></section><section>
-<h2>winddown_hard <span class="sc">apartment 1 · bathroom, bedroom, livingroom · 6 subgoals</span> <span class="ok">aligned</span></h2>
-<p class="ins">“Pick up the remote control in the living room, switch the television off, and put the remote on the coffee table. Then turn on the bedroom lamp, and bring the water glass from the bathroom to the bedroom nightstand.”</p>
+<h2>groceries_hard <span class="sc">apartment 2 · kitchen · 6 subgoals</span> <span class="ok">aligned</span></h2>
+<p class="ins">“The milk and the juice were left out somewhere in the house. Find them both and put them in the fridge, then close it.”</p>
 <div class="row">
- <div><video controls preload="metadata" src="video/winddown_hard.mp4"></video></div>
+ <div><video controls preload="metadata" src="video/groceries_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 39 ticks · checkpoints 5/5</p>
-  <p class="dim">plan: <code>fetch(remotecontrol)</code> → <code>switch_off(tv)</code> → <code>deposit(remotecontrol)</code> → <code>switch_on(tablelamp)</code> → <code>fetch(waterglass)</code> → <code>deposit(waterglass)</code></p>
-  <h3>Gemini audit — clauses seen 5/5</h3><ul class="cl"><li>✔ Pick up the remote control in the living room <span class="dim">00:07 Picks up remote from sofa</span></li><li>✔ switch the television off <span class="dim">00:15 TV screen goes black</span></li><li>✔ and put the remote on the coffee table. <span class="dim">00:19 Remote placed on table</span></li><li>✔ Then turn on the bedroom lamp <span class="dim">00:37 Lamp illuminates</span></li><li>✔ and bring the water glass from the bathroom to the bedroom nightstand. <span class="dim">00:30-00:38 Fetches glass from bathroom and places it on nightstand</span></li></ul>
+  <p class="dim">engine: outcome <b>won</b>, 46 ticks · checkpoints 3/3</p>
+  <p class="dim">plan: <code>fetch(milk)</code> → <code>open(fridge)</code> → <code>deposit(milk)</code> → <code>fetch(juice)</code> → <code>deposit(juice)</code> → <code>shut(fridge)</code></p>
+  <h3>Gemini audit — clauses seen 3/3</h3><ul class="cl"><li>✔ Find them both [the milk and the juice] <span class="dim">00:11, 00:32 Milk found in bedroom, juice found in living room.</span></li><li>✔ and put them in the fridge <span class="dim">00:25, 00:40 Milk placed in fridge, then juice placed in fridge.</span></li><li>✔ then close it <span class="dim">00:44 Fridge door is closed.</span></li></ul>
   
  </div></div></section><section>
-<h2>guestready_hard <span class="sc">apartment 1 · bedroom, kitchen, livingroom · 7 subgoals</span> <span class="ok">aligned</span></h2>
-<p class="ins">“Put the pillow from the living room on the bed, bring the mug from the bedroom to the kitchen table, take the apple from the kitchen to the living-room coffee table, and switch the TV on.”</p>
+<h2>aftermeal_hard <span class="sc">apartment 3 · kitchen · 10 subgoals</span> <span class="ok">aligned</span></h2>
+<p class="ins">“Clear up after the meal on the living-room coffee table: the plates and the mug go in the dishwasher, the apple goes back in the fridge, and close both.”</p>
 <div class="row">
- <div><video controls preload="metadata" src="video/guestready_hard.mp4"></video></div>
+ <div><video controls preload="metadata" src="video/aftermeal_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 47 ticks · checkpoints 4/4</p>
-  <p class="dim">plan: <code>fetch(pillow)</code> → <code>deposit(pillow)</code> → <code>fetch(mug)</code> → <code>deposit(mug)</code> → <code>fetch(apple)</code> → <code>deposit(apple)</code> → <code>switch_on(tv)</code></p>
-  <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ Put the pillow from the living room on the bed <span class="dim">00:04-00:16 Picks up pillow in living room, places on bed.</span></li><li>✔ bring the mug from the bedroom to the kitchen table <span class="dim">00:20-00:28 Picks up mug in bedroom, places on kitchen table.</span></li><li>✔ take the apple from the kitchen to the living-room coffee table <span class="dim">00:32-00:40 Picks up apple in kitchen, places on coffee table.</span></li><li>✔ and switch the TV on <span class="dim">00:42-00:46 Approaches TV and screen turns on.</span></li></ul>
+  <p class="dim">engine: outcome <b>won</b>, 75 ticks · checkpoints 5/5</p>
+  <p class="dim">plan: <code>fetch(plate@1)</code> → <code>open(dishwasher)</code> → <code>deposit(plate@1)</code> → <code>fetch(plate@2)</code> → <code>deposit(plate@2)</code> → <code>fetch(mug)</code> → <code>fetch(apple)</code> → <code>deposit(mug)</code> → <code>shut(dishwasher)</code> → <code>deposit(apple)</code></p>
+  <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ Clear up after the meal on the living-room coffee table <span class="dim">00:00-00:05 Approaches the coffee table to begin cleaning.</span></li><li>✔ the plates and the mug go in the dishwasher <span class="dim">00:05-00:57 Transfers two plates and one mug to the dishwasher.</span></li><li>✔ the apple goes back in the fridge <span class="dim">00:45-01:09 Picks up the apple and places it in the fridge.</span></li><li>✔ and close both <span class="dim">01:00, 01:14 Closes the dishwasher and the fridge.</span></li></ul>
   
  </div></div></section><section>
-<h2>breakfast_hard <span class="sc">apartment 1 · bedroom, kitchen, livingroom · 6 subgoals</span> <span class="ok">aligned</span></h2>
-<p class="ins">“Bring the mug from the bedroom to the kitchen table, take the slice of bread from the kitchen to the living-room coffee table, then pick up the remote and switch the TV on.”</p>
+<h2>shutdown_hard <span class="sc">apartment 4 · bedroom, kitchen, livingroom · 5 subgoals</span> <span class="ok">aligned</span></h2>
+<p class="ins">“Everything has been left on. Switch off all the table lamps, the TV and the computer, and close the fridge.”</p>
 <div class="row">
- <div><video controls preload="metadata" src="video/breakfast_hard.mp4"></video></div>
+ <div><video controls preload="metadata" src="video/shutdown_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 35 ticks · checkpoints 4/4</p>
-  <p class="dim">plan: <code>fetch(mug)</code> → <code>deposit(mug)</code> → <code>fetch(breadslice)</code> → <code>deposit(breadslice)</code> → <code>fetch(remotecontrol)</code> → <code>switch_on(tv)</code></p>
-  <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ Bring the mug from the bedroom to the kitchen table <span class="dim">00:07-00:13 Mug picked up in bedroom and placed on kitchen table</span></li><li>✔ take the slice of bread from the kitchen to the living-room coffee table <span class="dim">00:16-00:23 Bread picked up in kitchen and placed on coffee table</span></li><li>✔ then pick up the remote <span class="dim">00:28 Remote picked up from sofa side table</span></li><li>✔ and switch the TV on <span class="dim">00:34 TV screen turns white</span></li></ul>
+  <p class="dim">engine: outcome <b>won</b>, 40 ticks · checkpoints 4/4</p>
+  <p class="dim">plan: <code>shut(fridge)</code> → <code>switch_off(tv)</code> → <code>switch_off(computer)</code> → <code>switch_off(tablelamp@1)</code> → <code>switch_off(tablelamp@1)#2</code></p>
+  <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ close the fridge <span class="dim">00:09 Fridge door is shut.</span></li><li>✔ switch off the TV <span class="dim">00:18 TV screen goes dark.</span></li><li>✔ switch off the computer <span class="dim">00:24 Computer screen goes dark.</span></li><li>✔ switch off all the table lamps <span class="dim">00:32, 00:39 Two table lamps are turned off.</span></li></ul>
   
  </div></div></section><section>
-<h2>bathroom_reset <span class="sc">apartment 2 · bathroom, bedroom, kitchen · 8 subgoals</span> <span class="ok">aligned</span></h2>
-<p class="ins">“In the bathroom, put the toothbrush and the toothpaste into the wall cabinet and shut it. Then take the mug from the bedroom to the kitchen table.”</p>
+<h2>mugs_hard <span class="sc">apartment 5 · bathroom, kitchen, livingroom · 6 subgoals</span> <span class="ok">aligned</span></h2>
+<p class="ins">“Three mugs have been left lying around the flat. Collect all three and put them on the kitchen table.”</p>
 <div class="row">
- <div><video controls preload="metadata" src="video/bathroom_reset.mp4"></video></div>
+ <div><video controls preload="metadata" src="video/mugs_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 49 ticks · checkpoints 4/4</p>
-  <p class="dim">plan: <code>fetch(toothbrush)</code> → <code>open(bathroomcabinet)</code> → <code>deposit(toothbrush)</code> → <code>fetch(toothpaste)</code> → <code>deposit(toothpaste)</code> → <code>shut(bathroomcabinet)</code> → <code>fetch(mug)</code> → <code>deposit(mug)</code></p>
-  <h3>Gemini audit — clauses seen 3/3</h3><ul class="cl"><li>✔ In the bathroom, put the toothbrush and the toothpaste into the wall cabinet <span class="dim">00:06-00:30 Toothbrush placed at 00:19, toothpaste at 00:29.</span></li><li>✔ and shut it. <span class="dim">00:35 Cabinet is closed.</span></li><li>✔ Then take the mug from the bedroom to the kitchen table. <span class="dim">00:37-00:48 Mug picked up in bedroom at 00:42, placed on kitchen table at 00:48.</span></li></ul>
-  
- </div></div></section><section>
-<h2>dinnerliving_hard <span class="sc">apartment 2 · bedroom, kitchen, livingroom · 6 subgoals</span> <span class="ok">aligned</span></h2>
-<p class="ins">“Bring the plate and the water glass from the kitchen to the living-room coffee table, switch the TV on, then go and turn the bedroom lamp off.”</p>
-<div class="row">
- <div><video controls preload="metadata" src="video/dinnerliving_hard.mp4"></video></div>
- <div>
-  <p class="dim">engine: outcome <b>won</b>, 42 ticks · checkpoints 4/4</p>
-  <p class="dim">plan: <code>fetch(plate)</code> → <code>deposit(plate)</code> → <code>fetch(waterglass)</code> → <code>deposit(waterglass)</code> → <code>switch_on(tv)</code> → <code>switch_off(tablelamp)</code></p>
-  <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ Bring the plate from the kitchen to the living-room coffee table <span class="dim">00:05-00:14 Plate is picked up in kitchen and placed on coffee table.</span></li><li>✔ Bring the water glass from the kitchen to the living-room coffee table <span class="dim">00:19-00:28 Water glass is picked up in kitchen and placed on coffee table.</span></li><li>✔ switch the TV on <span class="dim">00:32-00:33 TV screen turns on.</span></li><li>✔ then go and turn the bedroom lamp off <span class="dim">00:39-00:41 Lamp light turns off.</span></li></ul>
-  
- </div></div></section><section>
-<h2>tidyup_hard <span class="sc">apartment 3 · bedroom, kitchen, livingroom · 7 subgoals</span> <span class="ok">aligned</span></h2>
-<p class="ins">“Take the plate from the living room to the kitchen table, bring the mug from the kitchen to the bedroom nightstand, put the pillow from the living room on the bed, then switch the living-room TV off.”</p>
-<div class="row">
- <div><video controls preload="metadata" src="video/tidyup_hard.mp4"></video></div>
- <div>
-  <p class="dim">engine: outcome <b>won</b>, 47 ticks · checkpoints 4/4</p>
-  <p class="dim">plan: <code>fetch(plate)</code> → <code>deposit(plate)</code> → <code>fetch(mug)</code> → <code>deposit(mug)</code> → <code>fetch(pillow)</code> → <code>deposit(pillow)</code> → <code>switch_off(tv)</code></p>
-  <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ Take the plate from the living room to the kitchen table <span class="dim">00:02-00:13 Plate moved to kitchen table.</span></li><li>✔ bring the mug from the kitchen to the bedroom nightstand <span class="dim">00:18-00:24 Mug moved to nightstand.</span></li><li>✔ put the pillow from the living room on the bed <span class="dim">00:32-00:39 Pillow moved to bed.</span></li><li>✔ then switch the living-room TV off <span class="dim">00:45 TV switched off.</span></li></ul>
-  
- </div></div></section><section>
-<h2>cleartable_hard <span class="sc">apartment 4 · bedroom, kitchen, livingroom · 6 subgoals</span> <span class="ok">aligned</span></h2>
-<p class="ins">“Take the plate and the water glass from the living room to the kitchen table, switch the living-room TV off, then turn on the bedroom lamp.”</p>
-<div class="row">
- <div><video controls preload="metadata" src="video/cleartable_hard.mp4"></video></div>
- <div>
-  <p class="dim">engine: outcome <b>won</b>, 47 ticks · checkpoints 4/4</p>
-  <p class="dim">plan: <code>fetch(plate)</code> → <code>deposit(plate)</code> → <code>fetch(waterglass)</code> → <code>deposit(waterglass)</code> → <code>switch_off(tv)</code> → <code>switch_on(tablelamp)</code></p>
-  <h3>Gemini audit — clauses seen 3/3</h3><ul class="cl"><li>✔ Take the plate and the water glass from the living room to the kitchen table <span class="dim">00:03-00:28 Both items moved successfully.</span></li><li>✔ switch the living-room TV off <span class="dim">00:34-00:36 TV screen goes black.</span></li><li>✔ then turn on the bedroom lamp <span class="dim">00:44-00:46 Lamp illuminates.</span></li></ul>
-  
- </div></div></section><section>
-<h2>office_hard <span class="sc">apartment 5 · bedroom, kitchen, livingroom · 6 subgoals</span> <span class="ok">aligned</span></h2>
-<p class="ins">“Take the book from the bedroom to the living-room desk and switch the computer on, bring the mug from the kitchen to that desk, then turn on the bedroom lamp.”</p>
-<div class="row">
- <div><video controls preload="metadata" src="video/office_hard.mp4"></video></div>
- <div>
-  <p class="dim">engine: outcome <b>won</b>, 43 ticks · checkpoints 4/4</p>
-  <p class="dim">plan: <code>fetch(book)</code> → <code>deposit(book)</code> → <code>switch_on(computer)</code> → <code>fetch(mug)</code> → <code>deposit(mug)</code> → <code>switch_on(tablelamp)</code></p>
-  <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ Take the book from the bedroom to the living-room desk <span class="dim">00:00-00:07 Agent picks up book and drops it near/on the desk.</span></li><li>✔ and switch the computer on <span class="dim">00:08-00:16 Computer screen turns on.</span></li><li>✔ bring the mug from the kitchen to that desk <span class="dim">00:17-00:32 Agent fetches mug and places it on the desk.</span></li><li>✔ then turn on the bedroom lamp <span class="dim">00:33-00:42 Lamp lights up.</span></li></ul>
-  
- </div></div></section><section>
-<h2>study_hard <span class="sc">apartment 6 · bedroom, kitchen, livingroom · 6 subgoals</span> <span class="ok">aligned</span></h2>
-<p class="ins">“Take the book from the living room to the bedroom coffee table and switch the bedroom computer on, switch the living-room TV off, then bring the mug from the living room to the kitchen table.”</p>
-<div class="row">
- <div><video controls preload="metadata" src="video/study_hard.mp4"></video></div>
- <div>
-  <p class="dim">engine: outcome <b>won</b>, 44 ticks · checkpoints 4/4</p>
-  <p class="dim">plan: <code>fetch(book)</code> → <code>deposit(book)</code> → <code>switch_on(computer)</code> → <code>switch_off(tv)</code> → <code>fetch(mug)</code> → <code>deposit(mug)</code></p>
-  <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ Take the book from the living room to the bedroom coffee table <span class="dim">00:04-00:15 Book is picked up and placed on the bedroom table.</span></li><li>✔ and switch the bedroom computer on <span class="dim">00:21 Computer screen turns on.</span></li><li>✔ switch the living-room TV off <span class="dim">00:31 TV screen goes black.</span></li><li>✔ then bring the mug from the living room to the kitchen table <span class="dim">00:36-00:43 Mug is picked up and placed on the kitchen table.</span></li></ul>
+  <p class="dim">engine: outcome <b>won</b>, 43 ticks · checkpoints 1/1</p>
+  <p class="dim">plan: <code>fetch(mug@1)</code> → <code>fetch(mug@1)#2</code> → <code>deposit(mug@1)</code> → <code>deposit(mug@1)#2</code> → <code>fetch(mug@1)#3</code> → <code>deposit(mug@1)#3</code></p>
+  <h3>Gemini audit — clauses seen 3/3</h3><ul class="cl"><li>✔ Three mugs have been left lying around the flat. <span class="dim">00:00-00:42 Contextual statement; three mugs are found in different rooms.</span></li><li>✔ Collect all three <span class="dim">00:07, 00:17, 00:35 Picks up a white mug, a green mug, and a red mug.</span></li><li>✔ and put them on the kitchen table. <span class="dim">00:27, 00:29, 00:42 Places all three mugs on the kitchen table.</span></li></ul>
   
  </div></div></section></div>
