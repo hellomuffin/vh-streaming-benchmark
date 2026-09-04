@@ -68,11 +68,11 @@ verdict is beside each.</p>
 <h2>aftermeal_hard <span class="sc">B · everywhere→one · apartment 3 · kitchen · 10 subgoals</span> <span class="ok">aligned</span></h2>
 <p class="ins">“Clear up after the meal in the living room: the two plates on the coffee table and the mug on the side table go in the dishwasher, the apple on the side table goes back in the fridge, and close both.”</p>
 <div class="row">
- <div><div class="ph">no film</div></div>
+ <div><video controls preload="metadata" src="video/aftermeal_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>—</b>, — ticks · checkpoints 0/0</p>
+  <p class="dim">engine: outcome <b>won</b>, 78 ticks · checkpoints 5/5</p>
   <p class="dim">plan: <code>fetch(plate@1)</code> → <code>open(dishwasher)</code> → <code>deposit(plate@1)</code> → <code>fetch(plate@2)</code> → <code>deposit(plate@2)</code> → <code>fetch(mug)</code> → <code>fetch(apple)</code> → <code>deposit(mug)</code> → <code>shut(dishwasher)</code> → <code>deposit(apple)</code></p>
-  <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ the two plates on the coffee table go in the dishwasher <span class="dim">00:09-00:40 Both plates moved to dishwasher.</span></li><li>✔ the mug on the side table go in the dishwasher <span class="dim">00:49-01:03 Mug placed in dishwasher.</span></li><li>✔ the apple on the desk goes back in the fridge <span class="dim">00:54-01:17 Apple placed in fridge.</span></li><li>✔ and close both <span class="dim">01:08, 01:21 Dishwasher and fridge closed.</span></li></ul>
+  <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ the two plates on the coffee table go in the dishwasher <span class="dim">00:18, 00:37 Both plates are fetched and deposited in the dishwasher.</span></li><li>✔ the mug on the side table go in the dishwasher <span class="dim">00:58 Mug is deposited in the dishwasher.</span></li><li>✔ the apple on the side table goes back in the fridge <span class="dim">01:12 Apple is placed in the fridge.</span></li><li>✔ and close both <span class="dim">01:03, 01:16 Dishwasher and fridge are both closed.</span></li></ul>
   
  </div></div></section><section>
 <h2>guest_hard <span class="sc">C · one goal, things apart · apartment 1 · bedroom, kitchen, livingroom · 9 subgoals</span> <span class="ok">aligned</span></h2>
