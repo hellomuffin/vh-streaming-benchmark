@@ -26,14 +26,14 @@ with its instruction was sent to Gemini 3.1 Pro to ask whether they align clause
 verdict is beside each.</p>
 <section>
 <h2>putback_hard <span class="sc">A · many→many · apartment 2 · bathroom, bedroom · 6 subgoals</span> <span class="ok">aligned</span></h2>
-<p class="ins">“On the living-room coffee table and sofa are a toothbrush, a book and a pillow that belong in other rooms. Put each of them back where it belongs.”</p>
+<p class="ins">“On the living-room coffee table and sofa are a toothbrush, a book and a pillow that belong in other rooms. Put the toothbrush in the bathroom cabinet, the book on the bedroom desk, and the pillow on the bed.”</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/putback_hard.mp4"></video></div>
  <div>
   <p class="dim">engine: outcome <b>won</b>, 59 ticks · checkpoints 3/3</p>
   <p class="dim">plan: <code>fetch(toothbrush)</code> → <code>deposit(toothbrush)</code> → <code>fetch(book)</code> → <code>deposit(book)</code> → <code>fetch(pillow)</code> → <code>deposit(pillow)</code></p>
-  <h3>Gemini audit — clauses seen 2/2</h3><ul class="cl"><li>✔ On the living-room coffee table and sofa are a toothbrush, a book and a pillow <span class="dim">00:00-00:07 Objects are seen on the table and sofa.</span></li><li>✔ Put each of them back where it belongs. <span class="dim">00:15-00:58 Agent moves the toothbrush to a bathroom cabinet, the book to a desk, and the pillow to a bed.</span></li></ul>
-  <h3>Problems</h3><ul class="cl"><li>The destination for each object is subjective and not explicitly stated, making it impossible to objectively evaluate success without guessing the intended locations.</li></ul>
+  <h3>Gemini audit — clauses seen 3/3</h3><ul class="cl"><li>✔ Put the toothbrush in the bathroom cabinet <span class="dim">00:06-00:20 Toothbrush picked up and placed in cabinet.</span></li><li>✔ the book on the bedroom desk <span class="dim">00:38-00:46 Book picked up and placed on desk.</span></li><li>✔ and the pillow on the bed. <span class="dim">00:51-00:58 Pillow picked up and placed on bed.</span></li></ul>
+  <h3>Problems</h3><ul class="cl"><li>Ambiguous instruction due to multiple bedrooms with beds and desks.</li></ul>
  </div></div></section><section>
 <h2>dishes_hard <span class="sc">B · everywhere→one · apartment 2 · kitchen · 12 subgoals</span> <span class="ok">aligned</span></h2>
 <p class="ins">“Dirty dishes have been left around the flat: a plate and a glass on the kitchen table, a plate and a glass on the living-room coffee table, and a plate on the bedroom desk. Put all of them in the dishwasher and close it.”</p>
