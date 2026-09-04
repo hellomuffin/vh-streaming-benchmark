@@ -25,15 +25,15 @@ engine. Every film opens with an establishing look at each displaced object wher
 with its instruction was sent to Gemini 3.1 Pro to ask whether they align clause by clause; the
 verdict is beside each.</p>
 <section>
-<h2>putback_hard <span class="sc">A · many→many · apartment 2 · bathroom, bedroom · 6 subgoals</span> <span class="ok">aligned</span></h2>
+<h2>putback_hard <span class="sc">A · many→many · apartment 1 · bathroom, bedroom · 6 subgoals</span> <span class="ok">aligned</span></h2>
 <p class="ins">“On the living-room coffee table and sofa are a toothbrush, a book and a pillow that belong in other rooms. Put the toothbrush in the bathroom cabinet, the book on the bedroom desk, and the pillow on the bed.”</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/putback_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 59 ticks · checkpoints 3/3</p>
+  <p class="dim">engine: outcome <b>won</b>, 65 ticks · checkpoints 3/3</p>
   <p class="dim">plan: <code>fetch(toothbrush)</code> → <code>deposit(toothbrush)</code> → <code>fetch(book)</code> → <code>deposit(book)</code> → <code>fetch(pillow)</code> → <code>deposit(pillow)</code></p>
-  <h3>Gemini audit — clauses seen 3/3</h3><ul class="cl"><li>✔ Put the toothbrush in the bathroom cabinet <span class="dim">00:06-00:20 Toothbrush picked up and placed in cabinet.</span></li><li>✔ the book on the bedroom desk <span class="dim">00:38-00:46 Book picked up and placed on desk.</span></li><li>✔ and the pillow on the bed. <span class="dim">00:51-00:58 Pillow picked up and placed on bed.</span></li></ul>
-  <h3>Problems</h3><ul class="cl"><li>Ambiguous instruction due to multiple bedrooms with beds and desks.</li></ul>
+  <h3>Gemini audit — clauses seen 3/3</h3><ul class="cl"><li>✔ Put the toothbrush in the bathroom cabinet <span class="dim">00:06-00:20 Toothbrush picked up from coffee table and placed in bathroom cabinet.</span></li><li>✔ the book on the bedroom desk <span class="dim">00:34-00:43 Book picked up from coffee table and placed on bedroom desk.</span></li><li>✔ and the pillow on the bed. <span class="dim">00:51-01:03 Pillow picked up from sofa and placed on bed.</span></li></ul>
+  
  </div></div></section><section>
 <h2>dishes_hard <span class="sc">B · everywhere→one · apartment 2 · kitchen · 12 subgoals</span> <span class="ok">aligned</span></h2>
 <p class="ins">“Dirty dishes have been left around the flat: a plate and a glass on the kitchen table, a plate and a glass on the living-room coffee table, and a plate on the bedroom desk. Put all of them in the dishwasher and close it.”</p>
@@ -96,14 +96,14 @@ verdict is beside each.</p>
   
  </div></div></section><section>
 <h2>tidybedroom_hard <span class="sc">C · one goal, things apart · apartment 1 · bedroom, kitchen · 6 subgoals</span> <span class="ok">aligned</span></h2>
-<p class="ins">“Tidy up the bedroom: the book is lying on the bed, a lamp has been left on, the cabinet is open, and there is a mug on the nightstand that belongs on the kitchen table.”</p>
+<p class="ins">“Tidy up the bedroom: put the book that is lying on the bed back on the desk, turn off the lamp that was left on, close the cabinet, and take the mug from the nightstand to the kitchen table.”</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/tidybedroom_hard.mp4"></video></div>
  <div>
   <p class="dim">engine: outcome <b>won</b>, 37 ticks · checkpoints 4/4</p>
   <p class="dim">plan: <code>fetch(book)</code> → <code>deposit(book)</code> → <code>shut(cabinet)</code> → <code>switch_off(tablelamp@1)</code> → <code>fetch(mug)</code> → <code>deposit(mug)</code></p>
-  <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ the book is lying on the bed <span class="dim">00:08-00:13 Book picked up from bed and placed on desk.</span></li><li>✔ a lamp has been left on <span class="dim">00:29 Lamp on the right nightstand is turned off.</span></li><li>✔ the cabinet is open <span class="dim">00:20 Cabinet is closed.</span></li><li>✔ there is a mug on the nightstand that belongs on the kitchen table <span class="dim">00:30-00:36 Mug moved from nightstand to kitchen table.</span></li></ul>
-  <h3>Problems</h3><ul class="cl"><li>Missing destination for the book.</li><li>Ambiguity regarding which lamp to turn off.</li></ul>
+  <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ put the book that is lying on the bed back on the desk <span class="dim">00:07-00:14 Book is taken from the bed and placed on the desk.</span></li><li>✔ turn off the lamp that was left on <span class="dim">00:27-00:29 The lamp on the nightstand is switched off.</span></li><li>✔ close the cabinet <span class="dim">00:18-00:21 The open cabinet doors are shut.</span></li><li>✔ and take the mug from the nightstand to the kitchen table <span class="dim">00:29-00:36 Mug is picked up from the nightstand and placed on the kitchen table.</span></li></ul>
+  
  </div></div></section><section>
 <h2>routine_hard <span class="sc">original benchmark task · apartment 2 · bedroom, kitchen, livingroom · 8 subgoals</span> <span class="bad">drop</span></h2>
 <p class="ins">“Turn off a bedroom lamp, put a book on the living-room coffee table, heat the milk from the fridge in the microwave, and bring a plate over to the coffee table.”</p>
@@ -123,16 +123,6 @@ verdict is beside each.</p>
   <p class="dim">engine: outcome <b>won</b>, 39 ticks · checkpoints 3/3</p>
   <p class="dim">plan: <code>switch_off(tablelamp@1)</code> → <code>switch_off(tablelamp@3)</code> → <code>shut(fridge)</code> → <code>switch_off(tv)</code></p>
   <h3>Gemini audit — clauses seen 3/3</h3><ul class="cl"><li>✔ switch off the lights on both table lamps <span class="dim">00:04 and 00:16 Both lamps are visibly switched off.</span></li><li>✔ switch off the TV <span class="dim">00:37 The TV screen goes black.</span></li><li>✔ close the fridge <span class="dim">00:27 The fridge door is shut.</span></li></ul>
-  
- </div></div></section><section>
-<h2>settable_hard <span class="sc">original benchmark task · apartment 2 · bedroom, kitchen, livingroom · 4 subgoals</span> <span class="ok">aligned</span></h2>
-<p class="ins">“Put a book and a plate onto the coffee table in the living room.”</p>
-<div class="row">
- <div><video controls preload="metadata" src="video/settable_hard.mp4"></video></div>
- <div>
-  <p class="dim">engine: outcome <b>won</b>, 24 ticks · checkpoints 2/2</p>
-  <p class="dim">plan: <code>fetch(book)</code> → <code>deposit(book)</code> → <code>fetch(plate)</code> → <code>deposit(plate)</code></p>
-  <h3>Gemini audit — clauses seen 3/3</h3><ul class="cl"><li>✔ Put a book <span class="dim">00:10 Book placed on table</span></li><li>✔ and a plate <span class="dim">00:23 Plate placed on table</span></li><li>✔ onto the coffee table in the living room. <span class="dim">00:10, 00:23 Both items deposited on the correct table</span></li></ul>
   
  </div></div></section><section>
 <h2>appliance_hard <span class="sc">original benchmark task · apartment 2 · kitchen, livingroom · 3 subgoals</span> <span class="bad">drop</span></h2>
