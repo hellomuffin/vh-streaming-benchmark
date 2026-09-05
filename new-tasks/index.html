@@ -30,7 +30,7 @@ verdict is beside each.</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/putback_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 54 ticks · checkpoints 3/3</p>
+  <p class="dim">engine: outcome <b>won</b>, 82 ticks · checkpoints 3/3</p>
   <p class="dim">plan: <code>fetch(toiletpaper)</code> → <code>deposit(toiletpaper)</code> → <code>fetch(book)</code> → <code>deposit(book)</code> → <code>fetch(pillow)</code> → <code>deposit(pillow)</code></p>
   <h3>Gemini audit — clauses seen 3/3</h3><ul class="cl"><li>✔ Put the toilet paper roll on the bathroom counter <span class="dim">00:06-00:16 Moved TP to counter</span></li><li>✔ the book on the bedroom desk <span class="dim">00:24-00:35 Moved book to desk</span></li><li>✔ and the pillow on the bed <span class="dim">00:43-00:53 Moved pillow to bed</span></li></ul>
   
@@ -40,7 +40,7 @@ verdict is beside each.</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/dishes_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 60 ticks · checkpoints 3/3</p>
+  <p class="dim">engine: outcome <b>won</b>, 93 ticks · checkpoints 3/3</p>
   <p class="dim">plan: <code>fetch(plate@3)</code> → <code>open(dishwasher)</code> → <code>deposit(plate@3)</code> → <code>fetch(plate@2)</code> → <code>fetch(waterglass@2)</code> → <code>deposit(plate@2)</code> → <code>deposit(waterglass@2)</code> → <code>fetch(plate@1)</code> → <code>fetch(waterglass@1)</code> → <code>deposit(plate@1)</code> → <code>deposit(waterglass@1)</code> → <code>shut(dishwasher)</code></p>
   <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ a plate on the bedroom desk. Put all of them in the dishwasher <span class="dim">00:06-00:18 Plate taken from desk and placed in dishwasher.</span></li><li>✔ a plate and a glass on the living-room coffee table... Put all of them in the dishwasher <span class="dim">00:24-00:37 Plate and glass taken from coffee table and placed in dishwasher.</span></li><li>✔ a plate and a glass on the kitchen table... Put all of them in the dishwasher <span class="dim">00:42-00:54 Plate and glass taken from kitchen table and placed in dishwasher.</span></li><li>✔ and close it. <span class="dim">00:56-00:58 Dishwasher is closed.</span></li></ul>
   
@@ -50,7 +50,7 @@ verdict is beside each.</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/groceries_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 47 ticks · checkpoints 3/3</p>
+  <p class="dim">engine: outcome <b>won</b>, 72 ticks · checkpoints 3/3</p>
   <p class="dim">plan: <code>fetch(milk)</code> → <code>open(fridge)</code> → <code>deposit(milk)</code> → <code>fetch(juice)</code> → <code>deposit(juice)</code> → <code>shut(fridge)</code></p>
   <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ The milk was left on the bedroom nightstand <span class="dim">00:12 Agent finds and picks up the milk from the bedroom nightstand.</span></li><li>✔ and the juice on the living-room coffee table. <span class="dim">00:33 Agent finds and picks up the juice from the living room coffee table.</span></li><li>✔ Put them both in the fridge, <span class="dim">00:26, 00:42 Milk is placed in the fridge at 00:26, juice at 00:42.</span></li><li>✔ then close it. <span class="dim">00:46 The fridge door is closed.</span></li></ul>
   
@@ -60,7 +60,7 @@ verdict is beside each.</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/mugs_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 52 ticks · checkpoints 1/1</p>
+  <p class="dim">engine: outcome <b>won</b>, 78 ticks · checkpoints 1/1</p>
   <p class="dim">plan: <code>fetch(mug@1)</code> → <code>deposit(mug@1)</code> → <code>fetch(mug@1)#2</code> → <code>deposit(mug@1)#2</code> → <code>fetch(mug@1)#3</code> → <code>deposit(mug@1)#3</code></p>
   <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ Collect mug from the bathroom <span class="dim">00:08 Picks up blue mug from bathroom floor</span></li><li>✔ Collect mug from the living room <span class="dim">00:26 Picks up green mug from living room desk</span></li><li>✔ Collect mug from the bedroom nightstand <span class="dim">00:43 Picks up red mug from bedroom nightstand</span></li><li>✔ Put them on the kitchen table <span class="dim">00:18, 00:37, 00:51 Places all three mugs on the kitchen table</span></li></ul>
   
@@ -70,7 +70,7 @@ verdict is beside each.</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/aftermeal_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 78 ticks · checkpoints 5/5</p>
+  <p class="dim">engine: outcome <b>won</b>, 113 ticks · checkpoints 5/5</p>
   <p class="dim">plan: <code>fetch(plate@1)</code> → <code>open(dishwasher)</code> → <code>deposit(plate@1)</code> → <code>fetch(plate@2)</code> → <code>deposit(plate@2)</code> → <code>fetch(mug)</code> → <code>fetch(apple)</code> → <code>deposit(mug)</code> → <code>shut(dishwasher)</code> → <code>deposit(apple)</code></p>
   <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ the two plates on the coffee table go in the dishwasher <span class="dim">00:18, 00:37 Both plates are fetched and deposited in the dishwasher.</span></li><li>✔ the mug on the side table go in the dishwasher <span class="dim">00:58 Mug is deposited in the dishwasher.</span></li><li>✔ the apple on the side table goes back in the fridge <span class="dim">01:12 Apple is placed in the fridge.</span></li><li>✔ and close both <span class="dim">01:03, 01:16 Dishwasher and fridge are both closed.</span></li></ul>
   
@@ -80,7 +80,7 @@ verdict is beside each.</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/guest_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 67 ticks · checkpoints 4/4</p>
+  <p class="dim">engine: outcome <b>won</b>, 95 ticks · checkpoints 4/4</p>
   <p class="dim">plan: <code>fetch(plate)</code> → <code>open(dishwasher)</code> → <code>deposit(plate)</code> → <code>fetch(mug)</code> → <code>deposit(mug)</code> → <code>shut(dishwasher)</code> → <code>fetch(pillow)</code> → <code>deposit(pillow)</code> → <code>switch_off(tv)</code></p>
   <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ Put the plate on the coffee table into the dishwasher <span class="dim">00:10-00:19 Plate picked up from coffee table and placed in dishwasher.</span></li><li>✔ and the mug on the desk into the dishwasher <span class="dim">00:24-00:36 Mug picked up from desk and placed in dishwasher.</span></li><li>✔ put the pillow from the sofa back on the bed <span class="dim">00:42-00:56 Pillow picked up from sofa and placed on bed.</span></li><li>✔ and switch the TV off <span class="dim">01:03-01:05 TV screen goes black.</span></li></ul>
   
@@ -90,7 +90,7 @@ verdict is beside each.</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/shutdown_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 40 ticks · checkpoints 4/4</p>
+  <p class="dim">engine: outcome <b>won</b>, 51 ticks · checkpoints 4/4</p>
   <p class="dim">plan: <code>shut(fridge)</code> → <code>switch_off(tv)</code> → <code>switch_off(computer)</code> → <code>switch_off(tablelamp@1)</code> → <code>switch_off(tablelamp@1)#2</code></p>
   <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ Switch off all the table lamps <span class="dim">00:28-00:31, 00:36-00:39 Two table lamps are switched off.</span></li><li>✔ Switch off the TV <span class="dim">00:15-00:18 TV screen turns black.</span></li><li>✔ Switch off the computer <span class="dim">00:21-00:24 Computer screen and tower light turn off.</span></li><li>✔ close the fridge <span class="dim">00:04-00:10 Fridge door is closed.</span></li></ul>
   
@@ -100,7 +100,7 @@ verdict is beside each.</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/tidybedroom_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 37 ticks · checkpoints 4/4</p>
+  <p class="dim">engine: outcome <b>won</b>, 55 ticks · checkpoints 4/4</p>
   <p class="dim">plan: <code>fetch(book)</code> → <code>deposit(book)</code> → <code>shut(cabinet)</code> → <code>switch_off(tablelamp@1)</code> → <code>fetch(mug)</code> → <code>deposit(mug)</code></p>
   <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ put the book that is lying on the bed back on the desk <span class="dim">00:07-00:14 Book is taken from the bed and placed on the desk.</span></li><li>✔ turn off the lamp that was left on <span class="dim">00:27-00:29 The lamp on the nightstand is switched off.</span></li><li>✔ close the cabinet <span class="dim">00:18-00:21 The open cabinet doors are shut.</span></li><li>✔ and take the mug from the nightstand to the kitchen table <span class="dim">00:29-00:36 Mug is picked up from the nightstand and placed on the kitchen table.</span></li></ul>
   
@@ -110,7 +110,7 @@ verdict is beside each.</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/routine_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 66 ticks · checkpoints 5/5</p>
+  <p class="dim">engine: outcome <b>won</b>, 93 ticks · checkpoints 5/5</p>
   <p class="dim">plan: <code>switch_off(tablelamp)</code> → <code>fetch(book)</code> → <code>deposit(book)</code> → <code>fetch(milk)</code> → <code>deposit(milk)</code> → <code>switch_on(microwave)</code> → <code>fetch(plate)</code> → <code>deposit(plate)</code></p>
   <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ Turn off the bedroom lamp that is on <span class="dim">00:09 Lamp is turned off.</span></li><li>✔ put the book that is lying on the bed on the living-room coffee table <span class="dim">00:14-00:22 Book is moved from bed to coffee table.</span></li><li>✔ heat the milk from the fridge in the microwave <span class="dim">00:34-00:54 Milk is taken from fridge, placed in microwave, and microwave is started.</span></li><li>✔ bring one of the plates from the kitchen table over to the coffee table <span class="dim">00:59-01:05 Plate is moved from kitchen table to coffee table.</span></li></ul>
   
@@ -120,7 +120,7 @@ verdict is beside each.</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/tidy_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 39 ticks · checkpoints 3/3</p>
+  <p class="dim">engine: outcome <b>won</b>, 53 ticks · checkpoints 3/3</p>
   <p class="dim">plan: <code>switch_off(tablelamp@1)</code> → <code>switch_off(tablelamp@3)</code> → <code>shut(fridge)</code> → <code>switch_off(tv)</code></p>
   <h3>Gemini audit — clauses seen 3/3</h3><ul class="cl"><li>✔ switch off the lights on both table lamps <span class="dim">00:04 and 00:16 Both lamps are visibly switched off.</span></li><li>✔ switch off the TV <span class="dim">00:37 The TV screen goes black.</span></li><li>✔ close the fridge <span class="dim">00:27 The fridge door is shut.</span></li></ul>
   
@@ -130,7 +130,7 @@ verdict is beside each.</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/appliance_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 40 ticks · checkpoints 3/3</p>
+  <p class="dim">engine: outcome <b>won</b>, 55 ticks · checkpoints 3/3</p>
   <p class="dim">plan: <code>fetch(milk)</code> → <code>deposit(milk)</code> → <code>switch_on(microwave)</code></p>
   <h3>Gemini audit — clauses seen 1/3</h3><ul class="cl"><li>✔ Take the milk from the fridge <span class="dim">00:15 Milk taken from fridge.</span></li><li>✘ put it in the microwave <span class="dim">00:31 The milk is placed on top of the microwave, not inside.</span></li><li>✘ and switch the microwave on <span class="dim">00:38 No interaction to turn the microwave on is visible.</span></li></ul>
   <h3>Problems</h3><ul class="cl"><li>The agent places the milk on top of the microwave instead of inside it.</li><li>The agent fails to switch the microwave on.</li></ul>
@@ -140,7 +140,7 @@ verdict is beside each.</p>
 <div class="row">
  <div><video controls preload="metadata" src="video/search_hard.mp4"></video></div>
  <div>
-  <p class="dim">engine: outcome <b>won</b>, 27 ticks · checkpoints 4/4</p>
+  <p class="dim">engine: outcome <b>won</b>, 35 ticks · checkpoints 4/4</p>
   <p class="dim">plan: <code>inspect(fridge)</code> → <code>inspect(tv)</code> → <code>inspect(tablelamp)</code> → <code>inspect(computer)</code></p>
   <h3>Gemini audit — clauses seen 4/4</h3><ul class="cl"><li>✔ Find a TV and go up to it <span class="dim">00:05-00:11 Approaches the TV in the living room.</span></li><li>✔ Find a table lamp and go up to it <span class="dim">00:12-00:16 Approaches the table lamp in the bedroom.</span></li><li>✔ Find the fridge and go up to it <span class="dim">00:00-00:04 Approaches the fridge in the kitchen.</span></li><li>✔ Find the computer and go up to it <span class="dim">00:17-00:26 Approaches the computer in the second bedroom.</span></li></ul>
   
